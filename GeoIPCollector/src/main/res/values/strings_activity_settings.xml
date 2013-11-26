@@ -1,0 +1,31 @@
+<resources>
+        <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_category_privacy">Report Settings</string>
+    <string name="pref_category_location">Location Settings</string>
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_submit_device_id">Submit Device ID</string>
+    <string name="pref_submit_device_id_desc">The current device id is:1234567</string>
+
+    <string name="pref_submit_ssid">Submit Network Name</string>
+    <string name="pref_submit_ssid_desc">Include the network name in the report</string>
+
+    <string name="pref_submit_bssid">Submit Network Fingerprint</string>
+    <string name="pref_submit_bssid_desc">Include the network mac address in the report</string>
+
+    <string name="pref_get_loc_method">Set Default Location Provider</string>
+
+    <string-array name="pref_get_loc_entries">
+        <item>Network</item>
+        <item>GPS</item>
+    </string-array>
+
+    <string-array name="pref_get_loc_entry_values">
+        <item>network</item>
+        <item>gps</item>
+    </string-array>
+
+</resources>

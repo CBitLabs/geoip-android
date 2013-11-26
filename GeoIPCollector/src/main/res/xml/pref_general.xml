@@ -1,0 +1,38 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_category_privacy"
+        android:key="pref_privacy">
+        <CheckBoxPreference
+            android:key="submit_device_id"
+            android:title="@string/pref_submit_device_id"
+            android:summary="@string/pref_submit_device_id_desc"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="submit_ssid"
+            android:title="@string/pref_submit_ssid"
+            android:summary="@string/pref_submit_ssid_desc"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="submit_bssid"
+            android:title="@string/pref_submit_bssid"
+            android:summary="@string/pref_submit_bssid_desc"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_location"
+        android:key="pref_location">
+
+        <ListPreference
+            android:key="get_location_method"
+            android:title="@string/pref_get_loc_method"
+            android:entries="@array/pref_get_loc_entries"
+            android:entryValues="@array/pref_get_loc_entry_values"
+            android:defaultValue="network"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
