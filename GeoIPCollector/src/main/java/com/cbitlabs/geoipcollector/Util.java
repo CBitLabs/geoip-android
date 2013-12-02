@@ -19,8 +19,8 @@ import java.util.UUID;
  */
 public class Util {
 
-    public static final String DNS_SERVER   = "geo.spf.gladstonefamily.net";
-    public static final String DNS_RESOLVER = "charon.gladstonefamily.net";
+    public static final String DNS_SERVER   = "geo.cbitlabs.com";
+    public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
 
     public static final String TAG = "CBITLABS_GEOIP";
 
