@@ -12,6 +12,8 @@ import android.provider.Settings;
 import android.util.Log;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -19,8 +21,16 @@ import java.util.UUID;
  */
 public class Util {
 
-    public static final String DNS_SERVER   = "geo.cbitlabs.com";
-    public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
+    public static final Map<String, String> dnsServerMap = new HashMap<String, String>();
+    public static final Map<String, String> dnsResolverMap = new HashMap<String,String>();
+
+    static{
+        dnsServerMap.put("CBL", "geo.cbitlabs.com");
+        dnsServerMap.put("GSF", "geo.spf.gladstonefamily.net");
+
+        dnsResolverMap.put("CBL", "cb101.public.cbitlabs.com");
+        dnsResolverMap.put("GSF", "charon.gladstonefamily.net");
+    }
 
     public static final String TAG = "CBITLABS_GEOIP";
 
@@ -29,11 +39,25 @@ public class Util {
     public static final String PREF_KEY_SUBMIT_SSID = "submit_ssid";
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
     public static final String PREF_KEY_LOC_METHOD  = "pref_location";
+
+    public static final String PREF_KEY_REPORT_SERVER  = "reporting_server";
+
     private static final String DEVICE_ID_UNSET = "no device id";
 
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
+    public static String getDNSResolverURL(Context c){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
+        return dnsResolverMap.get(serverKey);
+    }
+
+    public static String getDNSServerURL(Context c){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
+        return dnsServerMap.get(serverKey);
+    }
 
     public static String getReportInformation(Context c){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);

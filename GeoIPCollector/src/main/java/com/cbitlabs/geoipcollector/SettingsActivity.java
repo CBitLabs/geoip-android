@@ -31,7 +31,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         submit_id = (CheckBoxPreference) this.findPreference("submit_device_id");
         submit_id.setOnPreferenceChangeListener(this);
         this.updateDeviceIDHelpText();
-
     }
 
     @Override

@@ -50,11 +50,11 @@ public class DataTxTask extends AsyncTask{
     public void txDataViaDNSLookup()  {
 
         String info = Util.getReportInformation(context);
-        String host = info.concat(".").concat(Util.DNS_SERVER);
+        String host = info.concat(".").concat(Util.getDNSServerURL(this.context));
         Log.i(Util.TAG, "Created Hostname for Lookup:" + host);
 
         Resolver defaultResolver = Lookup.getDefaultResolver();
-        String simpleResolverUrl = Util.DNS_RESOLVER;
+        String simpleResolverUrl = Util.getDNSResolverURL(this.context);
         executeLookupUsingResolver("d." + host, defaultResolver);
 
         try{
