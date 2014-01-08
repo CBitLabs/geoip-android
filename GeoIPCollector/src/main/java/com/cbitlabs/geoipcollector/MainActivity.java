@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -18,13 +19,17 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String info = Util.getReportInformation(this);
+        Log.d(Util.TAG, info);
+        TextView view = (TextView) findViewById(R.id.ip_info);
+        view.setText(info);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
 
-        Util.getReportInformation(this);
     }
 
 
