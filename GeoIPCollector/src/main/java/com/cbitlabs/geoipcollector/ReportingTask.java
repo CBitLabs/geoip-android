@@ -12,8 +12,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import org.json.JSONObject;
-
 import java.util.Map;
 
 public class ReportingTask extends AsyncTask {
@@ -21,15 +19,13 @@ public class ReportingTask extends AsyncTask {
     private Context context;
 
     public ReportingTask(Context context) {
-        Log.d(Util.TAG, "DataTask Created");
-
+        Log.d(Util.TAG, "ReportingTask Created");
         this.context = context;
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        Log.d(Util.TAG, "DataTask.doInBackground()");
-
+        Log.d(Util.TAG, "ReportingTask.doInBackground()");
         this.postReport();
         return null;
     }
@@ -37,7 +33,7 @@ public class ReportingTask extends AsyncTask {
     public void postReport() {
         Map<String, String> infoReport = Util.getReportInfo(this.context);
         JsonObject json = new JsonObject();
-        for (Map.Entry<String, String> entry : infoReport.entrySet()){
+        for (Map.Entry<String, String> entry : infoReport.entrySet()) {
             json.addProperty(entry.getKey(), entry.getValue());
         }
         Log.i(Util.TAG, "Posting json " + json.toString());
