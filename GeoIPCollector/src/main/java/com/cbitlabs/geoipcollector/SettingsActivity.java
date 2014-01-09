@@ -35,10 +35,10 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == this.submit_id){
+        if (preference == this.submit_id) {
             boolean doSubmit = (Boolean) newValue;
 
-            if (doSubmit){
+            if (doSubmit) {
                 Util.genDevID(this);
             }
             this.updateDeviceIDHelpText(doSubmit);
@@ -47,35 +47,40 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     }
 
 
-    private void updateDeviceIDHelpText(){
+    private void updateDeviceIDHelpText() {
         this.updateDeviceIDHelpText(this.submit_id.isChecked());
     }
 
-    private void updateDeviceIDHelpText(boolean doSubmit){
+    private void updateDeviceIDHelpText(boolean doSubmit) {
 
         String description;
-        if (doSubmit){
+        if (doSubmit) {
             String deviceId = Util.getUUID(this);
             description = "Device ID: ".concat(deviceId);
-        }
-        else{
+        } else {
             description = "Device ID will not be submitted.";
         }
         this.submit_id.setSummary(description);
     }
 
     @Override
-    public boolean onIsMultiPane() {return false;}
+    public boolean onIsMultiPane() {
+        return false;
+    }
 
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
-        & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
 
-    private static boolean isSimplePreferences(Context context) {return true;}
+    private static boolean isSimplePreferences(Context context) {
+        return true;
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {

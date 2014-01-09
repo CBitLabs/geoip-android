@@ -22,9 +22,9 @@ import java.util.UUID;
 public class Util {
 
     public static final Map<String, String> dnsServerMap = new HashMap<String, String>();
-    public static final Map<String, String> dnsResolverMap = new HashMap<String,String>();
+    public static final Map<String, String> dnsResolverMap = new HashMap<String, String>();
 
-    static{
+    static {
         dnsServerMap.put("CBL", "geo.cbitlabs.com");
         dnsServerMap.put("GSF", "geo.spf.gladstonefamily.net");
 
@@ -34,48 +34,49 @@ public class Util {
 
     public static final String TAG = "CBITLABS_GEOIP";
 
-    public static final String PREF_KEY_DEVICE_ID   = "device_id";
+    public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
     public static final String PREF_KEY_SUBMIT_SSID = "submit_ssid";
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
-    public static final String PREF_KEY_LOC_METHOD  = "pref_location";
+    public static final String PREF_KEY_LOC_METHOD = "pref_location";
 
-    public static final String PREF_KEY_REPORT_SERVER  = "reporting_server";
+    public static final String PREF_KEY_REPORT_SERVER = "reporting_server";
 
     private static final String DEVICE_ID_UNSET = "no device id";
 
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    public static String getDNSResolverURL(Context c){
+    public static String getDNSResolverURL(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
         return dnsResolverMap.get(serverKey);
     }
 
-    public static String getDNSServerURL(Context c){
+    public static String getDNSServerURL(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
         return dnsServerMap.get(serverKey);
     }
 
-    public Map<String, String> getReportMap(){
-         return new HashMap<String, String>(){{
-             put("lat", null);
-             put("lng", null);
-             put("mac_addr", null);
-             put("dev_id", null);
-             put("ip", null);
-         }
+    public Map<String, String> getReportMap() {
+        return new HashMap<String, String>() {
+            {
+                put("lat", null);
+                put("lng", null);
+                put("mac_addr", null);
+                put("dev_id", null);
+                put("ip", null);
+            }
         };
     }
 
-    public static Map<String, String> getReportInformation(Context c){
+    public static Map<String, String> getReportInformation(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
-        boolean submitBSSID= prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
+        boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
 
         Log.i(Util.TAG, String.format("%b %b %b", submitUUID, submitSSID, submitBSSID));
 
@@ -84,7 +85,7 @@ public class Util {
         reportMap.put("lat", loc.getLat());
         reportMap.put("lng", loc.getLng());
         reportMap.put("ssid", submitSSID ? getSSID(c) : null);
-        reportMap.put("bssid", submitBSSID ? getBSSID(c): null);
+        reportMap.put("bssid", submitBSSID ? getBSSID(c) : null);
         reportMap.put("uuid", submitUUID ? getUUID(c) : null);
 
         Log.i(TAG, reportMap.toString());
@@ -92,7 +93,7 @@ public class Util {
 
     }
 
-    public static String getUUID(Context c){
+    public static String getUUID(Context c) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String deviceId = prefs.getString(Util.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
@@ -103,7 +104,7 @@ public class Util {
         return deviceId;
     }
 
-    public static String genDevID(Context c){
+    public static String genDevID(Context c) {
 
         Long id = UUID.randomUUID().getMostSignificantBits();
         String deviceId;
@@ -118,22 +119,22 @@ public class Util {
         return deviceId;
     }
 
-    public static String getSSID(Context c){
+    public static String getSSID(Context c) {
 
         if (!Util.getWifiConnectionState(c))
             return "";
 
         WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
         String ssid = wifiManager.getConnectionInfo().getSSID();
-        ssid = ssid.replace("\"","").replace(" ", "_");
+        ssid = ssid.replace("\"", "").replace(" ", "_");
 
-        Log.i(Util.TAG, "Got Network SSID:" + ssid );
+        Log.i(Util.TAG, "Got Network SSID:" + ssid);
 
         return ssid;
     }
 
 
-    public static String getBSSID(Context c){
+    public static String getBSSID(Context c) {
         if (!Util.getWifiConnectionState(c))
             return "";
 
@@ -141,24 +142,24 @@ public class Util {
         String bssid = wifiManager.getConnectionInfo().getBSSID();
         bssid = bssid.replace(":", "");
 
-        Log.i(Util.TAG, "Got Network BSSID:" + bssid );
+        Log.i(Util.TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 
 
-    public static boolean getWifiConnectionState(final Context context){
+    public static boolean getWifiConnectionState(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        boolean state =  wifi.isConnected();
+        boolean state = wifi.isConnected();
         Log.i(TAG, String.format("WiFi State:%b", state));
         return state;
     }
 
 
-    public static GeoPoint getLocation(final Context context){
+    public static GeoPoint getLocation(final Context context) {
 
         Location netLoc = getNetworkLocation(context);
         Location gpsLoc = getGPSLocation(context);
@@ -170,47 +171,44 @@ public class Util {
             l = netLoc;
 
         GeoPoint p;
-        if (l==null){
+        if (l == null) {
             p = GeoPoint.getNullPoint();
             String providers = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             Log.d(Util.TAG, "Failed to get location information");
-        }
-        else{
+        } else {
             long locAge = (new Date()).getTime() - l.getTime();
-            if (locAge > TEN_MINUTES)
-            {
+            if (locAge > TEN_MINUTES) {
                 p = GeoPoint.getNullPoint();
                 Log.d(Util.TAG, "Failed to get recent location information!");
-            }
-            else
-                p =  new GeoPoint(l.getLatitude (), l.getLongitude ());
+            } else
+                p = new GeoPoint(l.getLatitude(), l.getLongitude());
         }
         return p;
     }
 
-    protected static Location getNetworkLocation(final Context context)
-    {
+    protected static Location getNetworkLocation(final Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
-    protected static Location getGPSLocation(final Context context)
-    {
+    protected static Location getGPSLocation(final Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
 
-    /** Determines whether one Location reading is better than the current Location fix
-     * @param location  The new Location that you want to evaluate
-     * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+    /**
+     * Determines whether one Location reading is better than the current Location fix
+     *
+     * @param location            The new Location that you want to evaluate
+     * @param currentBestLocation The current Location fix, to which you want to compare the new one
      */
     protected static boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
         }
-        if (location == null){
+        if (location == null) {
             return false;
         }
 
@@ -250,7 +248,9 @@ public class Util {
         return false;
     }
 
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private static boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;

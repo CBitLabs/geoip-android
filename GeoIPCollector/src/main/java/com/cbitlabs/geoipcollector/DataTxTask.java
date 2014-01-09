@@ -3,6 +3,7 @@ package com.cbitlabs.geoipcollector;
 /**
  * Created by stuart on 11/25/13.
  */
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,17 +13,18 @@ import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Resolver;
 import org.xbill.DNS.SimpleResolver;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class DataTxTask extends AsyncTask{
+public class DataTxTask extends AsyncTask {
 
     private Context context;
-    public DataTxTask(Context context){
+
+    public DataTxTask(Context context) {
         Log.d(Util.TAG, "DataTxTask Created");
 
         this.context = context;
     }
+
     @Override
     protected Object doInBackground(Object[] objects) {
         Log.d(Util.TAG, "DataTxTask.doInBackground()");
@@ -31,23 +33,23 @@ public class DataTxTask extends AsyncTask{
         return null;
     }
 
-    protected void executeLookupUsingResolver(String h, Resolver r){
+    protected void executeLookupUsingResolver(String h, Resolver r) {
 
         Lookup.setDefaultResolver(r);
         executeLookup(h);
     }
 
-    protected void executeLookup(String h){
+    protected void executeLookup(String h) {
         Log.i(Util.TAG, "Looking up:" + h);
 
-        try{
+        try {
             Address.getByName(h);
-        }catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             Log.e(Util.TAG, "DNS Lookup failed for host:" + h, e);
         }
     }
 
-    public void txDataViaDNSLookup()  {
+    public void txDataViaDNSLookup() {
 
         String info = Util.getReportInformation(context).toString();
         String host = info.concat(".").concat(Util.getDNSServerURL(this.context));
@@ -57,13 +59,12 @@ public class DataTxTask extends AsyncTask{
         String simpleResolverUrl = Util.getDNSResolverURL(this.context);
         executeLookupUsingResolver("d." + host, defaultResolver);
 
-        try{
+        try {
             Log.i(Util.TAG, "Setting DNS Resolver to use:" + simpleResolverUrl);
             Resolver simpleResolver = new SimpleResolver(simpleResolverUrl);
             executeLookupUsingResolver("s." + host, simpleResolver);
             Lookup.setDefaultResolver(defaultResolver);
-        }
-        catch(UnknownHostException e){
+        } catch (UnknownHostException e) {
             Log.e(Util.TAG, "A problem occurred while setting the custom resolver. UnknownHostException:" + simpleResolverUrl, e);
         }
     }
