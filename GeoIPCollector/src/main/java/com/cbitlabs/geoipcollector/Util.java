@@ -21,17 +21,6 @@ import java.util.UUID;
  */
 public class Util {
 
-    public static final Map<String, String> dnsServerMap = new HashMap<String, String>();
-    public static final Map<String, String> dnsResolverMap = new HashMap<String, String>();
-
-    static {
-        dnsServerMap.put("CBL", "geo.cbitlabs.com");
-        dnsServerMap.put("GSF", "geo.spf.gladstonefamily.net");
-
-        dnsResolverMap.put("CBL", "cb101.public.cbitlabs.com");
-        dnsResolverMap.put("GSF", "charon.gladstonefamily.net");
-    }
-
     public static final String TAG = "CBITLABS_GEOIP";
 
     public static final String PREF_KEY_DEVICE_ID = "device_id";
@@ -49,19 +38,7 @@ public class Util {
 
     private static final String REPORT_SERVER_URL = "127.0.0.1:8000";
 
-    public static String getDNSResolverURL(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
-        return dnsResolverMap.get(serverKey);
-    }
-
-    public static String getDNSServerURL(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
-        return dnsServerMap.get(serverKey);
-    }
-
-    public static String getReportServerUrl(){
+    public static String getReportServerUrl() {
         return REPORT_SERVER_URL;
     }
 
