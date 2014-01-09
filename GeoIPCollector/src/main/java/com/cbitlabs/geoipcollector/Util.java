@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.util.Date;
@@ -29,14 +28,28 @@ public class Util {
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
     public static final String PREF_KEY_LOC_METHOD = "pref_location";
 
-    public static final String PREF_KEY_REPORT_SERVER = "reporting_server";
-
     private static final String DEVICE_ID_UNSET = "no device id";
 
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     private static final String REPORT_SERVER_URL = "http://172.16.0.179:8000/geoip";
+
+    private static Map<String, String> lastReport = null;
+    public static boolean isReportValid = true;
+
+    public static boolean isValidReport(Context c, Map<String, String> report) {
+        return getWifiConnectionState(c) && !isDuplicateReport(report);
+    }
+
+    private static boolean isDuplicateReport(Map<String, String> report) {
+        boolean isDuplicate = true;
+        if (lastReport != null) {
+            isDuplicate = report.equals(lastReport);
+        }
+        lastReport = new HashMap<String, String>(report);
+        return isDuplicate;
+    }
 
     public static String getReportServerUrl() {
         return REPORT_SERVER_URL;
@@ -144,11 +157,9 @@ public class Util {
         GeoPoint p;
         if (l == null) {
             p = GeoPoint.getNullPoint();
-            String providers = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             Log.d(Util.TAG, "Failed to get location information");
         } else {
-            long locAge = (new Date()).getTime() - l.getTime();
-            if (locAge > TEN_MINUTES) {
+            if (Util.isRecentLocation(l)) {
                 p = GeoPoint.getNullPoint();
                 Log.d(Util.TAG, "Failed to get recent location information!");
             } else
@@ -165,6 +176,11 @@ public class Util {
     protected static Location getGPSLocation(final Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+
+    protected static boolean isRecentLocation(Location l) {
+        long locAge = (new Date()).getTime() - l.getTime();
+        return locAge > TEN_MINUTES;
     }
 
 
@@ -231,7 +247,7 @@ public class Util {
 
 
     public static void createReportingTask(Context context) {
-        Log.i(Util.TAG, "Creating new DataTX AsyncTask");
+        Log.i(Util.TAG, "Creating new Reporting AsyncTask");
         ReportingTask t = new ReportingTask(context);
         t.execute();
     }

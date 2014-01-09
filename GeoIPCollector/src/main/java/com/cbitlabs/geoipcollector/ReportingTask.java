@@ -32,6 +32,12 @@ public class ReportingTask extends AsyncTask {
 
     public void postReport() {
         Map<String, String> infoReport = Util.getReportInfo(this.context);
+
+        if (!Util.isValidReport(this.context, infoReport)) {
+            Log.i(Util.TAG, "Duplicate or noWIFI report not sent.");
+            return;
+        }
+
         JsonObject json = new JsonObject();
         for (Map.Entry<String, String> entry : infoReport.entrySet()) {
             json.addProperty(entry.getKey(), entry.getValue());
