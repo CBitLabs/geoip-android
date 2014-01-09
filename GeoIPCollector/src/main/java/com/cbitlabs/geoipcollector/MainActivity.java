@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String info = Util.getReportInformation(this).toString();
+        String info = Util.getReportInfo(this).toString();
         Log.d(Util.TAG, info);
         TextView view = (TextView) findViewById(R.id.ip_info);
         view.setText(info);

@@ -47,6 +47,8 @@ public class Util {
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
+    private static final String REPORT_SERVER_URL = "127.0.0.1:8000";
+
     public static String getDNSResolverURL(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
@@ -59,19 +61,11 @@ public class Util {
         return dnsServerMap.get(serverKey);
     }
 
-    public Map<String, String> getReportMap() {
-        return new HashMap<String, String>() {
-            {
-                put("lat", null);
-                put("lng", null);
-                put("mac_addr", null);
-                put("dev_id", null);
-                put("ip", null);
-            }
-        };
+    public static String getReportServerUrl(){
+        return REPORT_SERVER_URL;
     }
 
-    public static Map<String, String> getReportInformation(Context c) {
+    public static Map<String, String> getReportInfo(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
