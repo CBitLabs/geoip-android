@@ -28,7 +28,7 @@ public class Util {
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
     public static final String PREF_KEY_LOC_METHOD = "pref_location";
 
-    private static final String DEVICE_ID_UNSET = "no device id";
+    private static final String DEVICE_ID_UNSET = "no_device_id";
 
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;

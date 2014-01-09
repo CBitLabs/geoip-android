@@ -1,36 +1,23 @@
 <resources>
-        <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
-    <string name="pref_category_server">Reporting Settings</string>
     <string name="pref_category_privacy">Information Settings</string>
     <string name="pref_category_location">Location Settings</string>
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
-    <string name="pref_server">Report Collector</string>
-    <string name="pref_server_desc">What server to submit reports to</string>
 
     <string name="pref_submit_device_id">Submit Device ID</string>
     <string name="pref_submit_device_id_desc">The current device id is:1234567</string>
 
     <string name="pref_submit_ssid">Submit Network Name</string>
-    <string name="pref_submit_ssid_desc">Include the network name in the report</string>
+    <string name="pref_submit_ssid_desc">Include the network name in the report.</string>
 
     <string name="pref_submit_bssid">Submit Network Fingerprint</string>
-    <string name="pref_submit_bssid_desc">Include the network mac address in the report</string>
+    <string name="pref_submit_bssid_desc">Include the network mac address in the report.</string>
 
     <string name="pref_get_loc_method">Set Default Location Provider</string>
-
-    <string-array name="pref_server_list_entries">
-        <item>CBL</item>
-        <item>GSF</item>
-    </string-array>
-
-    <string-array name="pref_server_list_values">
-        <item>CBL</item>
-        <item>GSF</item>
-    </string-array>
 
     <string-array name="pref_get_loc_entries">
         <item>Network</item>

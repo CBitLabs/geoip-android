@@ -1,9 +1,7 @@
 package com.cbitlabs.geoipcollector;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -15,16 +13,15 @@ import java.util.List;
 
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
-    private static final boolean ALWAYS_SIMPLE_PREFS = true;
-
     private CheckBoxPreference submit_id;
     private SharedPreferences prefs;
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.pref_general);
 
@@ -68,15 +65,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         return false;
     }
 
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-
-    private static boolean isSimplePreferences(Context context) {
-        return true;
-    }
 
     /**
      * {@inheritDoc}

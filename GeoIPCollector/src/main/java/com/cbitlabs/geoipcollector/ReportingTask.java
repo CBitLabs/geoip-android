@@ -34,7 +34,7 @@ public class ReportingTask extends AsyncTask {
         Map<String, String> infoReport = Util.getReportInfo(this.context);
 
         if (!Util.isValidReport(this.context, infoReport)) {
-            Log.i(Util.TAG, "Duplicate or noWIFI report not sent.");
+            Log.i(Util.TAG, "Duplicate or noWIFI. Report not sent.");
             return;
         }
 
