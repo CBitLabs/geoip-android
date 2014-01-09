@@ -36,7 +36,7 @@ public class Util {
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    private static final String REPORT_SERVER_URL = "127.0.0.1:8000";
+    private static final String REPORT_SERVER_URL = "http://172.16.0.179:8000/geoip";
 
     public static String getReportServerUrl() {
         return REPORT_SERVER_URL;
@@ -228,4 +228,12 @@ public class Util {
         }
         return provider1.equals(provider2);
     }
+
+
+    public static void createReportingTask(Context context) {
+        Log.i(Util.TAG, "Creating new DataTX AsyncTask");
+        ReportingTask t = new ReportingTask(context);
+        t.execute();
+    }
+
 }

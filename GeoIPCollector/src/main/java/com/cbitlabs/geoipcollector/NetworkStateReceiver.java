@@ -29,7 +29,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             GeoPoint p = Util.getLocation(context);
 
             if (GeoPoint.isValidPoint(p)) {
-                createDataTask(context);
+                Util.createReportingTask(context);
             } else {
                 Log.i(Util.TAG, "Location isn't accurate enough, registering location listener");
                 updateLocation(context);
@@ -57,7 +57,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.i(Util.TAG, "Received updated location via Network!");
-                createDataTask(context);
+                Util.createReportingTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 
@@ -82,7 +82,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.i(Util.TAG, "Received updated location via GPS!");
-                createDataTask(context);
+                Util.createReportingTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 
@@ -97,11 +97,4 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, llGps);
     }
-
-    private void createDataTask(Context context) {
-        Log.i(Util.TAG, "Creating new DataTX AsyncTask");
-        ReportingTask t = new ReportingTask(context);
-        t.execute();
-    }
-
 }

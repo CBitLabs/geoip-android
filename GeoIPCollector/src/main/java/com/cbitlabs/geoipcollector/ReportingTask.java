@@ -12,6 +12,10 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import org.json.JSONObject;
+
+import java.util.Map;
+
 public class ReportingTask extends AsyncTask {
 
     private Context context;
@@ -31,16 +35,24 @@ public class ReportingTask extends AsyncTask {
     }
 
     public void postReport() {
+        Map<String, String> infoReport = Util.getReportInfo(this.context);
         JsonObject json = new JsonObject();
-        json.addProperty("foo", "bar");
-
+        for (Map.Entry<String, String> entry : infoReport.entrySet()){
+            json.addProperty(entry.getKey(), entry.getValue());
+        }
+        Log.i(Util.TAG, "Posting json " + json.toString());
         Ion.with(context, Util.getReportServerUrl())
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        Log.i(Util.TAG, ("Res: %s, err: %s").format(result.toString(), e.toString()));
+                    public void onCompleted(Exception e, JsonObject res) {
+                        if (e != null) {
+                            Log.i(Util.TAG, e.toString());
+                        }
+                        if (res != null) {
+                            Log.i(Util.TAG, "Recieved " + res.toString());
+                        }
                     }
                 });
     }

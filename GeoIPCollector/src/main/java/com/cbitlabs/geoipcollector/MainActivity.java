@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         String info = Util.getReportInfo(this).toString();
+        Util.createReportingTask(this);
         Log.d(Util.TAG, info);
         TextView view = (TextView) findViewById(R.id.ip_info);
         view.setText(info);
@@ -72,6 +73,10 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
+    }
+
+    public void sendMessage(View view) {
+        Util.createReportingTask(this);
     }
 
 }
