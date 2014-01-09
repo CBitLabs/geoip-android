@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Map;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -19,7 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String info = Util.getReportInformation(this);
+        String info = Util.getReportInformation(this).toString();
         Log.d(Util.TAG, info);
         TextView view = (TextView) findViewById(R.id.ip_info);
         view.setText(info);

@@ -49,7 +49,7 @@ public class DataTxTask extends AsyncTask{
 
     public void txDataViaDNSLookup()  {
 
-        String info = Util.getReportInformation(context);
+        String info = Util.getReportInformation(context).toString();
         String host = info.concat(".").concat(Util.getDNSServerURL(this.context));
         Log.i(Util.TAG, "Created Hostname for Lookup:" + host);
 

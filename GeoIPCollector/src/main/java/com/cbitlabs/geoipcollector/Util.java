@@ -59,55 +59,51 @@ public class Util {
         return dnsServerMap.get(serverKey);
     }
 
-    public static String getReportInformation(Context c){
+    public Map<String, String> getReportMap(){
+         return new HashMap<String, String>(){{
+             put("lat", null);
+             put("lng", null);
+             put("mac_addr", null);
+             put("dev_id", null);
+             put("ip", null);
+         }
+        };
+    }
+
+    public static Map<String, String> getReportInformation(Context c){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
         boolean submitBSSID= prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
+
         Log.i(Util.TAG, String.format("%b %b %b", submitUUID, submitSSID, submitBSSID));
 
-        StringBuilder s = new StringBuilder();
+        Map<String, String> reportMap = new HashMap<String, String>();
+        GeoPoint loc = getLocation(c);
+        reportMap.put("lat", loc.getLat());
+        reportMap.put("lng", loc.getLng());
+        reportMap.put("ssid", submitSSID ? getSSID(c) : null);
+        reportMap.put("bssid", submitBSSID ? getBSSID(c): null);
+        reportMap.put("uuid", submitUUID ? getUUID(c) : null);
 
-        s.append(getLocation(c).toString());
-        s.append(".");
-
-        if (submitSSID)
-            s.append(getSSID(c));
-        else
-            s.append("nossid");
-
-        s.append(".");
-
-        if (submitBSSID)
-            s.append(getBSSID(c));
-        else
-            s.append("nomac");
-
-        s.append(".");
-
-        if (submitUUID)
-            s.append(getDeviceID(c));
-        else
-            s.append("nodevid");
-
-        Log.i(TAG, s.toString());
-        return s.toString();
+        Log.i(TAG, reportMap.toString());
+        return reportMap;
 
     }
 
-    public static String getDeviceID(Context c){
+    public static String getUUID(Context c){
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String deviceId = prefs.getString(Util.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
         if (deviceId.equals(DEVICE_ID_UNSET))
-            deviceId = generateNewDeviceID(c);
+            deviceId = genDevID(c);
 
         Log.i(TAG, "Got Device ID:" + deviceId);
         return deviceId;
     }
 
-    public static String generateNewDeviceID(Context c){
+    public static String genDevID(Context c){
 
         Long id = UUID.randomUUID().getMostSignificantBits();
         String deviceId;

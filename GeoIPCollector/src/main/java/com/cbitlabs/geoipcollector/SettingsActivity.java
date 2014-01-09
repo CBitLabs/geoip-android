@@ -39,7 +39,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             boolean doSubmit = (Boolean) newValue;
 
             if (doSubmit){
-                Util.generateNewDeviceID(this);
+                Util.genDevID(this);
             }
             this.updateDeviceIDHelpText(doSubmit);
         }
@@ -55,7 +55,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         String description;
         if (doSubmit){
-            String deviceId = Util.getDeviceID(this);
+            String deviceId = Util.getUUID(this);
             description = "Device ID: ".concat(deviceId);
         }
         else{
