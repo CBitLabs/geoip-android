@@ -30,10 +30,10 @@ public class Util {
 
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
-    private static final long TEN_MINUTES = 1000 * 60 * 10l;
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    public static final long TEN_MINUTES = 1000 * 60 * 10l;
+    public static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    private static final String REPORT_SERVER_URL = "http://cbitslab-geoip.herokuapp.com/geoip";
+    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com/geoip";
 
     private static Map<String, String> lastReport = null;
     public static boolean isReportValid = true;

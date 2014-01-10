@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
         String info = Util.getReportInfo(this).toString();
         Util.createReportingTask(this);
         Log.d(Util.TAG, info);
-        TextView view = (TextView) findViewById(R.id.ip_info);
-        view.setText(info);
+        Intent intent = new Intent(this, ReportIntentService.class);
+        startService(intent);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()

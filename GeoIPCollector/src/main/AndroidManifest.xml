@@ -44,6 +44,9 @@
 
             </intent-filter>
         </receiver>
+        <service android:name="com.cbitlabs.geoipcollector.ReportIntentService">
+
+        </service>
     </application>
 
 </manifest>
