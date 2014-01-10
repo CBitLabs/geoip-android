@@ -43,7 +43,7 @@ public class ReportingTask extends AsyncTask {
             json.addProperty(entry.getKey(), entry.getValue());
         }
         Log.i(Util.TAG, "Posting json " + json.toString());
-        Ion.with(context, Util.getReportServerUrl())
+        Ion.with(context, Util.getReportUrl())
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

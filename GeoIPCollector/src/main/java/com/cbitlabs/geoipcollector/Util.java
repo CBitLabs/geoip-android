@@ -33,7 +33,7 @@ public class Util {
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com/geoip";
+    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
 
     private static Map<String, String> lastReport = null;
     public static boolean isReportValid = true;
@@ -53,8 +53,12 @@ public class Util {
         return isDuplicate;
     }
 
-    public static String getReportServerUrl() {
-        return REPORT_SERVER_URL;
+    public static String getReportUrl() {
+        return REPORT_SERVER_URL + "/geoip";
+    }
+
+    public static String getHistoryUrl(String uuid) {
+        return REPORT_SERVER_URL + "/history/" + uuid;
     }
 
     public static Map<String, String> getReportInfo(Context c) {
