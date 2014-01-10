@@ -33,21 +33,23 @@ public class Util {
     private static final long TEN_MINUTES = 1000 * 60 * 10l;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    private static final String REPORT_SERVER_URL = "http://172.16.0.179:8000/geoip";
+    private static final String REPORT_SERVER_URL = "http://cbitslab-geoip.herokuapp.com/geoip";
 
     private static Map<String, String> lastReport = null;
     public static boolean isReportValid = true;
 
     public static boolean isValidReport(Context c, Map<String, String> report) {
-        return getWifiConnectionState(c) && !isDuplicateReport(report);
+        return isWiFiConnected(c) && !isDuplicateReport(c, report);
     }
 
-    private static boolean isDuplicateReport(Map<String, String> report) {
+    private static boolean isDuplicateReport(Context c, Map<String, String> report) {
         boolean isDuplicate = true;
         if (lastReport != null) {
             isDuplicate = report.equals(lastReport);
         }
-        lastReport = new HashMap<String, String>(report);
+        if (isWiFiConnected(c)) {
+            lastReport = new HashMap<String, String>(report);
+        }
         return isDuplicate;
     }
 
@@ -61,8 +63,6 @@ public class Util {
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
         boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
-
-        Log.i(Util.TAG, String.format("%b %b %b", submitUUID, submitSSID, submitBSSID));
 
         Map<String, String> reportMap = new HashMap<String, String>();
         GeoPoint loc = getLocation(c);
@@ -105,7 +105,7 @@ public class Util {
 
     public static String getSSID(Context c) {
 
-        if (!Util.getWifiConnectionState(c))
+        if (!Util.isWiFiConnected(c))
             return "";
 
         WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
@@ -119,7 +119,7 @@ public class Util {
 
 
     public static String getBSSID(Context c) {
-        if (!Util.getWifiConnectionState(c))
+        if (!Util.isWiFiConnected(c))
             return "";
 
         WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
@@ -131,7 +131,7 @@ public class Util {
     }
 
 
-    public static boolean getWifiConnectionState(final Context context) {
+    public static boolean isWiFiConnected(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 

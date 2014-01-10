@@ -24,7 +24,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         Log.d(Util.TAG, "--------------------------------");
         Log.d(Util.TAG, "NetworkStateReceiver.onReceive()");
 
-        if (Util.getWifiConnectionState(context)) {
+        if (Util.isWiFiConnected(context)) {
 
             GeoPoint p = Util.getLocation(context);
 
