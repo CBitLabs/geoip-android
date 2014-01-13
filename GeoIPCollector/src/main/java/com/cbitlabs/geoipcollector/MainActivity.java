@@ -19,9 +19,19 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends Activity {
 
     ArrayAdapter<JsonObject> historyAdaptor = null;
+    Map<Integer, String> historyMap = new HashMap<Integer, String>() {
+        {
+            put(R.id.item_ssid, "ssid");
+            put(R.id.item_loc, "loc");
+            put(R.id.item_created_at_human, "created_at_human");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +40,6 @@ public class MainActivity extends Activity {
         //start reporting geoIP in the background.
         Intent intent = new Intent(this, ReportIntentService.class);
         startService(intent);
-
         // create a history adapter for our list view
         if (historyAdaptor == null) {
             historyAdaptor = new ArrayAdapter<JsonObject>(this, 0) {
@@ -40,9 +49,9 @@ public class MainActivity extends Activity {
                         convertView = getLayoutInflater().inflate(R.layout.history_item, null);
 
                     JsonObject item = getItem(position);
-
-                    TextView text = (TextView) convertView.findViewById(R.id.item);
-                    text.setText(item.toString());
+                    for (Map.Entry<Integer, String> el : historyMap.entrySet()) {
+                        convertView = setHistoryAdaptorText(convertView, item, el.getKey(), el.getValue());
+                    }
                     return convertView;
                 }
             };
@@ -53,8 +62,13 @@ public class MainActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(historyAdaptor);
 
-        // authenticate and do the first load
         load();
+    }
+
+    private View setHistoryAdaptorText(View convertView, JsonObject item, int id, String key) {
+        TextView text = (TextView) convertView.findViewById(id);
+        text.setText(item.get(key).toString().replaceAll("^\"|\"$", ""));
+        return convertView;
     }
 
     // This "Future" tracks loading operations.
@@ -95,6 +109,7 @@ public class MainActivity extends Activity {
                     }
                 });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

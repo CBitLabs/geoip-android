@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <ImageView
         android:id="@+id/image"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_launcher"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_action_place" />
 
     <LinearLayout
         android:paddingLeft="4dp"
@@ -21,10 +22,23 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/item"
+            android:id="@+id/item_ssid"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <TextView
+            android:id="@+id/item_loc"
             style="@android:style/TextAppearance.Small"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/item_created_at_human"
+            style="@android:style/TextAppearance.Small"
+            android:textStyle="italic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </LinearLayout>
