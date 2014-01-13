@@ -36,7 +36,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             boolean doSubmit = (Boolean) newValue;
 
             if (doSubmit) {
-                Util.genDevID(this);
+                Util.generateDeviceID(this);
             }
             this.updateDeviceIDHelpText(doSubmit);
         }
