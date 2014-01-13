@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
                             return;
                         }
                         Log.i(Util.LOG_TAG, "Found history: " + result.toString());
-                        Toast.makeText(MainActivity.this, "Successfully loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
 
                         historyAdaptor.clear();
 
@@ -110,13 +110,11 @@ public class MainActivity extends Activity {
                 });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -124,22 +122,20 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Log.i(Util.LOG_TAG, "Settings!");
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Log.i(Util.LOG_TAG, "Settings!");
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+
+            case R.id.refresHistory:
+                load();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void sendReport(View view) {
-        Util.createReportingTask(this);
-    }
-
-    public void refreshHistory(View view) {
-        load();
     }
 
 }

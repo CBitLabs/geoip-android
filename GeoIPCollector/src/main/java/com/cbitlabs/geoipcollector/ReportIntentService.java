@@ -20,7 +20,6 @@ public class ReportIntentService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "ReportServiceIntentService starting", Toast.LENGTH_SHORT).show();
         return super.onStartCommand(intent, flags, startId);
     }
 
