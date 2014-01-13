@@ -12,8 +12,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.util.Map;
-
 public class ReportingTask extends AsyncTask {
 
     private Context context;
@@ -31,20 +29,17 @@ public class ReportingTask extends AsyncTask {
     }
 
     public void postReport() {
-        Map<String, String> infoReport = Util.getReportInfo(this.context);
+        JsonObject geoReport = Util.getReport(this.context);
 
-        if (!Util.isValidReport(this.context, infoReport)) {
+        if (!Util.isValidReport(this.context, geoReport)) {
             Log.i(Util.TAG, "Duplicate or noWIFI. Report not sent.");
             return;
         }
 
-        JsonObject json = new JsonObject();
-        for (Map.Entry<String, String> entry : infoReport.entrySet()) {
-            json.addProperty(entry.getKey(), entry.getValue());
-        }
-        Log.i(Util.TAG, "Posting json " + json.toString());
+
+        Log.i(Util.TAG, "Posting json " + geoReport.toString());
         Ion.with(context, Util.getReportUrl())
-                .setJsonObjectBody(json)
+                .setJsonObjectBody(geoReport)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

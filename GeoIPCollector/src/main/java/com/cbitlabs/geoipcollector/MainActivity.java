@@ -21,7 +21,7 @@ import com.koushikdutta.ion.Ion;
 
 public class MainActivity extends Activity {
 
-    ArrayAdapter<JsonObject> historyAdaptor;
+    ArrayAdapter<JsonObject> historyAdaptor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +32,21 @@ public class MainActivity extends Activity {
         startService(intent);
 
         // create a history adapter for our list view
-        historyAdaptor = new ArrayAdapter<JsonObject>(this, 0) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null)
-                    convertView = getLayoutInflater().inflate(R.layout.history_item, null);
+        if (historyAdaptor == null) {
+            historyAdaptor = new ArrayAdapter<JsonObject>(this, 0) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    if (convertView == null)
+                        convertView = getLayoutInflater().inflate(R.layout.history_item, null);
 
-                JsonObject item = getItem(position);
+                    JsonObject item = getItem(position);
 
-                TextView text = (TextView) convertView.findViewById(R.id.item);
-                text.setText(item.toString());
-                return convertView;
-            }
-        };
+                    TextView text = (TextView) convertView.findViewById(R.id.item);
+                    text.setText(item.toString());
+                    return convertView;
+                }
+            };
+        }
 
         // basic setup of the ListView and adapter
         setContentView(R.layout.activity_main);

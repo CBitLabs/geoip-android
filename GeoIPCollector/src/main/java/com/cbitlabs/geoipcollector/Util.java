@@ -10,8 +10,10 @@ import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class Util {
 
     public static final String TAG = "CBITLABS_GEOIP";
+    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
 
     public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
@@ -33,22 +36,23 @@ public class Util {
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
+    private static JsonObject lastReport = null;
 
-    private static Map<String, String> lastReport = null;
-    public static boolean isReportValid = true;
-
-    public static boolean isValidReport(Context c, Map<String, String> report) {
+    public static boolean isValidReport(Context c, JsonObject report) {
         return isWiFiConnected(c) && !isDuplicateReport(c, report);
     }
 
-    private static boolean isDuplicateReport(Context c, Map<String, String> report) {
+    private static boolean isDuplicateReport(Context c, JsonObject report) {
         boolean isDuplicate = true;
         if (lastReport != null) {
             isDuplicate = report.equals(lastReport);
         }
+
         if (isWiFiConnected(c)) {
-            lastReport = new HashMap<String, String>(report);
+            JsonObject lastReport = new JsonObject();
+            for (Map.Entry<String, JsonElement> entry : report.entrySet()) {
+                lastReport.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
+            }
         }
         return isDuplicate;
     }
@@ -61,20 +65,20 @@ public class Util {
         return REPORT_SERVER_URL + "/history/" + uuid;
     }
 
-    public static Map<String, String> getReportInfo(Context c) {
+    public static JsonObject getReport(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
         boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
 
-        Map<String, String> reportMap = new HashMap<String, String>();
+        JsonObject reportMap = new JsonObject();
         GeoPoint loc = getLocation(c);
-        reportMap.put("lat", loc.getLat());
-        reportMap.put("lng", loc.getLng());
-        reportMap.put("ssid", submitSSID ? getSSID(c) : null);
-        reportMap.put("bssid", submitBSSID ? getBSSID(c) : null);
-        reportMap.put("uuid", submitUUID ? getUUID(c) : null);
+        reportMap.addProperty("lat", loc.getLat());
+        reportMap.addProperty("lng", loc.getLng());
+        reportMap.addProperty("ssid", submitSSID ? getSSID(c) : null);
+        reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : null);
+        reportMap.addProperty("uuid", submitUUID ? getUUID(c) : null);
 
         Log.i(TAG, reportMap.toString());
         return reportMap;
@@ -86,13 +90,13 @@ public class Util {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String deviceId = prefs.getString(Util.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
         if (deviceId.equals(DEVICE_ID_UNSET))
-            deviceId = genDevID(c);
+            deviceId = generateDeviceID(c);
 
         Log.i(TAG, "Got Device ID:" + deviceId);
         return deviceId;
     }
 
-    public static String genDevID(Context c) {
+    public static String generateDeviceID(Context c) {
 
         Long id = UUID.randomUUID().getMostSignificantBits();
         String deviceId;

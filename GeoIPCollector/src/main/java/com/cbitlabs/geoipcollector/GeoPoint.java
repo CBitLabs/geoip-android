@@ -4,7 +4,7 @@ package com.cbitlabs.geoipcollector;
  * Created by stuart on 11/25/13.
  */
 public class GeoPoint {
-    public double lat, lng;
+    private double lat, lng;
     protected boolean isValid;
 
     GeoPoint(double lat, double lng) {
@@ -23,12 +23,12 @@ public class GeoPoint {
         return g.isValid;
     }
 
-    public String getLat() {
-        return String.valueOf(this.lat);
+    public double getLat() {
+        return this.lat;
     }
 
-    public String getLng() {
-        return String.valueOf(this.lng);
+    public double getLng() {
+        return this.lng;
     }
 
     public String toString() {

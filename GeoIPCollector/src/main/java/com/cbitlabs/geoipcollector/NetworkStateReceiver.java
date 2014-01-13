@@ -52,7 +52,6 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     private void updateLocationUsingNetwork(final Context context) {
         final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        final LocationListener llNetwork;
         llNet = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
