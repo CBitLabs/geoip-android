@@ -32,7 +32,7 @@ public class ReportIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         while (true) {
-            Log.i(Util.TAG, "Sending background task.");
+            Log.i(Util.LOG_TAG, "Sending background task.");
             Util.createReportingTask(this);
             try {
                 Thread.sleep(Util.TWO_MINUTES);

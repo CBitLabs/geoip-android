@@ -17,13 +17,13 @@ public class ReportingTask extends AsyncTask {
     private Context context;
 
     public ReportingTask(Context context) {
-        Log.d(Util.TAG, "ReportingTask Created");
+        Log.d(Util.LOG_TAG, "ReportingTask Created");
         this.context = context;
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        Log.d(Util.TAG, "ReportingTask.doInBackground()");
+        Log.d(Util.LOG_TAG, "ReportingTask.doInBackground()");
         this.postReport();
         return null;
     }
@@ -32,12 +32,12 @@ public class ReportingTask extends AsyncTask {
         JsonObject geoReport = Util.getReport(this.context);
 
         if (!Util.isValidReport(this.context, geoReport)) {
-            Log.i(Util.TAG, "Duplicate or noWIFI. Report not sent.");
+            Log.i(Util.LOG_TAG, "Duplicate or noWIFI. Report not sent.");
             return;
         }
 
 
-        Log.i(Util.TAG, "Posting json " + geoReport.toString());
+        Log.i(Util.LOG_TAG, "Posting json " + geoReport.toString());
         Ion.with(context, Util.getReportUrl())
                 .setJsonObjectBody(geoReport)
                 .asJsonObject()
@@ -45,10 +45,10 @@ public class ReportingTask extends AsyncTask {
                     @Override
                     public void onCompleted(Exception e, JsonObject res) {
                         if (e != null) {
-                            Log.i(Util.TAG, e.toString());
+                            Log.i(Util.LOG_TAG, e.toString());
                         }
                         if (res != null) {
-                            Log.i(Util.TAG, "Recieved " + res.toString());
+                            Log.i(Util.LOG_TAG, "Recieved " + res.toString());
                         }
                     }
                 });

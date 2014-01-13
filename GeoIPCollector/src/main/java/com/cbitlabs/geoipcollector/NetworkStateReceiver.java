@@ -21,8 +21,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     LocationListener llGps;
 
     public void onReceive(final Context context, final Intent intent) {
-        Log.d(Util.TAG, "--------------------------------");
-        Log.d(Util.TAG, "NetworkStateReceiver.onReceive()");
+        Log.d(Util.LOG_TAG, "--------------------------------");
+        Log.d(Util.LOG_TAG, "NetworkStateReceiver.onReceive()");
 
         if (Util.isWiFiConnected(context)) {
 
@@ -31,7 +31,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             if (GeoPoint.isValidPoint(p)) {
                 Util.createReportingTask(context);
             } else {
-                Log.i(Util.TAG, "Location isn't accurate enough, registering location listener");
+                Log.i(Util.LOG_TAG, "Location isn't accurate enough, registering location listener");
                 updateLocation(context);
             }
         }
@@ -55,7 +55,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         llNet = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                Log.i(Util.TAG, "Received updated location via Network!");
+                Log.i(Util.LOG_TAG, "Received updated location via Network!");
                 Util.createReportingTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
@@ -80,7 +80,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         llGps = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                Log.i(Util.TAG, "Received updated location via GPS!");
+                Log.i(Util.LOG_TAG, "Received updated location via GPS!");
                 Util.createReportingTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }

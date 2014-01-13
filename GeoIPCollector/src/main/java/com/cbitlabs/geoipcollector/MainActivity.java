@@ -80,10 +80,11 @@ public class MainActivity extends Activity {
                     public void onCompleted(Exception e, JsonArray result) {
                         // this is called back onto the ui thread, no Activity.runOnUiThread or Handler.post necessary.
                         if (e != null) {
+                            Log.i(Util.LOG_TAG, e.toString());
                             Toast.makeText(MainActivity.this, "Error loading history", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Log.i(Util.TAG, "Found history: " + result.toString());
+                        Log.i(Util.LOG_TAG, "Found history: " + result.toString());
                         Toast.makeText(MainActivity.this, "Successfully loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
 
                         historyAdaptor.clear();
@@ -110,7 +111,7 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Log.i(Util.TAG, "Settings!");
+            Log.i(Util.LOG_TAG, "Settings!");
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
             return true;

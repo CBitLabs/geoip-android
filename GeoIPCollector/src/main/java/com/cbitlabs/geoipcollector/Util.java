@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class Util {
 
-    public static final String TAG = "CBITLABS_GEOIP";
+    public static final String LOG_TAG = "CBITLABS_GEOIP";
     private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
 
     public static final String PREF_KEY_DEVICE_ID = "device_id";
@@ -80,7 +80,7 @@ public class Util {
         reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : null);
         reportMap.addProperty("uuid", submitUUID ? getUUID(c) : null);
 
-        Log.i(TAG, reportMap.toString());
+        Log.i(LOG_TAG, reportMap.toString());
         return reportMap;
 
     }
@@ -92,7 +92,7 @@ public class Util {
         if (deviceId.equals(DEVICE_ID_UNSET))
             deviceId = generateDeviceID(c);
 
-        Log.i(TAG, "Got Device ID:" + deviceId);
+        Log.i(LOG_TAG, "Got Device ID:" + deviceId);
         return deviceId;
     }
 
@@ -103,7 +103,7 @@ public class Util {
         deviceId = Long.toString(id, Character.MAX_RADIX);
         deviceId = deviceId.replace("-", "");
 
-        Log.i(TAG, "Generated a new Device ID:".concat(deviceId));
+        Log.i(LOG_TAG, "Generated a new Device ID:".concat(deviceId));
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(c).edit();
         editor.putString(PREF_KEY_DEVICE_ID, deviceId);
         editor.commit();
@@ -120,7 +120,7 @@ public class Util {
         String ssid = wifiManager.getConnectionInfo().getSSID();
         ssid = ssid.replace("\"", "").replace(" ", "_");
 
-        Log.i(Util.TAG, "Got Network SSID:" + ssid);
+        Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
 
         return ssid;
     }
@@ -134,7 +134,7 @@ public class Util {
         String bssid = wifiManager.getConnectionInfo().getBSSID();
         bssid = bssid.replace(":", "");
 
-        Log.i(Util.TAG, "Got Network BSSID:" + bssid);
+        Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 
@@ -146,7 +146,7 @@ public class Util {
         NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         boolean state = wifi.isConnected();
-        Log.i(TAG, String.format("WiFi State:%b", state));
+        Log.i(LOG_TAG, String.format("WiFi State:%b", state));
         return state;
     }
 
@@ -165,11 +165,11 @@ public class Util {
         GeoPoint p;
         if (l == null) {
             p = GeoPoint.getNullPoint();
-            Log.d(Util.TAG, "Failed to get location information");
+            Log.d(Util.LOG_TAG, "Failed to get location information");
         } else {
             if (Util.isRecentLocation(l)) {
                 p = GeoPoint.getNullPoint();
-                Log.d(Util.TAG, "Failed to get recent location information!");
+                Log.d(Util.LOG_TAG, "Failed to get recent location information!");
             } else
                 p = new GeoPoint(l.getLatitude(), l.getLongitude());
         }
@@ -255,7 +255,7 @@ public class Util {
 
 
     public static void createReportingTask(Context context) {
-        Log.i(Util.TAG, "Creating new Reporting AsyncTask");
+        Log.i(Util.LOG_TAG, "Creating new Reporting AsyncTask");
         ReportingTask t = new ReportingTask(context);
         t.execute();
     }
