@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
             return;
 
         String url = Util.getHistoryUrl(Util.getUUID(this));
-
+        Log.i(Util.LOG_TAG, "Requesting history with url: " + url);
         // This request loads a URL as JsonArray and invokes
         // a callback on completion.
         loading = Ion.with(this, url)
