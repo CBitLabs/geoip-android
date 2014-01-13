@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendReport() {
+    public void sendReport(View view) {
         Util.createReportingTask(this);
     }
 
