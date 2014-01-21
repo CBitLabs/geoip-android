@@ -3,7 +3,6 @@ package com.cbitlabs.geoipcollector;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by jblum on 1/10/14.

@@ -13,7 +13,11 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.UUID;
 
@@ -68,6 +72,7 @@ public class Util {
     public static JsonObject getReport(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
+        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
         boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
@@ -79,6 +84,7 @@ public class Util {
         reportMap.addProperty("ssid", submitSSID ? getSSID(c) : null);
         reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : null);
         reportMap.addProperty("uuid", submitUUID ? getUUID(c) : null);
+        reportMap.addProperty("ip", submitUUID ? getIPAddress() : null);
 
         Log.i(LOG_TAG, reportMap.toString());
         return reportMap;
@@ -111,6 +117,17 @@ public class Util {
         return deviceId;
     }
 
+    public static boolean isWiFiConnected(final Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        boolean state = wifi.isConnected();
+        Log.i(LOG_TAG, String.format("WiFi State:%b", state));
+        return state;
+    }
+
     public static String getSSID(Context c) {
 
         if (!Util.isWiFiConnected(c))
@@ -138,18 +155,22 @@ public class Util {
         return bssid;
     }
 
-
-    public static boolean isWiFiConnected(final Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        boolean state = wifi.isConnected();
-        Log.i(LOG_TAG, String.format("WiFi State:%b", state));
-        return state;
+    public static String getIPAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e(LOG_TAG, ex.toString());
+        }
+        return null;
     }
-
 
     public static GeoPoint getLocation(final Context context) {
 
