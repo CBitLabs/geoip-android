@@ -28,8 +28,8 @@ import java.util.UUID;
 public class Util {
 
     public static final String LOG_TAG = "CBITLABS_GEOIP";
-    //    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
-    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
+    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
+    //    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
     public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
@@ -40,7 +40,7 @@ public class Util {
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int TWO_MINUTES = 5000;//1000 * 60 * 2;
+    public static final int TWO_MINUTES = 1000 * 60 * 2;
 
     private static JsonObject lastReport = null;
 
@@ -52,9 +52,6 @@ public class Util {
         boolean isDuplicate = false;
         if (lastReport != null) {
             isDuplicate = report.toString().equals(lastReport.toString());
-            Log.i(Util.LOG_TAG, "isDuplicate " + isDuplicate + " report: " + report.toString() + " last report:" + lastReport.toString());
-        } else {
-            Log.i(Util.LOG_TAG, "Null last report");
         }
 
         if (isWiFiConnected(c)) {

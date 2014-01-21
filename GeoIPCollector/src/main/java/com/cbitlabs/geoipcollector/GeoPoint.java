@@ -23,12 +23,12 @@ public class GeoPoint {
         return g.isValid;
     }
 
-    public double getLat() {
-        return this.lat;
+    public String getLat() {
+        return Double.toString(this.lat);
     }
 
-    public double getLng() {
-        return this.lng;
+    public String getLng() {
+        return Double.toString(this.lng);
     }
 
     public String toString() {
