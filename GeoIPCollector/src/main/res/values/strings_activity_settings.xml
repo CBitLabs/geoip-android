@@ -17,6 +17,9 @@
     <string name="pref_submit_bssid">Submit Network Fingerprint</string>
     <string name="pref_submit_bssid_desc">Include the network mac address in the report.</string>
 
+    <string name="pref_submit_ip">Submit IP Address</string>
+    <string name="pref_submit_ip_desc">Include the ip address in the report.</string>
+
     <string name="pref_get_loc_method">Set Default Location Provider</string>
 
     <string-array name="pref_get_loc_entries">

@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -27,9 +28,10 @@ import java.util.UUID;
 public class Util {
 
     public static final String LOG_TAG = "CBITLABS_GEOIP";
-    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
-
+    //    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
+    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
+    public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
     public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
     public static final String PREF_KEY_SUBMIT_SSID = "submit_ssid";
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
@@ -38,7 +40,7 @@ public class Util {
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int TWO_MINUTES = 1000 * 60 * 2;
+    public static final int TWO_MINUTES = 5000;//1000 * 60 * 2;
 
     private static JsonObject lastReport = null;
 
@@ -47,22 +49,27 @@ public class Util {
     }
 
     private static boolean isDuplicateReport(Context c, JsonObject report) {
-        boolean isDuplicate = true;
+        boolean isDuplicate = false;
         if (lastReport != null) {
-            isDuplicate = report.equals(lastReport);
+            isDuplicate = report.toString().equals(lastReport.toString());
+            Log.i(Util.LOG_TAG, "isDuplicate " + isDuplicate + " report: " + report.toString() + " last report:" + lastReport.toString());
+        } else {
+            Log.i(Util.LOG_TAG, "Null last report");
         }
 
         if (isWiFiConnected(c)) {
-            JsonObject lastReport = new JsonObject();
+
+            lastReport = new JsonObject();
             for (Map.Entry<String, JsonElement> entry : report.entrySet()) {
-                lastReport.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
+                lastReport.addProperty(entry.getKey(), entry.getValue().getAsString());
             }
+            Log.i(Util.LOG_TAG, "Setting lastReport" + lastReport.toString());
         }
         return isDuplicate;
     }
 
     public static String getReportUrl() {
-        return REPORT_SERVER_URL + "/geoip";
+        return REPORT_SERVER_URL + "/add";
     }
 
     public static String getHistoryUrl(String uuid) {
@@ -72,7 +79,7 @@ public class Util {
     public static JsonObject getReport(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 
-        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
+        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_IP, true);
         boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
         boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
         boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
@@ -84,7 +91,7 @@ public class Util {
         reportMap.addProperty("ssid", submitSSID ? getSSID(c) : null);
         reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : null);
         reportMap.addProperty("uuid", submitUUID ? getUUID(c) : null);
-        reportMap.addProperty("ip", submitUUID ? getIPAddress() : null);
+        reportMap.addProperty("ip", submitIP ? getIPAddress(c) : null);
 
         Log.i(LOG_TAG, reportMap.toString());
         return reportMap;
@@ -129,12 +136,11 @@ public class Util {
     }
 
     public static String getSSID(Context c) {
-
-        if (!Util.isWiFiConnected(c))
+        WifiInfo info = getWiFiInfo(c);
+        if (info == null) {
             return "";
-
-        WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
-        String ssid = wifiManager.getConnectionInfo().getSSID();
+        }
+        String ssid = info.getSSID();
         ssid = ssid.replace("\"", "").replace(" ", "_");
 
         Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
@@ -144,32 +150,40 @@ public class Util {
 
 
     public static String getBSSID(Context c) {
-        if (!Util.isWiFiConnected(c))
+        WifiInfo info = getWiFiInfo(c);
+        if (info == null) {
             return "";
-
-        WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
-        String bssid = wifiManager.getConnectionInfo().getBSSID();
+        }
+        String bssid = info.getBSSID();
         bssid = bssid.replace(":", "");
 
         Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 
-    public static String getIPAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            Log.e(LOG_TAG, ex.toString());
+    public static String getIPAddress(Context c) {
+        WifiInfo info = getWiFiInfo(c);
+        if (info == null) {
+            return "";
         }
-        return null;
+        int ip = info.getIpAddress();
+
+        String ipString = String.format(
+                "%d.%d.%d.%d",
+                (ip & 0xff),
+                (ip >> 8 & 0xff),
+                (ip >> 16 & 0xff),
+                (ip >> 24 & 0xff));
+
+        return ipString;
+    }
+
+    private static WifiInfo getWiFiInfo(Context c) {
+        if (!Util.isWiFiConnected(c))
+            return null;
+
+        WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
+        return wifiManager.getConnectionInfo();
     }
 
     public static GeoPoint getLocation(final Context context) {
