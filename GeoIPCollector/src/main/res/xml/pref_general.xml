@@ -8,7 +8,7 @@
             android:summary="@string/pref_server_desc"
             android:entries="@array/pref_server_list_entries"
             android:entryValues="@array/pref_server_list_values"
-            android:defaultValue="GSF"/>
+            android:defaultValue="GSF" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -25,14 +25,19 @@
             android:key="submit_ssid"
             android:title="@string/pref_submit_ssid"
             android:summary="@string/pref_submit_ssid_desc"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="submit_bssid"
             android:title="@string/pref_submit_bssid"
             android:summary="@string/pref_submit_bssid_desc"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
+        <CheckBoxPreference
+            android:key="submit_ip"
+            android:title="@string/pref_submit_ip"
+            android:summary="@string/pref_submit_ip_desc"
+            android:defaultValue="true" />
     </PreferenceCategory>
 
     <PreferenceCategory
