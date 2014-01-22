@@ -52,7 +52,7 @@ public class Util {
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int TWO_MINUTES = 10 * 1000;//1000 * 60 * 2;
+    public static final int TWO_MINUTES = 1000 * 60 * 2;
 
     private static JsonObject lastReport = null;
 

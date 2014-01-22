@@ -47,14 +47,10 @@ public class MainActivity extends Activity {
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null)
                         convertView = getLayoutInflater().inflate(R.layout.history_item, null);
-                    if (historyMap.size() < 0) {
-                        JsonObject item = getItem(position);
-                        for (Map.Entry<Integer, String> el : historyMap.entrySet()) {
-                            convertView = setHistoryAdaptorText(convertView, item, el.getKey(), el.getValue());
-                        }
-                    } else {
-                        TextView text = (TextView) convertView.findViewById(0);
-                        text.setText("No results found!");
+
+                    JsonObject item = getItem(position);
+                    for (Map.Entry<Integer, String> el : historyMap.entrySet()) {
+                        convertView = setHistoryAdaptorText(convertView, item, el.getKey(), el.getValue());
                     }
                     return convertView;
                 }
