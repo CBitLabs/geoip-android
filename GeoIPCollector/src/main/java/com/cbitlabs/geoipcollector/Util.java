@@ -14,11 +14,8 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,8 +24,19 @@ import java.util.UUID;
  */
 public class Util {
 
+    public static final Map<String, String> dnsServerMap = new HashMap<String, String>();
+    public static final Map<String, String> dnsResolverMap = new HashMap<String, String>();
+
+    static {
+        dnsServerMap.put("CBL", "geo.cbitlabs.com");
+        dnsServerMap.put("GSF", "geo.spf.gladstonefamily.net");
+
+        dnsResolverMap.put("CBL", "cb101.public.cbitlabs.com");
+        dnsResolverMap.put("GSF", "charon.gladstonefamily.net");
+    }
+
     public static final String LOG_TAG = "CBITLABS_GEOIP";
-    private static final String REPORT_SERVER_URL = "http://cbitlabs-geoip.herokuapp.com";
+    private static final String REPORT_SERVER_URL = "http://172.17.215.80";
     //    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
@@ -36,13 +44,47 @@ public class Util {
     public static final String PREF_KEY_SUBMIT_SSID = "submit_ssid";
     public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
     public static final String PREF_KEY_LOC_METHOD = "pref_location";
-
+    public static final String PREF_KEY_REPORT_SERVER = "reporting_server";
+    public static final String NO_SSID = "no_ssid";
+    public static final String NO_BSSID = "no_bssid";
+    public static final String NO_UUID = "no_uuid";
+    public static final String NO_IP = "no_ip";
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int TWO_MINUTES = 1000 * 60 * 2;
+    public static final int TWO_MINUTES = 10 * 1000;//1000 * 60 * 2;
 
     private static JsonObject lastReport = null;
+
+    public static JsonObject getReport(Context c) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+
+        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_IP, true);
+        boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
+        boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
+        boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
+
+        JsonObject reportMap = new JsonObject();
+        GeoPoint loc = getLocation(c);
+        reportMap.addProperty("lat", loc.getLat());
+        reportMap.addProperty("lng", loc.getLng());
+        reportMap.addProperty("ssid", submitSSID ? getSSID(c) : NO_SSID);
+        reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : NO_BSSID);
+        reportMap.addProperty("uuid", submitUUID ? getUUID(c) : NO_UUID);
+        reportMap.addProperty("ip", submitIP ? getIPAddress(c) : NO_IP);
+
+        Log.i(LOG_TAG, reportMap.toString());
+        return reportMap;
+
+    }
+
+    public static String getReportAsString(JsonObject report) {
+        String info = String.format("%3.3f.%3.3f.%s.%s.%s.%s",
+                report.get("lat").getAsFloat(), report.get("lng").getAsFloat(),
+                report.get("ssid").getAsString(), report.get("bssid").getAsString(),
+                report.get("uuid").getAsString(), report.get("ip").getAsString());
+        return info;
+    }
 
     public static boolean isValidReport(Context c, JsonObject report) {
         return isWiFiConnected(c) && !isDuplicateReport(c, report);
@@ -65,6 +107,17 @@ public class Util {
         return isDuplicate;
     }
 
+    public static boolean isWiFiConnected(final Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        boolean state = wifi.isConnected();
+        Log.i(LOG_TAG, String.format("WiFi State:%b", state));
+        return state;
+    }
+
     public static String getReportUrl() {
         return REPORT_SERVER_URL + "/add";
     }
@@ -73,26 +126,16 @@ public class Util {
         return REPORT_SERVER_URL + "/history/" + uuid;
     }
 
-    public static JsonObject getReport(Context c) {
+    public static String getDNSResolverURL(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
+        return dnsResolverMap.get(serverKey);
+    }
 
-        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_IP, true);
-        boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
-        boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
-        boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
-
-        JsonObject reportMap = new JsonObject();
-        GeoPoint loc = getLocation(c);
-        reportMap.addProperty("lat", loc.getLat());
-        reportMap.addProperty("lng", loc.getLng());
-        reportMap.addProperty("ssid", submitSSID ? getSSID(c) : null);
-        reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : null);
-        reportMap.addProperty("uuid", submitUUID ? getUUID(c) : null);
-        reportMap.addProperty("ip", submitIP ? getIPAddress(c) : null);
-
-        Log.i(LOG_TAG, reportMap.toString());
-        return reportMap;
-
+    public static String getDNSServerURL(Context c) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
+        return dnsServerMap.get(serverKey);
     }
 
     public static String getUUID(Context c) {
@@ -119,17 +162,6 @@ public class Util {
         editor.commit();
 
         return deviceId;
-    }
-
-    public static boolean isWiFiConnected(final Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        boolean state = wifi.isConnected();
-        Log.i(LOG_TAG, String.format("WiFi State:%b", state));
-        return state;
     }
 
     public static String getSSID(Context c) {
@@ -289,6 +321,12 @@ public class Util {
     public static void createReportingTask(Context context) {
         Log.i(Util.LOG_TAG, "Creating new Reporting AsyncTask");
         ReportingTask t = new ReportingTask(context);
+        t.execute();
+    }
+
+    public static void createDNSTask(Context context, JsonObject report) {
+        Log.i(Util.LOG_TAG, "Creating new DNS AsyncTask");
+        DNSTask t = new DNSTask(context, report);
         t.execute();
     }
 

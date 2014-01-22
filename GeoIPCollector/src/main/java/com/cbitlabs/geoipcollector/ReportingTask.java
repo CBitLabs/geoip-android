@@ -29,7 +29,7 @@ public class ReportingTask extends AsyncTask {
     }
 
     public void postReport() {
-        JsonObject geoReport = Util.getReport(this.context);
+        final JsonObject geoReport = Util.getReport(this.context);
 
         if (!Util.isValidReport(this.context, geoReport)) {
             Log.i(Util.LOG_TAG, "Duplicate or noWIFI. Report not sent.");
@@ -46,6 +46,8 @@ public class ReportingTask extends AsyncTask {
                     public void onCompleted(Exception e, JsonObject res) {
                         if (e != null) {
                             Log.i(Util.LOG_TAG, e.toString());
+                            //try a DNS lookup instead
+                            Util.createDNSTask(context, geoReport);
                         }
                         if (res != null) {
                             Log.i(Util.LOG_TAG, "Recieved " + res.toString());
