@@ -71,8 +71,6 @@ public class Util {
         reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : NO_BSSID);
         reportMap.addProperty("uuid", submitUUID ? getUUID(c) : NO_UUID);
         reportMap.addProperty("ip", submitIP ? getIPAddress(c) : NO_IP);
-
-        Log.i(LOG_TAG, reportMap.toString());
         return reportMap;
 
     }
@@ -103,7 +101,7 @@ public class Util {
             editor.commit();
 
         }
-        
+
         return isDuplicate;
     }
 
