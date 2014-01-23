@@ -76,9 +76,9 @@ public class Util {
     }
 
     public static String getReportAsString(JsonObject report) {
-        String info = String.format("%3.3f.%3.3f.%s.%s.%s.%s",
-                report.get("lat").getAsFloat(), report.get("lng").getAsFloat(),
-                report.get("ssid").getAsString(), report.get("bssid").getAsString(),
+        String info = String.format("%s.%s.%s.%s.%s.%s",
+                report.get("lat").getAsString(), report.get("lng").getAsString(),
+                report.get("ssid").getAsString().replace(".", "-"), report.get("bssid").getAsString(),
                 report.get("uuid").getAsString(), report.get("ip").getAsString());
         return info;
     }
