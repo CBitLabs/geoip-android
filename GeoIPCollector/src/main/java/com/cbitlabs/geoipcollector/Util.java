@@ -53,8 +53,7 @@ public class Util {
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int TWO_MINUTES = 1000 * 60 * 2;
-
-    private static JsonObject lastReport = null;
+    private static final String lastReportPref = "lastReport";
 
     public static JsonObject getReport(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
@@ -91,19 +90,20 @@ public class Util {
     }
 
     private static boolean isDuplicateReport(Context c, JsonObject report) {
-        boolean isDuplicate = false;
-        if (lastReport != null) {
-            isDuplicate = report.toString().equals(lastReport.toString());
-        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String lastReport = prefs.getString(lastReportPref, "");
+        boolean isDuplicate = report.toString().equals(lastReport);
 
         if (isWiFiConnected(c)) {
+            lastReport = report.toString();
 
-            lastReport = new JsonObject();
-            for (Map.Entry<String, JsonElement> entry : report.entrySet()) {
-                lastReport.addProperty(entry.getKey(), entry.getValue().getAsString());
-            }
-            Log.i(Util.LOG_TAG, "Setting lastReport" + lastReport.toString());
+            Log.i(Util.LOG_TAG, "Setting lastReport" + lastReport);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(lastReportPref, lastReport);
+            editor.commit();
+
         }
+        
         return isDuplicate;
     }
 

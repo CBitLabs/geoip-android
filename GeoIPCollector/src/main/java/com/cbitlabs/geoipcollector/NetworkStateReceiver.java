@@ -29,7 +29,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             GeoPoint p = Util.getLocation(context);
 
             if (GeoPoint.isValidPoint(p)) {
-                Util.createReportingTask(context);
+                Intent report_intent = new Intent(context, ReportIntentService.class);
+                context.startService(report_intent);
             } else {
                 Log.i(Util.LOG_TAG, "Location isn't accurate enough, registering location listener");
                 updateLocation(context);
