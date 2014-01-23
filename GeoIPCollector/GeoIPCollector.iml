@@ -88,6 +88,7 @@
     <orderEntry type="library" exported="" name="ion-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="androidasync-1.2.1" level="project" />
+    <orderEntry type="library" name="prettytime-3.2.4.Final" level="project" />
   </component>
 </module>
 

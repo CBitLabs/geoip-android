@@ -1,5 +1,6 @@
 package com.cbitlabs.geoipcollector;
 
+import android.util.Log;
 import android.widget.AbsListView;
 
 /**
@@ -52,7 +53,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if (loading) {
-            if (totalItemCount > previousTotalItemCount) {
+            if (totalItemCount >= previousTotalItemCount) {
                 loading = false;
                 previousTotalItemCount = totalItemCount;
                 currentPage++;

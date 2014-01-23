@@ -24,11 +24,12 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
 
-    ArrayAdapter<JsonObject> historyAdaptor = null;
-    HashMap<Integer, String> historyMap;
-    int pageNum = 0;
+    private ArrayAdapter<JsonObject> historyAdaptor = null;
+    private HashMap<Integer, String> historyMap;
+    private int pageNum;
 
     public MainActivity() {
+        pageNum = 0;
         historyMap = new HashMap<Integer, String>() {
             {
                 put(R.id.item_ssid, "ssid");
@@ -68,10 +69,12 @@ public class MainActivity extends Activity {
         listView.setAdapter(historyAdaptor);
         listView.setEmptyView(findViewById(R.id.empty_element));
         listView.setOnScrollListener(new EndlessScrollListener() {
+
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 load(false);
             }
+
         });
         load(false);
     }
