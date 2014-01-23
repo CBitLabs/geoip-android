@@ -25,13 +25,18 @@ import java.util.Map;
 public class MainActivity extends Activity {
 
     ArrayAdapter<JsonObject> historyAdaptor = null;
-    Map<Integer, String> historyMap = new HashMap<Integer, String>() {
-        {
-            put(R.id.item_ssid, "ssid");
-            put(R.id.item_loc, "loc");
-            put(R.id.item_created_at_human, "created_at_human");
-        }
-    };
+    HashMap<Integer, String> historyMap;
+    int pageNum = 0;
+
+    public MainActivity() {
+        historyMap = new HashMap<Integer, String>() {
+            {
+                put(R.id.item_ssid, "ssid");
+                put(R.id.item_loc, "loc");
+                put(R.id.item_created_at_human, "created_at_human");
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +66,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(historyAdaptor);
-
-        load();
+        listView.setEmptyView(findViewById(R.id.empty_element));
+        listView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                load(false);
+            }
+        });
+        load(false);
     }
 
     private View setHistoryAdaptorText(View convertView, JsonObject item, int id, String key) {
@@ -78,13 +89,20 @@ public class MainActivity extends Activity {
     // or cancel() it if you no longer need the result.
     Future<JsonArray> loading;
 
-    private void load() {
+    private void load(final boolean clear) {
         // don't attempt to load more if a load is already in progress
         if (loading != null && !loading.isDone() && !loading.isCancelled())
             return;
+        if (clear) {
+            pageNum = 0;
+        }
 
-        String url = Util.getHistoryUrl(Util.getUUID(this));
+
+        String url = Util.getHistoryUrl(Util.getUUID(this), pageNum);
         Log.i(Util.LOG_TAG, "Requesting history with url: " + url);
+
+        pageNum++;
+
         // This request loads a URL as JsonArray and invokes
         // a callback on completion.
         loading = Ion.with(this, url)
@@ -99,9 +117,11 @@ public class MainActivity extends Activity {
                             return;
                         }
                         Log.i(Util.LOG_TAG, "Found history: " + result.toString());
-                        Toast.makeText(MainActivity.this, "Loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "Loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
 
-                        historyAdaptor.clear();
+                        if (clear) { //clear after request returns
+                            historyAdaptor.clear();
+                        }
 
                         for (int i = 0; i < result.size(); i++) {
                             historyAdaptor.add(result.get(i).getAsJsonObject());
@@ -131,7 +151,7 @@ public class MainActivity extends Activity {
                 return true;
 
             case R.id.refresHistory:
-                load();
+                load(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

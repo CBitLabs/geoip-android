@@ -119,11 +119,15 @@ public class Util {
     }
 
     public static String getReportUrl() {
-        return REPORT_SERVER_URL + "/add";
+        return getUrl("add");
     }
 
-    public static String getHistoryUrl(String uuid) {
-        return REPORT_SERVER_URL + "/history/" + uuid;
+    public static String getHistoryUrl(String uuid, int pageNum) {
+        return String.format("%s/%s?page=%d", getUrl("history"), uuid, pageNum);
+    }
+
+    private static String getUrl(String baseUrl) {
+        return String.format("%s/%s", REPORT_SERVER_URL, baseUrl);
     }
 
     public static String getDNSResolverURL(Context c) {
