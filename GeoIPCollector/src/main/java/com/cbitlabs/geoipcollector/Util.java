@@ -36,7 +36,7 @@ public class Util {
     }
 
     public static final String LOG_TAG = "CBITLABS_GEOIP";
-    private static final String REPORT_SERVER_URL = "http://172.17.215.80";
+    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
     //    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
