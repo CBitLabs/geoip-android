@@ -1,4 +1,4 @@
-package com.cbitlabs.geoipcollector;
+package com.cbitlabs.geoip;
 
 import android.app.IntentService;
 import android.content.Intent;

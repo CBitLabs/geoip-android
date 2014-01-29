@@ -1,4 +1,4 @@
-package com.cbitlabs.geoipcollector;
+package com.cbitlabs.geoip;
 
 /**
  * Created by stuart on 11/25/13.

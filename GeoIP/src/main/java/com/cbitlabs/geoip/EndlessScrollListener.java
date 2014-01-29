@@ -1,6 +1,5 @@
-package com.cbitlabs.geoipcollector;
+package com.cbitlabs.geoip;
 
-import android.util.Log;
 import android.widget.AbsListView;
 
 /**

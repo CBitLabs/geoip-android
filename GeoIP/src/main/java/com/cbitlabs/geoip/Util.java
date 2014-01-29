@@ -1,4 +1,4 @@
-package com.cbitlabs.geoipcollector;
+package com.cbitlabs.geoip;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,6 @@ import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Date;
