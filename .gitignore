@@ -1,4 +1,6 @@
-.gradle
+.DS_Store
+
+*.gradle
 /local.properties
 /.idea/workspace.xml
 # built application files
