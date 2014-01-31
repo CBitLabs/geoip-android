@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GeoIP/GeoIP.iml" filepath="$PROJECT_DIR$/GeoIP/GeoIP.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-geoip.iml" filepath="$PROJECT_DIR$/android-geoip.iml" />
+      <module fileurl="file://$PROJECT_DIR$/geoip-android.iml" filepath="$PROJECT_DIR$/geoip-android.iml" />
     </modules>
   </component>
 </project>
