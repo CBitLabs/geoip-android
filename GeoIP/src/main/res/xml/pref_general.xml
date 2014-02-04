@@ -1,15 +1,4 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/pref_category_server"
-        android:key="pref_privacy">
-        <ListPreference
-            android:key="reporting_server"
-            android:title="@string/pref_server"
-            android:summary="@string/pref_server_desc"
-            android:entries="@array/pref_server_list_entries"
-            android:entryValues="@array/pref_server_list_values"
-            android:defaultValue="CBL" />
-    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/pref_category_privacy"

@@ -8,9 +8,6 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_server">Report Collector</string>
-    <string name="pref_server_desc">What server to submit reports to</string>
-
     <string name="pref_submit_device_id">Submit Device ID</string>
     <string name="pref_submit_device_id_desc">The current device id is:1234567</string>
 
@@ -24,16 +21,6 @@
     <string name="pref_submit_ip_desc">Include the IP address in the report.</string>
 
     <string name="pref_get_loc_method">Set Default Location Provider</string>
-
-    <string-array name="pref_server_list_entries">
-        <item>CBL</item>
-        <item>GSF</item>
-    </string-array>
-
-    <string-array name="pref_server_list_values">
-        <item>CBL</item>
-        <item>GSF</item>
-    </string-array>
 
     <string-array name="pref_get_loc_entries">
         <item>Network</item>
