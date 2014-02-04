@@ -23,20 +23,11 @@ import java.util.UUID;
  */
 public class Util {
 
-    public static final Map<String, String> dnsServerMap = new HashMap<String, String>();
-    public static final Map<String, String> dnsResolverMap = new HashMap<String, String>();
-
-    static {
-        dnsServerMap.put("CBL", "geo.cbitlabs.com");
-        dnsServerMap.put("GSF", "geo.spf.gladstonefamily.net");
-
-        dnsResolverMap.put("CBL", "cb101.public.cbitlabs.com");
-        dnsResolverMap.put("GSF", "charon.gladstonefamily.net");
-    }
-
     public static final String LOG_TAG = "CBITLABS_GEOIP";
+    public static final String DNS_SERVER = "geo.cbitlabs.com";
+    public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
     private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-//        private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
+    //    private static final String REPORT_SERVER_URL = "http://18.189.12.84:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
     public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
     public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
@@ -125,18 +116,6 @@ public class Util {
 
     private static String getUrl(String baseUrl) {
         return String.format("%s/%s", REPORT_SERVER_URL, baseUrl);
-    }
-
-    public static String getDNSResolverURL(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
-        return dnsResolverMap.get(serverKey);
-    }
-
-    public static String getDNSServerURL(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String serverKey = prefs.getString(Util.PREF_KEY_REPORT_SERVER, "GSF");
-        return dnsServerMap.get(serverKey);
     }
 
     public static String getUUID(Context c) {

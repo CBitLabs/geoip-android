@@ -56,11 +56,11 @@ public class DNSTask extends AsyncTask {
     public void sendDataViaDNSLookup() {
 
         String info = Util.getReportAsString(report);
-        String host = info.concat(".").concat(Util.getDNSServerURL(this.context));
+        String host = info.concat(".").concat(Util.DNS_SERVER);
         Log.i(Util.LOG_TAG, "Created Hostname for Lookup:" + host);
 
         Resolver defaultResolver = Lookup.getDefaultResolver();
-        String simpleResolverUrl = Util.getDNSResolverURL(this.context);
+        String simpleResolverUrl = Util.DNS_RESOLVER;
         executeLookupUsingResolver("d." + host, defaultResolver);
 
         try {

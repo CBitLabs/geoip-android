@@ -8,6 +8,9 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -74,6 +77,5 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     public void onBuildHeaders(List<Header> target) {
         return;
     }
-
 
 }

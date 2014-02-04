@@ -31,11 +31,11 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.cbitlabs.geoipcollector.MainActivity">
+            android:parentActivityName="com.cbitlabs.geoip.MainActivity">
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoipcollector.MainActivity" />
+                android:value="com.cbitlabs.geoip.MainActivity" />
         </activity>
 
         <receiver android:name=".NetworkStateReceiver">
