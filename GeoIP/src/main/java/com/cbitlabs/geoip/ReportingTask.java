@@ -29,7 +29,7 @@ public class ReportingTask extends AsyncTask {
     }
 
     public void postReport() {
-        final JsonObject geoReport = Util.getReport(this.context);
+        final JsonObject geoReport = Util.getCurrentReport(this.context);
 
         if (!Util.isValidReport(this.context, geoReport)) {
             Log.i(Util.LOG_TAG, "Duplicate or noWIFI. Report not sent.");

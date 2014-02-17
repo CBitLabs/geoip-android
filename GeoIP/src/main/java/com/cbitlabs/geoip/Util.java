@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
@@ -14,8 +15,7 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -26,41 +26,91 @@ public class Util {
     public static final String LOG_TAG = "CBITLABS_GEOIP";
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    //    private static final String REPORT_SERVER_URL = "http://18.189.12.84:8000";
+    //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
+    private static final String REPORT_SERVER_URL = "http://18.189.61.100:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
-    public static final String PREF_KEY_SUBMIT_IP = "submit_device_ip";
-    public static final String PREF_KEY_SUBMIT_UUID = "submit_device_id";
-    public static final String PREF_KEY_SUBMIT_SSID = "submit_ssid";
-    public static final String PREF_KEY_SUBMIT_BSSID = "submit_bssid";
-    public static final String PREF_KEY_LOC_METHOD = "pref_location";
-    public static final String PREF_KEY_REPORT_SERVER = "reporting_server";
-    public static final String NO_SSID = "no_ssid";
-    public static final String NO_BSSID = "no_bssid";
-    public static final String NO_UUID = "no_uuid";
-    public static final String NO_IP = "no_ip";
+
+    public static final String NO_IP = "0.0.0.0";
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final String lastReportPref = "lastReport";
 
-    public static JsonObject getReport(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+    private static final String ENTERPRISE_CAPABILITY = "-EAP-";
+    // Constants used for different security types
+    public static final String PSK = "PSK";
+    public static final String WEP = "WEP";
+    public static final String EAP = "EAP";
+    public static final String OPEN = "Open";
 
-        boolean submitIP = prefs.getBoolean(Util.PREF_KEY_SUBMIT_IP, true);
-        boolean submitUUID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_UUID, true);
-        boolean submitSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_SSID, true);
-        boolean submitBSSID = prefs.getBoolean(Util.PREF_KEY_SUBMIT_BSSID, true);
+    public static JsonObject getCurrentReport(Context c) {
+
+        WifiInfo info = getWiFiInfo(c);
+        ScanResult currentWifiResult = getCurrenWifiScanResult(c, info);
+        String security = getScanResultSecurity(currentWifiResult);
+        Boolean isEnterprise = scanResultIsEnterprise(currentWifiResult);
+        return getReport(c, info.getSSID(),
+                info.getBSSID(), getIPAddress(info),
+                security, isEnterprise);
+
+    }
+
+    public static void getScanReport(Context c) {
+        List<ScanResult> results = getAvailableWifiScan(c);
+        if (results != null) {
+            for (ScanResult result : results) {
+                Log.i(Util.LOG_TAG, String.format("Found result " +
+                        "ssid: %s, bssid: %s, capabilities: %s",
+                        result.SSID, result.BSSID, result.capabilities));
+            }
+
+        }
+    }
+
+    private static ScanResult getCurrenWifiScanResult(Context c, WifiInfo info) {
+        List<ScanResult> results = getAvailableWifiScan(c);
+        String bssid = info.getBSSID();
+        if (results != null) {
+            for (ScanResult result : results) {
+                if (result.BSSID.equals(bssid)) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static String getScanResultSecurity(ScanResult scanResult) {
+        final String cap = scanResult.capabilities;
+        final String[] securityModes = {WEP, PSK, EAP};
+        for (int i = securityModes.length - 1; i >= 0; i--) {
+            if (cap.contains(securityModes[i])) {
+                return securityModes[i];
+            }
+        }
+
+        return OPEN;
+    }
+
+    private static boolean scanResultIsEnterprise(ScanResult scanResult) {
+        return scanResult.capabilities.contains(ENTERPRISE_CAPABILITY);
+    }
+
+    private static JsonObject getReport(Context c, String ssid,
+                                        String bssid, String ip,
+                                        String security, Boolean isEnterprise) {
+        GeoPoint loc = getLocation(c);
 
         JsonObject reportMap = new JsonObject();
-        GeoPoint loc = getLocation(c);
         reportMap.addProperty("lat", loc.getLat());
         reportMap.addProperty("lng", loc.getLng());
-        reportMap.addProperty("ssid", submitSSID ? getSSID(c) : NO_SSID);
-        reportMap.addProperty("bssid", submitBSSID ? getBSSID(c) : NO_BSSID);
-        reportMap.addProperty("uuid", submitUUID ? getUUID(c) : NO_UUID);
-        reportMap.addProperty("ip", submitIP ? getIPAddress(c) : NO_IP);
+        reportMap.addProperty("ssid", fmtSSID(ssid));
+        reportMap.addProperty("bssid", fmtBSSID(bssid));
+        reportMap.addProperty("uuid", getUUID(c));
+        reportMap.addProperty("ip", ip);
+        reportMap.addProperty("security", security);
+        reportMap.addProperty("isEnterprise", isEnterprise);
         return reportMap;
 
     }
@@ -144,37 +194,22 @@ public class Util {
         return deviceId;
     }
 
-    public static String getSSID(Context c) {
-        WifiInfo info = getWiFiInfo(c);
-        if (info == null) {
-            return "";
-        }
-        String ssid = info.getSSID();
+    public static String fmtSSID(String ssid) {
         ssid = ssid.replace("\"", "").replace(" ", "_");
 
         Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
-
         return ssid;
     }
 
 
-    public static String getBSSID(Context c) {
-        WifiInfo info = getWiFiInfo(c);
-        if (info == null) {
-            return "";
-        }
-        String bssid = info.getBSSID();
+    private static String fmtBSSID(String bssid) {
         bssid = bssid.replace(":", "");
 
         Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 
-    public static String getIPAddress(Context c) {
-        WifiInfo info = getWiFiInfo(c);
-        if (info == null) {
-            return "";
-        }
+    public static String getIPAddress(WifiInfo info) {
         int ip = info.getIpAddress();
 
         String ipString = String.format(
@@ -188,11 +223,13 @@ public class Util {
     }
 
     private static WifiInfo getWiFiInfo(Context c) {
-        if (!Util.isWiFiConnected(c))
-            return null;
-
         WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
         return wifiManager.getConnectionInfo();
+    }
+
+    public static List<ScanResult> getAvailableWifiScan(Context c) {
+        WifiManager wifiManager = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
+        return wifiManager.getScanResults();
     }
 
     public static GeoPoint getLocation(final Context context) {

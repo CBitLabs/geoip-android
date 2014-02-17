@@ -40,15 +40,9 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     }
 
     public void updateLocation(final Context context) {
+        updateLocationUsingGps(context);
+        updateLocationUsingNetwork(context);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String method = prefs.getString(Util.PREF_KEY_LOC_METHOD, "network");
-        if (method.equals("gps")) {
-            updateLocationUsingGps(context);
-        } else {
-            updateLocationUsingNetwork(context);
-        }
     }
 
     private void updateLocationUsingNetwork(final Context context) {
