@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class Util {
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
     //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://18.189.61.100:8000";
+    private static final String REPORT_SERVER_URL = "http://18.189.12.102:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
 
     public static final String NO_IP = "0.0.0.0";
@@ -35,7 +36,8 @@ public class Util {
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final String lastReportPref = "lastReport";
+    private static final String lastWifiReportPref = "lastWifiReport";
+    private static final String lastScanReportPref = "lastScanReport";
 
     private static final String ENTERPRISE_CAPABILITY = "-EAP-";
     // Constants used for different security types
@@ -44,7 +46,7 @@ public class Util {
     public static final String EAP = "EAP";
     public static final String OPEN = "Open";
 
-    public static JsonObject getCurrentReport(Context c) {
+    public static JsonObject getWifiReport(Context c) {
 
         WifiInfo info = getWiFiInfo(c);
         ScanResult currentWifiResult = getCurrenWifiScanResult(c, info);
@@ -56,16 +58,48 @@ public class Util {
 
     }
 
-    public static void getScanReport(Context c) {
+    public static ArrayList<JsonObject> getScanReport(Context c) {
         List<ScanResult> results = getAvailableWifiScan(c);
+        ArrayList<JsonObject> jsonResults = new ArrayList<JsonObject>();
         if (results != null) {
             for (ScanResult result : results) {
-                Log.i(Util.LOG_TAG, String.format("Found result " +
-                        "ssid: %s, bssid: %s, capabilities: %s",
-                        result.SSID, result.BSSID, result.capabilities));
-            }
 
+                JsonObject jsonReport = getReport(c, result.SSID,
+                        result.BSSID, NO_IP,
+                        getScanResultSecurity(result),
+                        scanResultIsEnterprise(result));
+
+                jsonResults.add(jsonReport);
+            }
+            Log.i(Util.LOG_TAG, "jsonResults " + jsonResults.toString());
         }
+        return jsonResults;
+    }
+
+    private static JsonObject getReport(Context c, String ssid,
+                                        String bssid, String ip,
+                                        String security, Boolean isEnterprise) {
+        GeoPoint loc = getLocation(c);
+
+        JsonObject reportMap = new JsonObject();
+        reportMap.addProperty("lat", loc.getLat());
+        reportMap.addProperty("lng", loc.getLng());
+        reportMap.addProperty("ssid", fmtSSID(ssid));
+        reportMap.addProperty("bssid", fmtBSSID(bssid));
+        reportMap.addProperty("uuid", getUUID(c));
+        reportMap.addProperty("ip", ip);
+        reportMap.addProperty("security", security);
+        reportMap.addProperty("isEnterprise", isEnterprise);
+        return reportMap;
+
+    }
+
+    public static String getReportAsString(JsonObject report) {
+        String info = String.format("%s.%s.%s.%s.%s.%s",
+                report.get("lat").getAsString(), report.get("lng").getAsString(),
+                report.get("ssid").getAsString().replace(".", "-"), report.get("bssid").getAsString(),
+                report.get("uuid").getAsString(), report.get("ip").getAsString());
+        return info;
     }
 
     private static ScanResult getCurrenWifiScanResult(Context c, WifiInfo info) {
@@ -97,56 +131,41 @@ public class Util {
         return scanResult.capabilities.contains(ENTERPRISE_CAPABILITY);
     }
 
-    private static JsonObject getReport(Context c, String ssid,
-                                        String bssid, String ip,
-                                        String security, Boolean isEnterprise) {
-        GeoPoint loc = getLocation(c);
-
-        JsonObject reportMap = new JsonObject();
-        reportMap.addProperty("lat", loc.getLat());
-        reportMap.addProperty("lng", loc.getLng());
-        reportMap.addProperty("ssid", fmtSSID(ssid));
-        reportMap.addProperty("bssid", fmtBSSID(bssid));
-        reportMap.addProperty("uuid", getUUID(c));
-        reportMap.addProperty("ip", ip);
-        reportMap.addProperty("security", security);
-        reportMap.addProperty("isEnterprise", isEnterprise);
-        return reportMap;
-
+    public static boolean isValidWifiReport(Context c, JsonObject report) {
+        return isWiFiConnected(c) && !isDuplicateWifiReport(c, report);
     }
 
-    public static String getReportAsString(JsonObject report) {
-        String info = String.format("%s.%s.%s.%s.%s.%s",
-                report.get("lat").getAsString(), report.get("lng").getAsString(),
-                report.get("ssid").getAsString().replace(".", "-"), report.get("bssid").getAsString(),
-                report.get("uuid").getAsString(), report.get("ip").getAsString());
-        return info;
+    public static boolean isValidScanReport(Context c, ArrayList<JsonObject> report) {
+        return !isDuplicateScanReport(c, report);
     }
 
-    public static boolean isValidReport(Context c, JsonObject report) {
-        return isWiFiConnected(c) && !isDuplicateReport(c, report);
+    private static boolean isDuplicateWifiReport(Context c, JsonObject report) {
+        return isDuplicateReport(c, lastWifiReportPref, report.toString(), isWiFiConnected(c));
     }
 
-    private static boolean isDuplicateReport(Context c, JsonObject report) {
+    private static boolean isDuplicateScanReport(Context c, ArrayList<JsonObject> report) {
+        return isDuplicateReport(c, lastScanReportPref, report.toString(), true);
+    }
+
+    private static boolean isDuplicateReport(Context c, String prefKey,
+                                             String currentReport,
+                                             boolean saveReport) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String lastReport = prefs.getString(lastReportPref, "");
-        boolean isDuplicate = report.toString().equals(lastReport);
+        String lastReport = prefs.getString(prefKey, "");
 
-        if (isWiFiConnected(c)) {
-            lastReport = report.toString();
-
-            Log.i(Util.LOG_TAG, "Setting lastReport" + lastReport);
+        boolean isDuplicate = currentReport.toString().equals(lastReport);
+        if (saveReport) {
+            Log.i(Util.LOG_TAG, "Setting " + prefKey + currentReport);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(lastReportPref, lastReport);
+            editor.putString(prefKey, currentReport);
             editor.commit();
-
         }
 
         return isDuplicate;
     }
 
-    public static boolean isWiFiConnected(final Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.
+    public static boolean isWiFiConnected(final Context c) {
+        ConnectivityManager cm = (ConnectivityManager) c.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -156,9 +175,14 @@ public class Util {
         return state;
     }
 
-    public static String getReportUrl() {
-        return getUrl("add");
+    public static String getWifiReportUrl() {
+        return getUrl("wifi_report");
     }
+
+    public static String getScanReportUrl() {
+        return getUrl("scan_report");
+    }
+
 
     public static String getHistoryUrl(String uuid, int pageNum) {
         return String.format("%s/%s?page=%d", getUrl("history"), uuid, pageNum);
@@ -175,7 +199,7 @@ public class Util {
         if (deviceId.equals(DEVICE_ID_UNSET))
             deviceId = generateDeviceID(c);
 
-        Log.i(LOG_TAG, "Got Device ID:" + deviceId);
+//        Log.i(LOG_TAG, "Got Device ID:" + deviceId);
         return deviceId;
     }
 
@@ -197,7 +221,7 @@ public class Util {
     public static String fmtSSID(String ssid) {
         ssid = ssid.replace("\"", "").replace(" ", "_");
 
-        Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
+//        Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
         return ssid;
     }
 
@@ -205,7 +229,7 @@ public class Util {
     private static String fmtBSSID(String bssid) {
         bssid = bssid.replace(":", "");
 
-        Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
+//        Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 
@@ -232,10 +256,10 @@ public class Util {
         return wifiManager.getScanResults();
     }
 
-    public static GeoPoint getLocation(final Context context) {
+    public static GeoPoint getLocation(final Context c) {
 
-        Location netLoc = getNetworkLocation(context);
-        Location gpsLoc = getGPSLocation(context);
+        Location netLoc = getNetworkLocation(c);
+        Location gpsLoc = getGPSLocation(c);
         Location l;
 
         if (isBetterLocation(gpsLoc, netLoc))
@@ -257,13 +281,13 @@ public class Util {
         return p;
     }
 
-    protected static Location getNetworkLocation(final Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+    protected static Location getNetworkLocation(final Context c) {
+        LocationManager locationManager = (LocationManager) c.getSystemService(c.LOCATION_SERVICE);
         return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
-    protected static Location getGPSLocation(final Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+    protected static Location getGPSLocation(final Context c) {
+        LocationManager locationManager = (LocationManager) c.getSystemService(c.LOCATION_SERVICE);
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
@@ -335,15 +359,21 @@ public class Util {
     }
 
 
-    public static void createReportingTask(Context context) {
-        Log.i(Util.LOG_TAG, "Creating new Reporting AsyncTask");
-        ReportingTask t = new ReportingTask(context);
+    public static void createWifiReportTask(Context c) {
+        Log.i(Util.LOG_TAG, "Creating new Wifi AsyncTask");
+        WifiReportTask t = new WifiReportTask(c);
         t.execute();
     }
 
-    public static void createDNSTask(Context context, JsonObject report) {
+    public static void createScanReportTask(Context c) {
+        Log.i(Util.LOG_TAG, "Creating new ScanReport AsyncTask");
+        ScanReportTask t = new ScanReportTask(c);
+        t.execute();
+    }
+
+    public static void createDNSReportTask(Context c, JsonObject report) {
         Log.i(Util.LOG_TAG, "Creating new DNS AsyncTask");
-        DNSTask t = new DNSTask(context, report);
+        DNSReportTask t = new DNSReportTask(c, report);
         t.execute();
     }
 

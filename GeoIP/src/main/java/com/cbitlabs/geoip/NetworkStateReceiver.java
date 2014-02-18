@@ -7,12 +7,10 @@ package com.cbitlabs.geoip;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class NetworkStateReceiver extends BroadcastReceiver {
@@ -29,7 +27,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             GeoPoint p = Util.getLocation(context);
 
             if (GeoPoint.isValidPoint(p)) {
-                Util.createReportingTask(context);
+                Util.createWifiReportTask(context);
                 Intent report_intent = new Intent(context, ReportIntentService.class);
                 context.startService(report_intent);
             } else {
@@ -52,7 +50,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.i(Util.LOG_TAG, "Received updated location via Network!");
-                Util.createReportingTask(context);
+                Util.createWifiReportTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 
@@ -77,7 +75,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.i(Util.LOG_TAG, "Received updated location via GPS!");
-                Util.createReportingTask(context);
+                Util.createWifiReportTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 

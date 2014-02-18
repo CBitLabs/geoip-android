@@ -46,7 +46,6 @@ public class MainActivity extends Activity {
         //start reporting geoIP in the background.
         Intent intent = new Intent(this, ReportIntentService.class);
         startService(intent);
-        Util.getScanReport(this);
         // create a history adapter for our list view
         if (historyAdaptor == null) {
             historyAdaptor = new ArrayAdapter<JsonObject>(this, 0) {

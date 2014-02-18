@@ -17,24 +17,21 @@ import org.xbill.DNS.SimpleResolver;
 
 import java.net.UnknownHostException;
 
-public class DNSTask extends AsyncTask {
+public class DNSReportTask extends ReportingTask {
 
     private Context context;
     private JsonObject report;
 
-    public DNSTask(Context context, JsonObject report) {
-        Log.d(Util.LOG_TAG, "DNSTask Created");
+    public DNSReportTask(Context context, JsonObject report) {
+        super(context);
+        Log.d(Util.LOG_TAG, "DNSReportTask Created");
 
-        this.context = context;
         this.report = report;
     }
 
     @Override
-    protected Object doInBackground(Object[] objects) {
-        Log.d(Util.LOG_TAG, "DNSTask.doInBackground()");
-
+    public void postReport() {
         this.sendDataViaDNSLookup();
-        return null;
     }
 
     protected void executeLookupUsingResolver(String h, Resolver r) {
