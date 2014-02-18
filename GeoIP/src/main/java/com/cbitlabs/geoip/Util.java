@@ -68,7 +68,6 @@ public class Util {
                         result.BSSID, NO_IP,
                         getScanResultSecurity(result),
                         scanResultIsEnterprise(result));
-
                 jsonResults.add(jsonReport);
             }
             Log.i(Util.LOG_TAG, "jsonResults " + jsonResults.toString());
