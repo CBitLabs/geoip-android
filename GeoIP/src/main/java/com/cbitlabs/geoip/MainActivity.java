@@ -3,104 +3,94 @@ package com.cbitlabs.geoip;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
-    private ArrayAdapter<ScanResult> scanAdaptor = null;
-    private HashMap<Integer, String> itemMap;
-
-    public MainActivity() {
-        itemMap = new HashMap<Integer, String>() {
-            {
-                put(R.id.item_ssid, "ssid");
-            }
-        };
-    }
+    private ScanAdaptor scanAdaptor = null;
+    private Timer autoUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //start reporting geoIP in the background.
-        Intent intent = new Intent(this, ReportIntentService.class);
-        startService(intent);
+        startService(new Intent(this, ReportIntentService.class));
 
-        // create a scan adapter for our list view
+        setScanAdaptor();
+        setListView();
+
+        loadNetworks();
+    }
+
+    private void setScanAdaptor() {
         if (scanAdaptor == null) {
-            scanAdaptor = new ArrayAdapter<ScanResult>(this, 0) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    if (convertView == null)
-                        convertView = getLayoutInflater().inflate(R.layout.history_item, null);
-
-                    ScanResult item = getItem(position);
-
-                    for (Map.Entry<Integer, String> el : itemMap.entrySet()) {
-                        convertView = setAdaptorText(convertView, item, el.getKey(), el.getValue());
-                    }
-                    return convertView;
-                }
-            };
+            scanAdaptor = new ScanAdaptor(this, 0);
         }
+    }
 
+    private void setListView() {
         // basic setup of the ListView and adapter
         setContentView(R.layout.activity_main);
-        ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(scanAdaptor);
-        listView.setEmptyView(findViewById(R.id.empty_element));
-        load();
-    }
+        final ListView lv = (ListView) findViewById(R.id.list);
+        lv.setAdapter(scanAdaptor);
+        lv.setEmptyView(findViewById(R.id.empty_element));
+        lv.setClickable(true);
+        lv.setLongClickable(true);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-    private View setAdaptorText(View convertView, ScanResult item, int id, String key) {
-        TextView text = (TextView) convertView.findViewById(id);
-        text.setText(item.SSID); //todo fix
-        return convertView;
-    }
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
 
-    private void load() {
+                TextView textView = (TextView) view.findViewById(R.id.scan_connected);
 
-        List<ScanResult> results = Util.getAvailableWifiScan(this);
-        HashMap<String, ScanResult> cleanResults = cleanScanReport(results);
-        for (Map.Entry<String, ScanResult> entry : cleanResults.entrySet()) {
-            scanAdaptor.add(entry.getValue());
-        }
-    }
-
-    private HashMap<String, ScanResult> cleanScanReport(List<ScanResult> results) {
-        HashMap<String, ScanResult> cleanResults = new HashMap<String, ScanResult>();
-        for (ScanResult result : results) {
-            String ssid = result.SSID;
-            if (ssid == "") {
-                continue;
-            }
-            if (cleanResults.containsKey(ssid)) {
-                ScanResult el = cleanResults.get(ssid);
-                if (el.level > result.level) {
-                    cleanResults.put(ssid, result);
+                if (textView.getText().equals("Connected")) {
+                    return;
                 }
 
-            } else {
-                cleanResults.put(ssid, result);
+                final ScanResult result = (ScanResult) parent.getItemAtPosition(position);
+
+                if (!Util.connectToNetwork(getApplicationContext(), result.SSID)) {
+                    startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                }
+
+                TextView first = (TextView) lv.getChildAt(0).findViewById(R.id.scan_connected);
+                first.setText("");
+                textView.setText("Connecting...");
             }
-        }
-        return cleanResults;
+
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view,
+                                           int position, long id) {
+                Toast.makeText(MainActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
+
+    private void loadNetworks() {
+        List<ScanResult> results = Util.getAvailableWifiScan(this);
+        scanAdaptor.clear();
+        scanAdaptor.addAll(results);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,7 +108,7 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {
 
             case R.id.refreshScan:
-                load();
+                loadNetworks();
                 return true;
 
             case R.id.action_settings:
@@ -136,4 +126,25 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoUpdate = new Timer();
+        autoUpdate.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        loadNetworks();
+                    }
+                });
+            }
+        }, 0, 15 * 1000); // updates each 40 secs
+    }
+
+    @Override
+    public void onPause() {
+        autoUpdate.cancel();
+        super.onPause();
+    }
 }

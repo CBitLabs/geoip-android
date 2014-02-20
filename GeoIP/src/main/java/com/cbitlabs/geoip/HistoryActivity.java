@@ -123,7 +123,9 @@ public class HistoryActivity extends Activity {
                         }
 
                         for (int i = 0; i < result.size(); i++) {
-                            historyAdaptor.add(result.get(i).getAsJsonObject());
+                            JsonObject o = result.get(i).getAsJsonObject();
+                            o.addProperty("ssid", Util.cleanSSID(o.get("ssid")));
+                            historyAdaptor.add(o);
                         }
                     }
                 });
