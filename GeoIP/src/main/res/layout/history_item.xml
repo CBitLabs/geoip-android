@@ -8,10 +8,10 @@
 
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/rating_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_action_place" />
+        android:src="@drawable/ic_action_secure" />
 
     <LinearLayout
         android:paddingLeft="4dp"
@@ -25,20 +25,24 @@
             android:id="@+id/item_ssid"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:text="@string/ex_ssid"
+            android:singleLine="true" />
 
 
         <TextView
             android:id="@+id/item_loc"
             style="@android:style/TextAppearance.Small"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:text="@string/ex_loc" />
 
         <TextView
             android:id="@+id/item_created_at_human"
             style="@android:style/TextAppearance.Small"
             android:textStyle="italic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:text="@string/ex_created_at" />
     </LinearLayout>
 </LinearLayout>

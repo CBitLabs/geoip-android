@@ -2,7 +2,6 @@ package com.cbitlabs.geoip;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Created by jblum on 2/17/14.
@@ -16,9 +15,9 @@ public abstract class ReportingTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        this.postReport();
+        this.sendReport();
         return null;
     }
 
-    public abstract void postReport();
+    public abstract void sendReport();
 }

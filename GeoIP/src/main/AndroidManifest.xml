@@ -46,6 +46,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cbitlabs.geoip.MainActivity" />
         </activity>
+        <activity
+            android:name=".RatingDetailActivity"
+            android:parentActivityName="com.cbitlabs.geoip.MainActivity">
+            <!-- Parent activity meta-data to support API level 4+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cbitlabs.geoip.MainActivity" />
+        </activity>
+        <activity
+            android:name=".HistoryDetailActivity"
+            android:parentActivityName="com.cbitlabs.geoip.HistoryActivity">
+            <!-- Parent activity meta-data to support API level 4+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cbitlabs.geoip.HistoryActivity" />
+        </activity>
 
         <receiver android:name=".NetworkStateReceiver">
             <intent-filter>

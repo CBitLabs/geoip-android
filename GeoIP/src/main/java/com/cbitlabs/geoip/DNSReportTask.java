@@ -30,7 +30,7 @@ public class DNSReportTask extends ReportingTask {
     }
 
     @Override
-    public void postReport() {
+    public void sendReport() {
         this.sendDataViaDNSLookup();
     }
 

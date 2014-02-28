@@ -30,14 +30,14 @@ public class Util {
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
     //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://18.189.12.102:8000";
+    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
 
     public static final String NO_IP = "0.0.0.0";
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int TWO_MINUTES = 1000 * 60 * 2;
+    public static final int FIVE_MINUTES = 1000 * 60 * 5;
     private static final String lastWifiReportPref = "lastWifiReport";
     private static final String lastScanReportPref = "lastScanReport";
 
@@ -47,7 +47,6 @@ public class Util {
     private static final String WEP = "WEP";
     private static final String EAP = "EAP";
     private static final String OPEN = "Open";
-    private static final int WIFI_SIGNAL_LEVELS = 5;
 
     public static JsonObject getWifiReport(Context c) {
 
@@ -58,6 +57,7 @@ public class Util {
         }
         String security = getScanResultSecurity(currentWifiResult);
         Boolean isEnterprise = scanResultIsEnterprise(currentWifiResult);
+
         return getReport(c, info.getSSID(),
                 info.getBSSID(), getIPAddress(info),
                 security, isEnterprise);
@@ -69,12 +69,14 @@ public class Util {
         ArrayList<JsonObject> jsonResults = new ArrayList<JsonObject>();
         if (results != null) {
             for (ScanResult result : results) {
+                if (!isDuplicateScanReport(c, result.BSSID)) {
 
-                JsonObject jsonReport = getReport(c, result.SSID,
-                        result.BSSID, NO_IP,
-                        getScanResultSecurity(result),
-                        scanResultIsEnterprise(result));
-                jsonResults.add(jsonReport);
+                    JsonObject jsonReport = getReport(c, result.SSID,
+                            result.BSSID, NO_IP,
+                            getScanResultSecurity(result),
+                            scanResultIsEnterprise(result));
+                    jsonResults.add(jsonReport);
+                }
             }
             Log.i(Util.LOG_TAG, "jsonResults " + jsonResults.toString());
         }
@@ -137,33 +139,31 @@ public class Util {
     }
 
     public static boolean isValidWifiReport(Context c, JsonObject report) {
-        return report.entrySet().size() != 0 && isWiFiConnected(c) && !isDuplicateWifiReport(c, report);
+        return report.entrySet().size() != 0
+                && isWiFiConnected(c)
+                && !isDuplicateWifiReport(c, report.get("bssid").getAsString());
     }
 
-    public static boolean isValidScanReport(Context c, ArrayList<JsonObject> report) {
-        return !isDuplicateScanReport(c, report);
+    public static boolean isValidScanReport(Context c, ArrayList<JsonObject> results) {
+        return results.size() > 0;
     }
 
-    private static boolean isDuplicateWifiReport(Context c, JsonObject report) {
-        return isDuplicateReport(c, lastWifiReportPref, report.toString(), isWiFiConnected(c));
+    private static boolean isDuplicateWifiReport(Context c, String bssid) {
+        return isDuplicateReport(c, lastWifiReportPref, bssid, isWiFiConnected(c));
     }
 
-    private static boolean isDuplicateScanReport(Context c, ArrayList<JsonObject> report) {
-        return isDuplicateReport(c, lastScanReportPref, report.toString(), true);
+    private static boolean isDuplicateScanReport(Context c, String bssid) {
+        return isDuplicateReport(c, lastScanReportPref, bssid, true);
     }
 
     private static boolean isDuplicateReport(Context c, String prefKey,
-                                             String currentReport,
+                                             String bssid,
                                              boolean saveReport) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String lastReport = prefs.getString(prefKey, "");
 
-        boolean isDuplicate = currentReport.toString().equals(lastReport);
-        if (saveReport) {
-            Log.i(Util.LOG_TAG, "Setting " + prefKey + currentReport);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(prefKey, currentReport);
-            editor.commit();
+
+        boolean isDuplicate = StorageManager.inPrefStorage(c, prefKey, bssid);
+        if (!isDuplicate && saveReport) {
+            StorageManager.putPrefStorage(c, prefKey, bssid);
         }
 
         return isDuplicate;
@@ -194,6 +194,13 @@ public class Util {
         return getUrl("scan_report");
     }
 
+    public static String getScanRatingUrl(List<ScanResult> results) {
+        String url = getUrl("ratings/scan_ratings?");
+        for (ScanResult result : results) {
+            url += String.format("bssid=%s&", Util.fmtBSSID(result.BSSID));
+        }
+        return url;
+    }
 
     public static String getHistoryUrl(String uuid, int pageNum) {
         return String.format("%s/%s?page=%d", getUrl("history"), uuid, pageNum);
@@ -240,7 +247,7 @@ public class Util {
         return ssid.toString().replace("_", " ").replace("\"", "");
     }
 
-    private static String fmtBSSID(String bssid) {
+    public static String fmtBSSID(String bssid) {
         bssid = bssid.replace(":", "");
 
 //        Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
@@ -364,8 +371,8 @@ public class Util {
 
         // Check whether the new location fix is newer or older
         long timeDelta = location.getTime() - currentBestLocation.getTime();
-        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
-        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isSignificantlyNewer = timeDelta > FIVE_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -FIVE_MINUTES;
         boolean isNewer = timeDelta > 0;
 
         // If it's been more than two minutes since the current location, use the new location

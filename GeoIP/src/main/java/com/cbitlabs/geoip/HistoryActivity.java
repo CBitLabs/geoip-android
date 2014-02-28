@@ -1,13 +1,17 @@
 package com.cbitlabs.geoip;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +27,11 @@ import java.util.Map;
 
 public class HistoryActivity extends Activity {
 
-    private ArrayAdapter<JsonObject> historyAdaptor = null;
+    private ArrayAdapter<HistoryItem> historyAdaptor = null;
     private HashMap<Integer, String> historyMap;
     private int pageNum;
+
+    Future<JsonArray> loading;
 
     public HistoryActivity() {
         pageNum = 0;
@@ -44,16 +50,18 @@ public class HistoryActivity extends Activity {
 
         // create a history adapter for our list view
         if (historyAdaptor == null) {
-            historyAdaptor = new ArrayAdapter<JsonObject>(this, 0) {
+            historyAdaptor = new ArrayAdapter<HistoryItem>(this, 0) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null)
                         convertView = getLayoutInflater().inflate(R.layout.history_item, null);
 
-                    JsonObject item = getItem(position);
-                    for (Map.Entry<Integer, String> el : historyMap.entrySet()) {
-                        convertView = setHistoryAdaptorText(convertView, item, el.getKey(), el.getValue());
-                    }
+                    HistoryItem historyItem = getItem(position);
+                    ImageView imageView = (ImageView) convertView.findViewById(R.id.rating_icon);
+                    imageView.setImageResource(historyItem.getRating().getIcon());
+                    convertView = setHistoryAdaptorText(convertView, historyItem.getSsid(), R.id.item_ssid);
+                    convertView = setHistoryAdaptorText(convertView, historyItem.getLoc(), R.id.item_loc);
+                    convertView = setHistoryAdaptorText(convertView, historyItem.getCreated_at_human(), R.id.item_created_at_human);
                     return convertView;
                 }
             };
@@ -61,34 +69,49 @@ public class HistoryActivity extends Activity {
 
         // basic setup of the ListView and adapter
         setContentView(R.layout.activity_main);
-        ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(historyAdaptor);
-        listView.setEmptyView(findViewById(R.id.empty_element));
-        listView.setOnScrollListener(new EndlessScrollListener() {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                load(false);
-            }
-
-        });
-        load(false);
+        setListView();
+        loadHistory(false);
     }
 
-    private View setHistoryAdaptorText(View convertView, JsonObject item, int id, String key) {
-        TextView text = (TextView) convertView.findViewById(id);
-        text.setText(item.get(key).toString().replaceAll("^\"|\"$", ""));
+    private View setHistoryAdaptorText(View convertView, String text, int id) {
+        TextView tv = (TextView) convertView.findViewById(id);
+        tv.setText(text);
         return convertView;
     }
 
-    // This "Future" tracks loading operations.
-    // A Future is an object that manages the state of an operation
-    // in progress that will have a "Future" result.
-    // You can attach callbacks (setCallback) for when the result is ready,
-    // or cancel() it if you no longer need the result.
-    Future<JsonArray> loading;
+    private void setListView() {
+        ListView lv = (ListView) findViewById(R.id.list);
+        lv.setAdapter(historyAdaptor);
+        lv.setEmptyView(findViewById(R.id.empty_element));
+        lv.setOnScrollListener(new EndlessScrollListener() {
 
-    private void load(final boolean clear) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                loadHistory(false);
+            }
+
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+
+                HistoryItem historyItem= (HistoryItem) parent.getItemAtPosition(position);
+                Intent intent = new Intent(view.getContext(), HistoryDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(historyItem.SER_KEY, historyItem);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+        });
+
+    }
+
+
+    private void loadHistory(final boolean clear) {
         // don't attempt to load more if a load is already in progress
         if (loading != null && !loading.isDone() && !loading.isCancelled())
             return;
@@ -102,8 +125,6 @@ public class HistoryActivity extends Activity {
 
         pageNum++;
 
-        // This request loads a URL as JsonArray and invokes
-        // a callback on completion.
         loading = Ion.with(this, url)
                 .asJsonArray()
                 .setCallback(new FutureCallback<JsonArray>() {
@@ -116,8 +137,6 @@ public class HistoryActivity extends Activity {
                             return;
                         }
                         Log.i(Util.LOG_TAG, "Found history: " + result.toString());
-//                        Toast.makeText(MainActivity.this, "Loaded " + Integer.toString(result.size()) + " history items.", Toast.LENGTH_SHORT).show();
-
                         if (clear) { //clear after request returns
                             historyAdaptor.clear();
                         }
@@ -125,7 +144,7 @@ public class HistoryActivity extends Activity {
                         for (int i = 0; i < result.size(); i++) {
                             JsonObject o = result.get(i).getAsJsonObject();
                             o.addProperty("ssid", Util.cleanSSID(o.get("ssid")));
-                            historyAdaptor.add(o);
+                            historyAdaptor.add(new HistoryItem(o));
                         }
                     }
                 });
@@ -146,7 +165,7 @@ public class HistoryActivity extends Activity {
 
         switch (item.getItemId()) {
             case R.id.refreshHistory:
-                load(true);
+                loadHistory(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

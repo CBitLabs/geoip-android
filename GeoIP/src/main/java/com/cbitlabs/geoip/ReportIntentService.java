@@ -34,7 +34,7 @@ public class ReportIntentService extends IntentService {
             Util.createWifiReportTask(this);
             Util.createScanReportTask(this);
             try {
-                Thread.sleep(Util.TWO_MINUTES);
+                Thread.sleep(Util.FIVE_MINUTES);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }

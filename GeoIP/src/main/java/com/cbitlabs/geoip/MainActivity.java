@@ -12,21 +12,32 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.Future;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
     private ScanAdaptor scanAdaptor = null;
     private Timer autoUpdate;
 
+    // This "Future" tracks loading operations.
+    // A Future is an object that manages the state of an operation
+    // in progress that will have a "Future" result.
+    // You can attach callbacks (setCallback) for when the result is ready,
+    // or cancel() it if you no longer need the result.
+    Future<JsonObject> loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //start reporting geoIP in the background.
         startService(new Intent(this, ReportIntentService.class));
 
@@ -62,9 +73,9 @@ public class MainActivity extends Activity {
                     return;
                 }
 
-                final ScanResult result = (ScanResult) parent.getItemAtPosition(position);
+                final ScanRating result = (ScanRating) parent.getItemAtPosition(position);
 
-                if (!Util.connectToNetwork(getApplicationContext(), result.SSID)) {
+                if (!Util.connectToNetwork(getApplicationContext(), result.getScanResult().SSID)) {
                     startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                 }
 
@@ -79,16 +90,45 @@ public class MainActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, final View view,
                                            int position, long id) {
-                Toast.makeText(MainActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
+                ScanRating scanRating = (ScanRating) parent.getItemAtPosition(position);
+                Intent intent = new Intent(view.getContext(), RatingDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(scanRating.getRating().SER_KEY, scanRating.getRating());
+                intent.putExtras(bundle);
+                startActivity(intent);
+
                 return true;
             }
         });
     }
 
     private void loadNetworks() {
-        List<ScanResult> results = Util.getAvailableWifiScan(this);
-        scanAdaptor.clear();
-        scanAdaptor.addAll(results);
+        final List<ScanResult> results = Util.getAvailableWifiScan(this);
+        String url = Util.getScanRatingUrl(results);
+
+        loading = Ion.with(this, url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject jsonRepsonse) {
+                        // this is called back onto the ui thread, no Activity.runOnUiThread or Handler.post necessary.
+                        if (e != null) {
+                            Log.i(Util.LOG_TAG, e.toString());
+                            return;
+                        }
+                        Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
+                        List<ScanRating> ratings = new ArrayList<ScanRating>();
+                        for (ScanResult result : results) {
+
+                            JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+                            if (rating != null) {
+                                ratings.add(new ScanRating(result, rating.getAsJsonObject()));
+                            }
+                        }
+                        scanAdaptor.clear();
+                        scanAdaptor.addAll(ratings);
+                    }
+                });
     }
 
 
@@ -129,22 +169,22 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        autoUpdate = new Timer();
-        autoUpdate.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        loadNetworks();
-                    }
-                });
-            }
-        }, 0, 15 * 1000); // updates each 40 secs
+//        autoUpdate = new Timer();
+//        autoUpdate.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        loadNetworks();
+//                    }
+//                });
+//            }
+//        }, 0, 5 * 1000);
     }
 
     @Override
     public void onPause() {
-        autoUpdate.cancel();
+//        autoUpdate.cancel();
         super.onPause();
     }
 }

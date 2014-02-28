@@ -2,11 +2,11 @@ package com.cbitlabs.geoip;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,14 +20,6 @@ import java.util.List;
  */
 public class ScanAdaptor extends ArrayAdapter {
 
-    private ArrayList<ScanResult> objects;
-
-    public ScanAdaptor(Context c, int resource, ArrayList<ScanResult> objects) {
-        super(c, resource, objects);
-        this.objects = objects;
-        ;
-    }
-
     public ScanAdaptor(Context c, int resource) {
         super(c, resource);
     }
@@ -35,18 +27,17 @@ public class ScanAdaptor extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-
-
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.scan_item, null);
         }
-        ScanResult result = (ScanResult) getItem(position);
+        ScanRating result = (ScanRating) getItem(position);
 
-        boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(getContext(), result);
+        boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(getContext(), result.getScanResult());
         String scanConnected = isCurrentWifiConnection ? "Connected" : "";
-        convertView = setAdaptorText(convertView, result.SSID, R.id.scan_ssid);
+        convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
         convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
         convertView = setAdaptorText(convertView, fmtWifiStrength(result), R.id.scan_level);
+        convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
 
         return convertView;
     }
@@ -57,16 +48,23 @@ public class ScanAdaptor extends ArrayAdapter {
         return convertView;
     }
 
-    private String fmtWifiStrength(ScanResult result) {
-        return String.format("%d%%", Util.getWifiStrength(result));
+    private View setAdaptorImage(View convertView, int resource, int id) {
+        ImageView imageView = (ImageView) convertView.findViewById(id);
+        imageView.setImageResource(resource);
+        return convertView;
     }
 
-    public void addAll(List<ScanResult> results) {
-        List<ScanResult> cleanResults = cleanScanReport(results);
-        Collections.sort(cleanResults, new Comparator<ScanResult>() {
+    private String fmtWifiStrength(ScanRating result) {
+        return String.format("%d%%", Util.getWifiStrength(result.getScanResult()));
+    }
+
+    public void addAll(List<ScanRating> results) {
+        List<ScanRating> cleanResults = cleanScanReport(results);
+        Collections.sort(cleanResults, new Comparator<ScanRating>() {
             @Override
-            public int compare(ScanResult lhs, ScanResult rhs) {
-                return -Integer.compare(Util.getWifiStrength(lhs), Util.getWifiStrength(rhs));
+            public int compare(ScanRating lhs, ScanRating rhs) {
+                return -Integer.compare(Util.getWifiStrength(lhs.getScanResult()),
+                        Util.getWifiStrength(rhs.getScanResult()));
             }
 
         });
@@ -75,16 +73,16 @@ public class ScanAdaptor extends ArrayAdapter {
         super.addAll(cleanResults);
     }
 
-    private List<ScanResult> cleanScanReport(List<ScanResult> results) {
-        HashMap<String, ScanResult> cleanResults = new HashMap<String, ScanResult>();
-        for (ScanResult result : results) {
-            String ssid = result.SSID;
+    private List<ScanRating> cleanScanReport(List<ScanRating> results) {
+        HashMap<String, ScanRating> cleanResults = new HashMap<String, ScanRating>();
+        for (ScanRating result : results) {
+            String ssid = result.getScanResult().SSID;
             if (ssid == "") {
                 continue;
             }
             if (cleanResults.containsKey(ssid)) {
-                ScanResult el = cleanResults.get(ssid);
-                if (el.level > result.level) {
+                ScanRating el = cleanResults.get(ssid);
+                if (el.getScanResult().level > result.getScanResult().level) {
                     cleanResults.put(ssid, result);
                 }
 
@@ -92,18 +90,18 @@ public class ScanAdaptor extends ArrayAdapter {
                 cleanResults.put(ssid, result);
             }
         }
-        return new ArrayList<ScanResult>(cleanResults.values());
+        return new ArrayList<ScanRating>(cleanResults.values());
     }
 
-    private List<ScanResult> moveCurrentWifi(List<ScanResult> results) {
+    private List<ScanRating> moveCurrentWifi(List<ScanRating> results) {
         int index = getCurrentWifiIndex(results);
         return swapTop(results, index);
     }
 
-    private int getCurrentWifiIndex(List<ScanResult> results) {
+    private int getCurrentWifiIndex(List<ScanRating> results) {
         int index = -1;
         for (int i = 0; i < results.size(); i++) {
-            if (Util.isCurrentWifiConnection(getContext(), results.get(i))) {
+            if (Util.isCurrentWifiConnection(getContext(), results.get(i).getScanResult())) {
                 index = i;
                 break;
             }
@@ -111,9 +109,9 @@ public class ScanAdaptor extends ArrayAdapter {
         return index;
     }
 
-    private List<ScanResult> swapTop(List<ScanResult> results, int index) {
+    private List<ScanRating> swapTop(List<ScanRating> results, int index) {
         if (index != -1) {
-            ScanResult item = results.remove(index);
+            ScanRating item = results.remove(index);
             results.add(0, item);
         }
         return results;

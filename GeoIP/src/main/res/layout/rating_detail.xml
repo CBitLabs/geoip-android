@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:paddingBottom="25dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp">
+
+        <ImageView
+            android:id="@+id/rating_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_action_secure" />
+
+        <LinearLayout
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/detail_ssid"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine="false"
+                android:text="@string/ex_ssid"
+                android:focusable="false"
+                android:clickable="false" />
+
+
+            <TextView
+                android:id="@+id/item_loc"
+                style="@android:style/TextAppearance.Small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ex_loc" />
+
+            <TextView
+                android:id="@+id/item_created_at_human"
+                style="@android:style/TextAppearance.Small"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoText="false"
+                android:text="@string/ex_created_at"
+                android:singleLine="true" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:paddingTop="10dp"
+        android:text="@string/events_title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        style="@android:style/TextAppearance.Large" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <TextView
+            android:id="@+id/spam_count"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/bot_count"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:singleLine="false"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/bot_count"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/spam_count"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:singleLine="false"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/unexp_count"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/unexp_count"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:singleLine="false"
+            android:gravity="center" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:layout_marginTop="209dp"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:text="@string/set_notification"
+        android:id="@+id/button" />
+</LinearLayout>

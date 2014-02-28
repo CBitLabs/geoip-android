@@ -16,10 +16,10 @@ public class ScanReportTask extends ReportingTask {
 
     public ScanReportTask(Context context) {
         super(context);
-        Log.d(Util.LOG_TAG, "WifiReportTask Created");
+        Log.d(Util.LOG_TAG, "ScanReportTask Created");
     }
 
-    public void postReport() {
+    public void sendReport() {
         final ArrayList<JsonObject> jsonResults = Util.getScanReport(this.context);
 
         if (!Util.isValidScanReport(this.context, jsonResults)) {
