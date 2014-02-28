@@ -22,10 +22,11 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
-    private ScanAdaptor scanAdaptor = null;
+    private ScanAdapter scanAdaptor = null;
     private Timer autoUpdate;
 
     // This "Future" tracks loading operations.
@@ -49,7 +50,7 @@ public class MainActivity extends Activity {
 
     private void setScanAdaptor() {
         if (scanAdaptor == null) {
-            scanAdaptor = new ScanAdaptor(this, 0);
+            scanAdaptor = new ScanAdapter(this, 0);
         }
     }
 
@@ -169,22 +170,22 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-//        autoUpdate = new Timer();
-//        autoUpdate.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        loadNetworks();
-//                    }
-//                });
-//            }
-//        }, 0, 5 * 1000);
+        autoUpdate = new Timer();
+        autoUpdate.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        loadNetworks();
+                    }
+                });
+            }
+        }, 0, 5 * 1000);
     }
 
     @Override
     public void onPause() {
-//        autoUpdate.cancel();
+        autoUpdate.cancel();
         super.onPause();
     }
 }

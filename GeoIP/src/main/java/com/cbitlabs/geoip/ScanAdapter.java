@@ -1,13 +1,8 @@
 package com.cbitlabs.geoip;
 
 import android.content.Context;
-import android.net.wifi.ScanResult;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,18 +13,15 @@ import java.util.List;
 /**
  * Created by jblum on 2/20/14.
  */
-public class ScanAdaptor extends ArrayAdapter {
+public class ScanAdapter extends Adapter {
 
-    public ScanAdaptor(Context c, int resource) {
+    public ScanAdapter(Context c, int resource) {
         super(c, resource);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.scan_item, null);
-        }
+        convertView = getConvertView(convertView, R.layout.scan_item);
         ScanRating result = (ScanRating) getItem(position);
 
         boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(getContext(), result.getScanResult());
@@ -39,18 +31,6 @@ public class ScanAdaptor extends ArrayAdapter {
         convertView = setAdaptorText(convertView, fmtWifiStrength(result), R.id.scan_level);
         convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
 
-        return convertView;
-    }
-
-    private View setAdaptorText(View convertView, String text, int id) {
-        TextView textView = (TextView) convertView.findViewById(id);
-        textView.setText(text);
-        return convertView;
-    }
-
-    private View setAdaptorImage(View convertView, int resource, int id) {
-        ImageView imageView = (ImageView) convertView.findViewById(id);
-        imageView.setImageResource(resource);
         return convertView;
     }
 

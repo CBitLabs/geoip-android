@@ -2,18 +2,13 @@ package com.cbitlabs.geoip;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -22,12 +17,9 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class HistoryActivity extends Activity {
 
-    private ArrayAdapter<HistoryItem> historyAdaptor = null;
+    private HistoryAdapter historyAdaptor = null;
     private int pageNum;
 
     Future<JsonArray> loading;
@@ -42,33 +34,13 @@ public class HistoryActivity extends Activity {
 
         // create a history adapter for our list view
         if (historyAdaptor == null) {
-            historyAdaptor = new ArrayAdapter<HistoryItem>(this, 0) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    if (convertView == null)
-                        convertView = getLayoutInflater().inflate(R.layout.history_item, null);
-
-                    HistoryItem historyItem = getItem(position);
-                    ImageView imageView = (ImageView) convertView.findViewById(R.id.rating_icon);
-                    imageView.setImageResource(historyItem.getRating().getIcon());
-                    convertView = setHistoryAdaptorText(convertView, historyItem.getSsid(), R.id.item_ssid);
-                    convertView = setHistoryAdaptorText(convertView, historyItem.getLoc(), R.id.item_loc);
-                    convertView = setHistoryAdaptorText(convertView, historyItem.getCreated_at_human(), R.id.item_created_at_human);
-                    return convertView;
-                }
-            };
+            historyAdaptor = new HistoryAdapter(this, 0);
         }
 
         // basic setup of the ListView and adapter
         setContentView(R.layout.activity_main);
         setListView();
         loadHistory(false);
-    }
-
-    private View setHistoryAdaptorText(View convertView, String text, int id) {
-        TextView tv = (TextView) convertView.findViewById(id);
-        tv.setText(text);
-        return convertView;
     }
 
     private void setListView() {
@@ -90,7 +62,7 @@ public class HistoryActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
 
-                HistoryItem historyItem= (HistoryItem) parent.getItemAtPosition(position);
+                HistoryItem historyItem = (HistoryItem) parent.getItemAtPosition(position);
                 Intent intent = new Intent(view.getContext(), HistoryDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(historyItem.SER_KEY, historyItem);
