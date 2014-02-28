@@ -28,20 +28,12 @@ import java.util.Map;
 public class HistoryActivity extends Activity {
 
     private ArrayAdapter<HistoryItem> historyAdaptor = null;
-    private HashMap<Integer, String> historyMap;
     private int pageNum;
 
     Future<JsonArray> loading;
 
     public HistoryActivity() {
         pageNum = 0;
-        historyMap = new HashMap<Integer, String>() {
-            {
-                put(R.id.item_ssid, "ssid");
-                put(R.id.item_loc, "loc");
-                put(R.id.item_created_at_human, "created_at_human");
-            }
-        };
     }
 
     @Override
