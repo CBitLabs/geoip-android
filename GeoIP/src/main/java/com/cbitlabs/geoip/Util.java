@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -180,6 +181,19 @@ public class Util {
         return state;
     }
 
+    public static void enableWifi(Context c) {
+        setWifiEnabled(c, true);
+    }
+
+    public static void disableWifi(Context c) {
+        setWifiEnabled(c, false);
+    }
+
+    private static void setWifiEnabled(Context c, boolean status) {
+        WifiManager wifiManager = getWifiManger(c);
+        wifiManager.setWifiEnabled(status);
+    }
+
     public static boolean isCurrentWifiConnection(Context c, ScanResult result) {
         WifiInfo info = getWiFiInfo(c);
         String eq = String.valueOf(result.SSID.equals(info.getSSID()));
@@ -275,6 +289,18 @@ public class Util {
     public static List<ScanResult> getAvailableWifiScan(Context c) {
         WifiManager wifiManager = getWifiManger(c);
         return wifiManager.getScanResults();
+    }
+
+    public static List<ScanResult> getNewScanResults(Context c, ScanAdapter adapter) {
+        List<ScanResult> results = getAvailableWifiScan(c);
+        Set<String> currentBssids = adapter.getBssidSet();
+        List<ScanResult> cleanedResults = new ArrayList<ScanResult>();
+        for (ScanResult result : results) {
+            if (!currentBssids.contains(result.BSSID)) {
+                cleanedResults.add(result);
+            }
+        }
+        return cleanedResults;
     }
 
     public static boolean connectToNetwork(Context c, String ssid) {

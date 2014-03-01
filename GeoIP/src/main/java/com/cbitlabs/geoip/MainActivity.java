@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
 
     private ScanAdapter scanAdaptor = null;
     private Timer autoUpdate;
+    private final int TWENTY_SECONDS = 20 * 1000;
 
     // This "Future" tracks loading operations.
     // A Future is an object that manages the state of an operation
@@ -106,8 +108,22 @@ public class MainActivity extends Activity {
         });
     }
 
+    public void onToggleClicked(View view) {
+        boolean on = ((ToggleButton) view).isChecked();
+
+        if (on) {
+            Util.enableWifi(this);
+        } else {
+            Util.disableWifi(this);
+        }
+    }
+
     private void loadNetworks() {
-        final List<ScanResult> results = Util.getAvailableWifiScan(this);
+        final List<ScanResult> results = Util.getNewScanResults(this, scanAdaptor);
+        if (results.size() == 0) {
+            return;
+        }
+
         String url = Util.getScanRatingUrl(results);
 
         loading = Ion.with(this, url)
@@ -182,7 +198,7 @@ public class MainActivity extends Activity {
                     }
                 });
             }
-        }, 0, 5 * 1000);
+        }, 0, TWENTY_SECONDS);
     }
 
     @Override

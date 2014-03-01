@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jblum on 2/20/14.
  */
 public class ScanAdapter extends Adapter {
 
+    private List<ScanRating> allResults;
+
     public ScanAdapter(Context c, int resource) {
         super(c, resource);
+        allResults = new ArrayList<ScanRating>();
     }
 
     @Override
@@ -39,6 +44,7 @@ public class ScanAdapter extends Adapter {
     }
 
     public void addAll(List<ScanRating> results) {
+        allResults = results;
         List<ScanRating> cleanResults = cleanScanReport(results);
         Collections.sort(cleanResults, new Comparator<ScanRating>() {
             @Override
@@ -96,5 +102,14 @@ public class ScanAdapter extends Adapter {
         }
         return results;
     }
+
+    public Set<String> getBssidSet() {
+        Set<String> bssids = new HashSet<String>();
+        for (Object item : allResults) {
+            bssids.add(((ScanRating) item).getScanResult().BSSID);
+        }
+        return bssids;
+    }
+
 
 }
