@@ -47,7 +47,7 @@
                 android:value="com.cbitlabs.geoip.MainActivity" />
         </activity>
         <activity
-            android:name=".RatingDetailActivity"
+            android:name=".ScanDetailActivity"
             android:parentActivityName="com.cbitlabs.geoip.MainActivity">
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data

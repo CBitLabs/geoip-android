@@ -30,7 +30,7 @@ public class Util {
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
     //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
+    private static final String REPORT_SERVER_URL = "http://18.189.12.102:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
 
     public static final String NO_IP = "0.0.0.0";
@@ -161,9 +161,9 @@ public class Util {
                                              boolean saveReport) {
 
 
-        boolean isDuplicate = StorageManager.inPrefStorage(c, prefKey, bssid);
+        boolean isDuplicate = ReportCacheManager.inReportCache(c, prefKey, bssid);
         if (!isDuplicate && saveReport) {
-            StorageManager.putPrefStorage(c, prefKey, bssid);
+            ReportCacheManager.putReportCache(c, prefKey, bssid);
         }
 
         return isDuplicate;

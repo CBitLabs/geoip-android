@@ -109,6 +109,6 @@
         android:layout_marginTop="209dp"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:text="@string/set_notification"
+        android:text="@string/set_notification_btn"
         android:id="@+id/button" />
 </LinearLayout>

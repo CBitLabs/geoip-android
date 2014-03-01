@@ -20,9 +20,9 @@ public class ScanReportTask extends ReportingTask {
     }
 
     public void sendReport() {
-        final ArrayList<JsonObject> jsonResults = Util.getScanReport(this.context);
+        final ArrayList<JsonObject> jsonResults = Util.getScanReport(context);
 
-        if (!Util.isValidScanReport(this.context, jsonResults)) {
+        if (!Util.isValidScanReport(context, jsonResults)) {
             Log.i(Util.LOG_TAG, "Duplicate report. Scan Report not sent.");
             return;
         }

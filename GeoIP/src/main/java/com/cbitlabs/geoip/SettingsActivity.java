@@ -1,81 +1,84 @@
 package com.cbitlabs.geoip;
 
-import android.annotation.TargetApi;
-import android.content.SharedPreferences;
-import android.os.Build;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.List;
+import java.util.Set;
 
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
-
-    private CheckBoxPreference submit_id;
-    private SharedPreferences prefs;
+public class SettingsActivity extends Activity {
+    private ArrayAdapter<String> notifcationAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        addPreferencesFromResource(R.xml.pref_general);
-
-        submit_id = (CheckBoxPreference) this.findPreference("submit_device_id");
-        submit_id.setOnPreferenceChangeListener(this);
-        this.updateDeviceIDHelpText();
+        setContentView(R.layout.activity_settings);
+        setAdapter();
+        setListView();
+        loadAdapter();
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == this.submit_id) {
-            boolean doSubmit = (Boolean) newValue;
+    private void setListView() {
+        // basic setup of the ListView and adapter
+        final ListView lv = (ListView) findViewById(R.id.list);
+        lv.setAdapter(notifcationAdaptor);
+        lv.setEmptyView(findViewById(R.id.empty_element));
+        lv.setClickable(true);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            if (doSubmit) {
-                Util.generateDeviceID(this);
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+
+                TextView textView = (TextView) view.findViewById(R.id.notification_ssid);
+                final String ssid = textView.getText().toString();
+                AlertDialog dialog = createDialog(ssid);
+                dialog.show();
+
             }
-            this.updateDeviceIDHelpText(doSubmit);
+
+        });
+    }
+
+    private AlertDialog createDialog(final String ssid) {
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.rm_notification_title)
+                .setPositiveButton(R.string.rm_notification, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NotificationManager.rmNetworkNotification(builder.getContext(), ssid);
+                        notifcationAdaptor.remove(ssid);
+                        notifcationAdaptor.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        return builder.create();
+    }
+
+    private void setAdapter() {
+        if (notifcationAdaptor == null) {
+            notifcationAdaptor = new ArrayAdapter<String>(this, R.layout.notification_item, R.id.notification_ssid);
         }
-        return true;
+
     }
 
-
-    private void updateDeviceIDHelpText() {
-        this.updateDeviceIDHelpText(this.submit_id.isChecked());
+    private void loadAdapter() {
+        Set<String> networks = NotificationManager.getNetworks(getApplicationContext());
+        notifcationAdaptor.addAll(networks);
     }
 
-    private void updateDeviceIDHelpText(boolean doSubmit) {
-
-        String description;
-        if (doSubmit) {
-            String deviceId = Util.getUUID(this);
-            description = "Device ID: ".concat(deviceId);
-        } else {
-            description = "Device ID will not be submitted.";
-        }
-        this.submit_id.setSummary(description);
-    }
-
-    @Override
-    public boolean onIsMultiPane() {
-        return false;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        return;
-    }
 
 }

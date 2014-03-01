@@ -1,7 +1,10 @@
 package com.cbitlabs.geoip;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,4 +45,35 @@ public abstract class DetailActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(id);
         imageView.setImageResource(resource);
     }
+
+    protected void setupBtn(Rating rating) {
+
+        Button btn = (Button) findViewById(R.id.button);
+        final String ssid = rating.getSsid();
+        setBtnText(ssid);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                Context c = getApplicationContext();
+                boolean hasNotification = NotificationManager.hasNotification(getApplicationContext(), ssid);
+                if (hasNotification) {
+                    NotificationManager.rmNetworkNotification(c, ssid);
+                } else {
+                    NotificationManager.addNetworkNotification(c, ssid);
+                }
+                setBtnText(ssid);
+            }
+        });
+    }
+
+    private void setBtnText(String ssid) {
+        Button btn = (Button) findViewById(R.id.button);
+        boolean hasNotification = NotificationManager.hasNotification(getApplicationContext(), ssid);
+        if (hasNotification) {
+            btn.setText(R.string.rm_notification_btn);
+        } else {
+            btn.setText(R.string.set_notification_btn);
+        }
+    }
+
+
 }

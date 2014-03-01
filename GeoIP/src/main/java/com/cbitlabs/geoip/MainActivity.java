@@ -39,6 +39,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         //start reporting geoIP in the background.
         startService(new Intent(this, ReportIntentService.class));
 
@@ -56,7 +58,6 @@ public class MainActivity extends Activity {
 
     private void setListView() {
         // basic setup of the ListView and adapter
-        setContentView(R.layout.activity_main);
         final ListView lv = (ListView) findViewById(R.id.list);
         lv.setAdapter(scanAdaptor);
         lv.setEmptyView(findViewById(R.id.empty_element));
@@ -79,9 +80,11 @@ public class MainActivity extends Activity {
                 if (!Util.connectToNetwork(getApplicationContext(), result.getScanResult().SSID)) {
                     startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                 }
+                for (int i = 0; i < lv.getCount(); i++) {
+                    TextView clearText = (TextView) lv.getChildAt(i).findViewById(R.id.scan_connected);
+                    clearText.setText("");
+                }
 
-                TextView first = (TextView) lv.getChildAt(0).findViewById(R.id.scan_connected);
-                first.setText("");
                 textView.setText("Connecting...");
             }
 
@@ -92,7 +95,7 @@ public class MainActivity extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, final View view,
                                            int position, long id) {
                 ScanRating scanRating = (ScanRating) parent.getItemAtPosition(position);
-                Intent intent = new Intent(view.getContext(), RatingDetailActivity.class);
+                Intent intent = new Intent(view.getContext(), ScanDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(scanRating.getRating().SER_KEY, scanRating.getRating());
                 intent.putExtras(bundle);
@@ -153,7 +156,6 @@ public class MainActivity extends Activity {
                 return true;
 
             case R.id.action_settings:
-                Log.i(Util.LOG_TAG, "Settings!");
                 i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 return true;

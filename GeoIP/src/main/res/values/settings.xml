@@ -1,0 +1,7 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+    <string name="empty_network_notification">No notifications set!</string>
+    <string name="rm_notification_title">Remove notifcations for this network?</string>
+    <string name="cancel">Cancel</string>
+    <string name="rm_notification">Remove</string>
+</resources>

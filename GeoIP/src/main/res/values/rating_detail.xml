@@ -4,8 +4,8 @@
     <string name="bot_count">Botnet</string>
     <string name="spam_count">Spam</string>
     <string name="unexp_count">Other</string>
-    <string name="set_notification">Set notification for this network</string>
-    <string name="rm_notification">Ignore events from this network</string>
+    <string name="set_notification_btn">Set notification for this network</string>
+    <string name="rm_notification_btn">Ignore events from this network</string>
     <string name="ex_ssid">Sample SSID</string>
     <string name="ex_loc">150-160 Massachusetts 3, Cambridge, MA 02142, USA</string>
     <string name="ex_created_at">1000 days ago</string>

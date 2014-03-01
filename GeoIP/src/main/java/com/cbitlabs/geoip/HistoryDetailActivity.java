@@ -20,5 +20,6 @@ public class HistoryDetailActivity extends DetailActivity {
         setViewText(historyItem.getCreated_at_human(), R.id.item_created_at_human);
         setViewText(historyItem.getSsid(), R.id.detail_ssid);
         setRatingDetails(rating);
+        setupBtn(rating);
     }
 }

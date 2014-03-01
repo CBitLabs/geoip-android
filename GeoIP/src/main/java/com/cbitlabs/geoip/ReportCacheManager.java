@@ -11,16 +11,16 @@ import java.util.Date;
 /**
  * Created by jblum on 2/21/14.
  */
-public class StorageManager {
+public class ReportCacheManager extends PrefManager{
     private static final int ONE_DAY = 24 * 60 * 60 * 1000;
 
-    public static void putPrefStorage(Context c, String baseKey, String bssid) {
-        SharedPreferences.Editor editor = getPreferences(c).edit();
+    public static void putReportCache(Context c, String baseKey, String bssid) {
+        SharedPreferences.Editor editor = getEditor(c);
         editor.putLong(serialize(baseKey, bssid), getToday().getTime());
         editor.commit();
     }
 
-    public static boolean inPrefStorage(Context c, String baseKey, String bssid) {
+    public static boolean inReportCache(Context c, String baseKey, String bssid) {
         SharedPreferences prefs = getPreferences(c);
         String prefKey = serialize(baseKey, bssid);
         if (!prefs.contains(prefKey)) {
@@ -47,10 +47,6 @@ public class StorageManager {
 
     private static long deserialize(SharedPreferences prefs, String prefKey) {
         return prefs.getLong(prefKey, 0);
-    }
-
-    private static SharedPreferences getPreferences(Context c) {
-        return PreferenceManager.getDefaultSharedPreferences(c);
     }
 
 }
