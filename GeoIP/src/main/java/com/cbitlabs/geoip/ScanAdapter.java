@@ -1,6 +1,7 @@
 package com.cbitlabs.geoip;
 
 import android.content.Context;
+import android.net.wifi.ScanResult;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,13 +29,14 @@ public class ScanAdapter extends Adapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = getConvertView(convertView, R.layout.scan_item);
         ScanRating result = (ScanRating) getItem(position);
-
-        boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(getContext(), result.getScanResult());
+        Context c = getContext();
+        boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(c, result.getScanResult());
         String scanConnected = isCurrentWifiConnection ? "Connected" : "";
         convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
         convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
         convertView = setAdaptorText(convertView, fmtWifiStrength(result), R.id.scan_level);
         convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
+        convertView = setAdaptorImage(convertView, result.getRating().notificationIcon(c), R.id.hasNotification);
 
         return convertView;
     }
@@ -44,9 +46,9 @@ public class ScanAdapter extends Adapter {
     }
 
     public void addAll(List<ScanRating> results) {
-        allResults = results;
-        List<ScanRating> cleanResults = cleanScanReport(results);
-        Collections.sort(cleanResults, new Comparator<ScanRating>() {
+        allResults.addAll(results);
+        allResults = cleanScanReport(allResults);
+        Collections.sort(allResults, new Comparator<ScanRating>() {
             @Override
             public int compare(ScanRating lhs, ScanRating rhs) {
                 return -Integer.compare(Util.getWifiStrength(lhs.getScanResult()),
@@ -55,11 +57,11 @@ public class ScanAdapter extends Adapter {
 
         });
 
-        cleanResults = moveCurrentWifi(cleanResults);
-        super.addAll(cleanResults);
+        allResults = moveCurrentWifi(allResults);
+        super.addAll(allResults);
     }
 
-    private List<ScanRating> cleanScanReport(List<ScanRating> results) {
+    private static List<ScanRating> cleanScanReport(List<ScanRating> results) {
         HashMap<String, ScanRating> cleanResults = new HashMap<String, ScanRating>();
         for (ScanRating result : results) {
             String ssid = result.getScanResult().SSID;

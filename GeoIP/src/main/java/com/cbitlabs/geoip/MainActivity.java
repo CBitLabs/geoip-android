@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,6 +29,7 @@ public class MainActivity extends Activity {
     private ScanAdapter scanAdaptor = null;
     private Timer autoUpdate;
     private final int TWENTY_SECONDS = 20 * 1000;
+    private Menu menu;
 
     // This "Future" tracks loading operations.
     // A Future is an object that manages the state of an operation
@@ -108,19 +108,35 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void onToggleClicked(View view) {
-        boolean on = ((ToggleButton) view).isChecked();
-
-        if (on) {
+    public void onToggleClicked() {
+        boolean enable = !Util.isWifiEnabled(this);
+        if (enable) {
+            setWifiOnIcon();
             Util.enableWifi(this);
+            loadNetworks();
         } else {
+            setWifiOffIcon();
+            setnoWifiText();
+            scanAdaptor.clear();
             Util.disableWifi(this);
         }
     }
 
     private void loadNetworks() {
+
+        if (Util.isWifiEnabled(this)) {
+            setWifiOnIcon();
+        } else {
+            setnoWifiText();
+            setWifiOffIcon();
+            scanAdaptor.clear();
+            return;
+        }
+
         final List<ScanResult> results = Util.getNewScanResults(this, scanAdaptor);
+
         if (results.size() == 0) {
+            setEmptyText();
             return;
         }
 
@@ -156,6 +172,14 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
+        if (Util.isWifiEnabled(this)) {
+            setWifiOnIcon();
+        } else {
+            setWifiOffIcon();
+        }
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -171,6 +195,10 @@ public class MainActivity extends Activity {
                 loadNetworks();
                 return true;
 
+            case R.id.toggleWifi:
+                onToggleClicked();
+                return true;
+
             case R.id.action_settings:
                 i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
@@ -183,6 +211,41 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setnoWifiText() {
+        setText(R.string.no_wifi);
+    }
+
+    private void setEmptyText() {
+        setText(R.string.empty_element);
+    }
+
+    private void setText(int resource) {
+        TextView textView = (TextView) findViewById(R.id.empty_element
+        );
+        if (textView != null) {
+            textView.setText(resource);
+        }
+
+    }
+
+    private void setWifiOffIcon() {
+        setWifiIcon(R.drawable.ic_action_network_cell);
+    }
+
+    private void setWifiOnIcon() {
+        setWifiIcon(R.drawable.ic_action_network_wifi);
+    }
+
+    private void setWifiIcon(int resource) {
+        if (menu == null) {
+            return;
+        }
+
+        MenuItem item = menu.findItem(R.id.toggleWifi);
+        item.setIcon(resource);
+
     }
 
     @Override

@@ -23,21 +23,31 @@
         <TextView
             android:id="@+id/scan_ssid"
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:text="@string/ex_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <TextView
             android:id="@+id/scan_level"
+            android:text="@string/ex_scan_level"
             style="@android:style/TextAppearance.Small"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+
 
         <TextView
             android:id="@+id/scan_connected"
+            android:text="@string/ex_is_connected"
             style="@android:style/TextAppearance.Small"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
-
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hasNotification"
+        android:layout_gravity="right" />
 </LinearLayout>

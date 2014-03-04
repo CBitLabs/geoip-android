@@ -27,6 +27,7 @@ public class HistoryAdapter extends Adapter {
                 historyItem.getLoc(), R.id.item_loc);
         convertView = setAdaptorText(convertView,
                 historyItem.getCreated_at_human(), R.id.item_created_at_human);
+        convertView = setAdaptorImage(convertView, historyItem.getRating().notificationIcon(getContext()), R.id.hasNotification);
         return convertView;
     }
 

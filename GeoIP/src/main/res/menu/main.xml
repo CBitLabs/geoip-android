@@ -6,6 +6,12 @@
         android:showAsAction="always" />
 
     <item
+        android:id="@+id/toggleWifi"
+        android:icon="@drawable/ic_action_network_wifi"
+        android:title="@string/button_togglewifi"
+        android:showAsAction="always" />
+
+    <item
         android:id="@+id/refreshScan"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/button_refresh"

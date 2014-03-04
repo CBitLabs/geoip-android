@@ -1,5 +1,7 @@
 package com.cbitlabs.geoip;
 
+import android.content.Context;
+
 import com.google.gson.JsonObject;
 
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.io.Serializable;
 public class Rating implements Serializable {
     private static final long serialVersionUID = 7526472295622776147L;
     public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
+    private static final int infectedIcon = R.drawable.ic_action_warning;
+    private static final int notInfectedIcion = R.drawable.ic_action_accept;
     private final int spam_count;
     private final int spam_freq;
     private final int bot_count;
@@ -32,7 +36,7 @@ public class Rating implements Serializable {
         unexp_freq = rating.get("unexp_freq").getAsInt();
         raw_score = rating.get("raw_score").getAsInt();
         is_infected = rating.get("is_infected").getAsBoolean();
-        icon = is_infected ? R.drawable.ic_action_not_secure : R.drawable.ic_action_secure;
+        icon = is_infected ? infectedIcon : notInfectedIcion;
 
     }
 
@@ -74,6 +78,11 @@ public class Rating implements Serializable {
 
     public String getSsid() {
         return ssid;
+    }
+
+    public int notificationIcon(Context c) {
+        boolean hasNotification = NotificationManager.hasNotification(c, ssid);
+        return hasNotification ? R.drawable.ic_action_about : 0;
     }
 
     @Override

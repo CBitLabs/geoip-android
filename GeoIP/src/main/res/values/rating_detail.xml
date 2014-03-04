@@ -9,4 +9,6 @@
     <string name="ex_ssid">Sample SSID</string>
     <string name="ex_loc">150-160 Massachusetts 3, Cambridge, MA 02142, USA</string>
     <string name="ex_created_at">1000 days ago</string>
+    <string name="ex_scan_level">95%</string>
+    <string name="ex_is_connected">Conntected</string>
 </resources>

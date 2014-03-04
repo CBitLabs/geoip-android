@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -194,6 +195,11 @@ public class Util {
         wifiManager.setWifiEnabled(status);
     }
 
+    public static boolean isWifiEnabled(Context c) {
+        WifiManager wifiManager = getWifiManger(c);
+        return wifiManager.isWifiEnabled();
+    }
+
     public static boolean isCurrentWifiConnection(Context c, ScanResult result) {
         WifiInfo info = getWiFiInfo(c);
         String eq = String.valueOf(result.SSID.equals(info.getSSID()));
@@ -291,8 +297,28 @@ public class Util {
         return wifiManager.getScanResults();
     }
 
+    private static List<ScanResult> cleanScanReport(List<ScanResult> results) {
+        HashMap<String, ScanResult> cleanResults = new HashMap<String, ScanResult>();
+        for (ScanResult result : results) {
+            String ssid = result.SSID;
+            if (ssid == "") {
+                continue;
+            }
+            if (cleanResults.containsKey(ssid)) {
+                ScanResult el = cleanResults.get(ssid);
+                if (el.level > result.level) {
+                    cleanResults.put(ssid, result);
+                }
+
+            } else {
+                cleanResults.put(ssid, result);
+            }
+        }
+        return new ArrayList<ScanResult>(cleanResults.values());
+    }
+
     public static List<ScanResult> getNewScanResults(Context c, ScanAdapter adapter) {
-        List<ScanResult> results = getAvailableWifiScan(c);
+        List<ScanResult> results = cleanScanReport(getAvailableWifiScan(c));
         Set<String> currentBssids = adapter.getBssidSet();
         List<ScanResult> cleanedResults = new ArrayList<ScanResult>();
         for (ScanResult result : results) {
