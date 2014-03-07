@@ -5,7 +5,6 @@ package com.cbitlabs.geoip;
  */
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -19,14 +18,13 @@ import java.net.UnknownHostException;
 
 public class DNSReportTask extends ReportingTask {
 
-    private Context context;
     private JsonObject report;
 
     public DNSReportTask(Context context, JsonObject report) {
         super(context);
-        Log.d(Util.LOG_TAG, "DNSReportTask Created");
-
         this.report = report;
+
+        Log.d(Util.LOG_TAG, "DNSReportTask Created");
     }
 
     @Override
@@ -35,7 +33,6 @@ public class DNSReportTask extends ReportingTask {
     }
 
     protected void executeLookupUsingResolver(String h, Resolver r) {
-
         Lookup.setDefaultResolver(r);
         executeLookup(h);
     }

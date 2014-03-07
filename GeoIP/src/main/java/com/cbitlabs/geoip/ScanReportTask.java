@@ -28,13 +28,7 @@ public class ScanReportTask extends ReportingTask {
         }
 
         postReport(jsonObjects);
-
-        InfectedNotification infectedNotification = new InfectedNotification(c, jsonObjects);
-        infectedNotification.setNotification();
-
-        OpenNetworkNotification openNetworkNotification = new OpenNetworkNotification(c, jsonObjects);
-        openNetworkNotification.setNotification();
-
+        setNotifications(jsonObjects);
     }
 
     private void postReport(ArrayList<JsonObject> jsonObjects) {
@@ -53,5 +47,14 @@ public class ScanReportTask extends ReportingTask {
                         }
                     }
                 });
+    }
+
+    private void setNotifications(ArrayList<JsonObject> jsonObjects) {
+        InfectedNotification infectedNotification = new InfectedNotification(c, jsonObjects);
+        infectedNotification.setNotification();
+
+        OpenNetworkNotification openNetworkNotification = new OpenNetworkNotification(c, jsonObjects);
+        openNetworkNotification.setNotification();
+
     }
 }

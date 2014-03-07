@@ -19,7 +19,7 @@
         android:id="@+id/empty_element"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/empty_element"
+        android:text="@string/scanning_networks"
         android:textSize="12pt"
         android:layout_gravity="center" />
 </LinearLayout>

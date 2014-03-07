@@ -2,11 +2,20 @@
 <resources>
 
     <string name="app_name">GeoIP</string>
+
+    <string name="title_activity_main">Wi-Fi Scan</string>
+    <string name="title_activity_history">History</string>
+
     <string name="action_settings">Settings</string>
     <string name="button_refresh">Refresh</string>
     <string name="button_togglewifi">Toggle Wifi</string>
     <string name="button_view_history">View History</string>
+
+    <string name="no_networks">No networks in range</string>
+    <string name="scanning_networks">Scanning for networks</string>
+
     <string name="empty_element">No results found!</string>
     <string name="no_wifi">To see avaiable Wifi networks, turn Wi-Fi on.</string>
+
     <string name="crash_toast_text">Crash report sent!</string>
 </resources>

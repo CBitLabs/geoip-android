@@ -1,7 +1,6 @@
 package com.cbitlabs.geoip;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,21 +23,21 @@ public class StringSetPrefManager extends PrefManager {
 
     public void addString(String string) {
         Set<String> set = getSet();
-        Log.i(Util.LOG_TAG, "addString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
+//        Log.i(Util.LOG_TAG, "addString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         set.add(string);
         edit(set);
     }
 
     public void rmString(String string) {
         Set<String> set = getSet();
-        Log.i(Util.LOG_TAG, "rmString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
+//        Log.i(Util.LOG_TAG, "rmString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         set.remove(string);
         edit(set);
     }
 
     public boolean contains(String string) {
         Set<String> set = getSet();
-        Log.i(Util.LOG_TAG, "contains:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
+//        Log.i(Util.LOG_TAG, "contains:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         return set.contains(string);
     }
 

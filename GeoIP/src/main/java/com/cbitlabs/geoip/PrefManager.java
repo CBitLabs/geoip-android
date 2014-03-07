@@ -36,9 +36,5 @@ abstract class PrefManager {
     protected boolean isExpired(long cacheDate, long lifetime) {
         return getToday().getTime() - cacheDate > lifetime;
     }
-
-    protected void remove(String prefKey) {
-        getEditor().remove(prefKey);
-    }
 }
 

@@ -83,8 +83,11 @@ public class MainActivity extends Activity {
                     startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                 }
                 for (int i = 0; i < lv.getCount(); i++) {
-                    TextView clearText = (TextView) lv.getChildAt(i).findViewById(R.id.scan_connected);
-                    clearText.setText("");
+                    View child = lv.getChildAt(i);
+                    if (child != null) {
+                        TextView clearText = (TextView) findViewById(R.id.scan_connected);
+                        clearText.setText("");
+                    }
                 }
 
                 textView.setText("Connecting...");
@@ -218,7 +221,7 @@ public class MainActivity extends Activity {
     }
 
     private void setEmptyText() {
-        setText(R.string.empty_element);
+        setText(R.string.no_networks);
     }
 
     private void setText(int resource) {
