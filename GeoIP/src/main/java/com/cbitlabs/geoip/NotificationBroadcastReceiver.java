@@ -16,15 +16,19 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(final Context c, final Intent intent) {
         String action = intent.getAction();
         String extrasKey = "";
+        StringSetCacheManager cacheManager;
         if (action.equals(InfectedNotificationBuilder.DELETE_ACTION)) {
             extrasKey = InfectedNotificationBuilder.EXTRAS_KEY;
+            cacheManager = InfectedNotification.getCacheManager(c);
+
 
         } else if (action.equals(OpenNetworkNotificationBuilder.DELETE_ACTION)) {
-            extrasKey = "";
+            extrasKey = OpenNetworkNotificationBuilder.EXTRAS_KEY;
+            cacheManager = OpenNetworkNotification.getCacheManager(c);
+        } else {
+            return;
         }
 
-
-        InfectedNotificationCacheManager cacheManager = new InfectedNotificationCacheManager(c);
         ArrayList<String> ssids = intent.getStringArrayListExtra(extrasKey);
         Log.i(Util.LOG_TAG, "DeleteIntent. Action: " + action
                 + " extrasKey: " + extrasKey + " extras: " + ssids);

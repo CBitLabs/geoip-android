@@ -39,16 +39,16 @@ public class Util {
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int FIVE_MINUTES = 1000 * 30;
+    public static final int FIVE_MINUTES = 1000 * 60 * 5;
     public static final String lastWifiReportPref = "lastWifiReport";
     public static final String lastScanReportPref = "lastScanReport";
 
     private static final String ENTERPRISE_CAPABILITY = "-EAP-";
     // Constants used for different security types
-    private static final String PSK = "PSK";
-    private static final String WEP = "WEP";
-    private static final String EAP = "EAP";
-    private static final String OPEN = "Open";
+    public static final String PSK = "PSK";
+    public static final String WEP = "WEP";
+    public static final String EAP = "EAP";
+    public static final String OPEN = "Open";
 
     public static JsonObject getWifiReport(Context c) {
 
@@ -155,9 +155,7 @@ public class Util {
     }
 
     private static boolean isDuplicateScanReport(Context c, String bssid) {
-        return false;
-        //TODO : REMOVE COMMENTS
-//        return isDuplicateReport(c, lastScanReportPref, bssid, true);
+        return isDuplicateReport(c, lastScanReportPref, bssid, true);
     }
 
     private static boolean isDuplicateReport(Context c, String prefKey,

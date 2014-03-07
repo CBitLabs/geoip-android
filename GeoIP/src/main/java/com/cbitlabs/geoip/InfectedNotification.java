@@ -14,14 +14,17 @@ import java.util.Set;
 /**
  * Created by jblum on 3/6/14.
  */
-public class InfectedNotification {
+public class InfectedNotification extends Notification {
 
-    public static void buildNotification(final Context c, ArrayList<JsonObject> jsonObjects) {
-        ArrayList<String[]> results = getBssids(c, jsonObjects);
-        final String[] bssids = results.get(0);
-        final String[] ssids = results.get(1);
-        String url = Util.getScanRatingUrl(bssids);
-        Ion.with(c, url)
+    public static final String TAG = "infected_notification";
+    public static final long CACHE_LIFE = PrefManager.ONE_DAY;
+
+    public InfectedNotification(Context c, ArrayList<JsonObject> jsonObjects) {
+        super(c, jsonObjects, TAG, PrefManager.ONE_DAY);
+    }
+
+    public void setNotification() {
+        Ion.with(c, getUrl())
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -32,14 +35,14 @@ public class InfectedNotification {
                         }
                         ArrayList<String> infectedIds = new ArrayList<String>();
                         Rating rating;
-                        for (int i = 0; i < bssids.length; i++) {
-                            String bssid = bssids[i];
-                            String ssid = ssids[i];
-                            //TODO : REMOVE COMMENTS
+                        String bssid, ssid;
+                        for (JsonObject jsonObject : jsonObjects) {
+                            bssid = getBssid(jsonObject);
+                            ssid = getSsid(jsonObject);
                             rating = new Rating(jsonRepsonse.get(bssid).getAsJsonObject(), ssid);
-//                            if (rating.isInfected()) {
-                            infectedIds.add(ssid);
-//                            }
+                            if (rating.isInfected()) {
+                                infectedIds.add(ssid);
+                            }
                         }
                         InfectedNotificationBuilder notificationBuilder = new InfectedNotificationBuilder(c, infectedIds);
                         notificationBuilder.build();
@@ -50,32 +53,25 @@ public class InfectedNotification {
 
     }
 
-    private static ArrayList<String[]> getBssids(Context c, ArrayList<JsonObject> jsonResults) {
-        InfectedNotificationCacheManager cacheManager = new InfectedNotificationCacheManager(c);
-        NotificationStorageManager storageManager = new NotificationStorageManager(c);
-        Set<String> bssids = new HashSet<String>();
-        Set<String> ssids = new HashSet<String>();
-        String bssid, ssid;
-
-        for (JsonObject jsonObject : jsonResults) {
-            ssid = jsonObject.get("ssid").getAsString();
-            if (needsInfectedNotification(cacheManager, storageManager, ssid)) {
-                bssid = jsonObject.get("bssid").getAsString();
-                bssids.add(bssid);
-                ssids.add(ssid);
-            }
-        }
-
-        ArrayList<String[]> results = new ArrayList<String[]>();
-        results.add(bssids.toArray(new String[bssids.size()]));
-        results.add(ssids.toArray(new String[bssids.size()]));
-        return results;
-    }
-
-    private static boolean needsInfectedNotification(InfectedNotificationCacheManager cacheManager,
-                                                     NotificationStorageManager storageManager,
-                                                     String ssid) {
+    protected boolean needsNotification(JsonObject jsonObject) {
+        String ssid = getSsid(jsonObject);
         return !cacheManager.contains(ssid) && storageManager.contains(ssid);
     }
 
+
+    protected String getUrl() {
+        Set<String> bssids = new HashSet<String>();
+        String bssid;
+
+        for (JsonObject jsonObject : jsonObjects) {
+            bssid = getBssid(jsonObject);
+            bssids.add(bssid);
+        }
+
+        return Util.getScanRatingUrl(bssids.toArray(new String[bssids.size()]));
+    }
+
+    public static StringSetCacheManager getCacheManager(Context c) {
+        return new StringSetCacheManager(c, TAG, CACHE_LIFE);
+    }
 }

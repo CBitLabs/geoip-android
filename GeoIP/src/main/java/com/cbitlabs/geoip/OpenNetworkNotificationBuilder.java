@@ -16,11 +16,11 @@ public class OpenNetworkNotificationBuilder extends NotificationBuilder {
     private static final int SMALL_ICON = R.drawable.ic_action_network_wifi;
     private static final String CONTENT_TITLE = "See Wi-Fi security ratings";
 
-    private static final String BIG_CONTENT_TITLE = "Wi-Fi Networks Available";
-    private static final String SUMMARY_TEXT = "View security ratings for avialable Wi-Fi networks";
+    private static final String BIG_CONTENT_TITLE = "View security ratings for networks";
+    private static final String SUMMARY_TEXT = "Wi-Fi networks available.";
 
     public static final String EXTRAS_KEY = "ssids";
-    public static final String DELETE_ACTION = "open_network_notification_cancelled";
+    public static final String DELETE_ACTION = OpenNetworkNotification.TAG + "_cancelled";
 
     public OpenNetworkNotificationBuilder(Context c, ArrayList<String> ssids) {
         super(c, SMALL_ICON, LARGE_ICON, CONTENT_TITLE, DELETE_ACTION, EXTRAS_KEY);

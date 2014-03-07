@@ -14,11 +14,12 @@ import java.util.Set;
 
 public class SettingsActivity extends Activity {
     private ArrayAdapter<String> notifcationAdaptor;
-    private final NotificationStorageManager storageManager = new NotificationStorageManager(getApplicationContext());
+    private NotificationStorageManager storageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        storageManager = new NotificationStorageManager(getApplicationContext());
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_settings);
         setAdapter();

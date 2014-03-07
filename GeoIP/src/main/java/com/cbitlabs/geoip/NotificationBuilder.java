@@ -37,6 +37,10 @@ abstract class NotificationBuilder {
 
     public void build() {
 
+        if (getNumber() == 0){
+            return;
+        }
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(c)
                         .setLargeIcon(getLargeIcon())

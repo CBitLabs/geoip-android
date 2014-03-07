@@ -8,8 +8,6 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by jblum on 2/17/14.
@@ -22,16 +20,20 @@ public class ScanReportTask extends ReportingTask {
     }
 
     public void sendReport() {
-        final ArrayList<JsonObject> jsonResults = Util.getScanReport(c);
+        final ArrayList<JsonObject> jsonObjects = Util.getScanReport(c);
 
-        if (!Util.isValidScanReport(jsonResults)) {
+        if (!Util.isValidScanReport(jsonObjects)) {
             Log.i(Util.LOG_TAG, "Duplicate report. Scan Report not sent.");
             return;
         }
 
-        postReport(jsonResults);
-        InfectedNotification.buildNotification(c, jsonResults);
-        OpenNetworkNotification.buildNotification(c, jsonResults);
+        postReport(jsonObjects);
+
+        InfectedNotification infectedNotification = new InfectedNotification(c, jsonObjects);
+        infectedNotification.setNotification();
+
+        OpenNetworkNotification openNetworkNotification = new OpenNetworkNotification(c, jsonObjects);
+        openNetworkNotification.setNotification();
 
     }
 

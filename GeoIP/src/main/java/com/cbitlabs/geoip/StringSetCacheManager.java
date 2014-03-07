@@ -5,15 +5,15 @@ import android.content.Context;
 /**
  * Created by jblum on 3/6/14.
  */
-public class NotificationCacheManager extends StringSetPrefManager {
+public class StringSetCacheManager extends StringSetPrefManager {
 
     private final String expKey;
-    private final long expDate;
+    private final long expLife;
 
-    public NotificationCacheManager(Context c, String prefKey, long expDate) {
+    public StringSetCacheManager(Context c, String prefKey, long expDate) {
         super(c, prefKey);
         expKey = prefKey + "_expiration";
-        this.expDate = expDate;
+        this.expLife = expDate;
     }
 
     public void addString(String string) {
@@ -22,7 +22,7 @@ public class NotificationCacheManager extends StringSetPrefManager {
     }
 
     public boolean contains(String string) {
-        long expDate = getExpDate();
+        long expDate = getExpLife();
         if (isExpired(expDate, ONE_DAY)) {
             clearAll();
             return false;
@@ -30,13 +30,13 @@ public class NotificationCacheManager extends StringSetPrefManager {
         return super.contains(string);
     }
 
-    private long getExpDate() {
+    private long getExpLife() {
         return prefs.getLong(expKey, getToday().getTime());
     }
 
     private void setExpDate() {
-        long exp = getExpDate();
-        if (isExpired(exp, expDate)) {
+        long exp = getExpLife();
+        if (isExpired(exp, expLife)) {
             editor.putLong(expKey, getToday().getTime());
             editor.commit();
         }

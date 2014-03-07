@@ -17,7 +17,7 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
     private static final int SMALL_ICON = R.drawable.ic_action_warning_dark;
     private static final String BIG_CONTENT_TITLE = "Affected networks:";
 
-    public static final String DELETE_ACTION = "infected_notification_cancelled";
+    public static final String DELETE_ACTION = InfectedNotification.TAG + "_cancelled";
     public static final String EXTRAS_KEY = "ssids";
 
     public InfectedNotificationBuilder(Context c, ArrayList<String> ssids) {
@@ -28,10 +28,6 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
     public void build() {
 
         Log.i(Util.LOG_TAG, "Building notification for ssids: " + ssids);
-
-        if (ssids.size() == 0) {
-            return;
-        }
 
         super.build();
     }

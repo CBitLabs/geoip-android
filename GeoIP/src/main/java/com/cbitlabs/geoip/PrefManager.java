@@ -12,7 +12,7 @@ import java.util.Date;
  */
 abstract class PrefManager {
 
-    protected static final long ONE_DAY = 24 * 60 * 60 * 1000;
+    public static final long ONE_DAY = 24 * 60 * 60 * 1000;
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor editor;
 
