@@ -17,9 +17,22 @@ import java.util.ArrayList;
 abstract class NotificationBuilder {
     protected static final int notifyID = 1;
     protected Context c;
+    private final int smallIcon;
+    private final int largeIcon;
+    private final String contentTitle;
+    private final String deleteAction;
+    private final String extrasKey;
 
-    public NotificationBuilder(Context c) {
+    public NotificationBuilder(Context c, int smallIcon, int largeIcon,
+                               String contentTitle,
+                               String deleteAction,
+                               String extrasKey) {
         this.c = c;
+        this.smallIcon = smallIcon;
+        this.largeIcon = largeIcon;
+        this.contentTitle = contentTitle;
+        this.deleteAction = deleteAction;
+        this.extrasKey = extrasKey;
     }
 
     public void build() {
@@ -42,21 +55,31 @@ abstract class NotificationBuilder {
         mNotificationManager.notify(notifyID, mBuilder.build());
     }
 
-    abstract int getSmallIcon();
+    protected int getSmallIcon() {
+        return smallIcon;
+    }
 
-    abstract Bitmap getLargeIcon();
+    protected Bitmap getLargeIcon() {
+        return getBitmapFromResource(c, largeIcon);
+    }
 
-    abstract String getContentTitle();
+    protected String getContentTitle() {
+        return contentTitle;
+    }
+
+    protected String getDeleteAction() {
+        return deleteAction;
+    }
+
+    protected String getExtrasKey() {
+        return extrasKey;
+    }
 
     abstract int getNumber();
 
-    abstract NotificationCompat.Style getStyle();
-
-    abstract String getDeleteAction();
-
-    abstract String getExtrasKey();
-
     abstract ArrayList<String> getExtras();
+
+    abstract NotificationCompat.Style getStyle();
 
     protected static Bitmap getBitmapFromResource(Context c, int icon) {
         return BitmapFactory.decodeResource(c.getResources(),

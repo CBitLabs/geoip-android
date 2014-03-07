@@ -12,7 +12,7 @@ import java.util.Date;
  */
 abstract class PrefManager {
 
-    protected static final int ONE_DAY = 24 * 60 * 60 * 1000;
+    protected static final long ONE_DAY = 24 * 60 * 60 * 1000;
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor editor;
 
@@ -33,7 +33,7 @@ abstract class PrefManager {
         return Calendar.getInstance().getTime();
     }
 
-    protected boolean isExpired(long cacheDate, int lifetime) {
+    protected boolean isExpired(long cacheDate, long lifetime) {
         return getToday().getTime() - cacheDate > lifetime;
     }
 

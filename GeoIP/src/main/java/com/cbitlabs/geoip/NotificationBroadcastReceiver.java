@@ -19,7 +19,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         if (action.equals(InfectedNotificationBuilder.DELETE_ACTION)) {
             extrasKey = InfectedNotificationBuilder.EXTRAS_KEY;
 
-        } else if (action.equals(InfectedNotificationBuilder.OPEN_NETWORK_NOTIFICATION)) {
+        } else if (action.equals(OpenNetworkNotificationBuilder.DELETE_ACTION)) {
             extrasKey = "";
         }
 

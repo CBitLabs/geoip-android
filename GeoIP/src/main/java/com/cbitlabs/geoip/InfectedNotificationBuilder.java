@@ -1,7 +1,6 @@
 package com.cbitlabs.geoip;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -22,7 +21,7 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
     public static final String EXTRAS_KEY = "ssids";
 
     public InfectedNotificationBuilder(Context c, ArrayList<String> ssids) {
-        super(c);
+        super(c, SMALL_ICON, LARGE_ICON, CONTENT_TITLE, DELETE_ACTION, EXTRAS_KEY);
         this.ssids = ssids;
     }
 
@@ -37,18 +36,6 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
         super.build();
     }
 
-    protected Bitmap getLargeIcon() {
-        return getBitmapFromResource(c, LARGE_ICON);
-    }
-
-    protected int getSmallIcon() {
-        return SMALL_ICON;
-    }
-
-    protected String getContentTitle() {
-        return CONTENT_TITLE;
-    }
-
     protected int getNumber() {
         return ssids.size();
     }
@@ -57,23 +44,15 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
         return ssids;
     }
 
-    protected String getExtrasKey() {
-        return EXTRAS_KEY;
-    }
-
-    protected String getDeleteAction() {
-        return DELETE_ACTION;
-    }
-
     protected NotificationCompat.InboxStyle getStyle() {
-        NotificationCompat.InboxStyle inboxStyle =
+        NotificationCompat.InboxStyle style =
                 new NotificationCompat.InboxStyle();
 
-        inboxStyle.setBigContentTitle(BIG_CONTENT_TITLE);
+        style.setBigContentTitle(BIG_CONTENT_TITLE);
         for (String ssid : ssids) {
-            inboxStyle.addLine(ssid);
+            style.addLine(ssid);
         }
-        return inboxStyle;
+        return style;
     }
 
 }
