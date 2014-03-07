@@ -68,7 +68,7 @@ public class InfectedNotification extends Notification {
             bssids.add(bssid);
         }
 
-        return Util.getScanRatingUrl(bssids.toArray(new String[bssids.size()]));
+        return ReportUtil.getScanRatingUrl(bssids.toArray(new String[bssids.size()]));
     }
 
     public static StringSetCacheManager getCacheManager(Context c) {

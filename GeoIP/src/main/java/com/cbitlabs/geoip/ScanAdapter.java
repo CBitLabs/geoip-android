@@ -1,7 +1,6 @@
 package com.cbitlabs.geoip;
 
 import android.content.Context;
-import android.net.wifi.ScanResult;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,7 +29,7 @@ public class ScanAdapter extends Adapter {
         convertView = getConvertView(convertView, R.layout.scan_item);
         ScanRating result = (ScanRating) getItem(position);
         Context c = getContext();
-        boolean isCurrentWifiConnection = Util.isCurrentWifiConnection(c, result.getScanResult());
+        boolean isCurrentWifiConnection = WifiUtil.isCurrentWifiConnection(c, result.getScanResult());
         String scanConnected = isCurrentWifiConnection ? "Connected" : "";
         convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
         convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
@@ -42,7 +41,7 @@ public class ScanAdapter extends Adapter {
     }
 
     private String fmtWifiStrength(ScanRating result) {
-        return String.format("%d%%", Util.getWifiStrength(result.getScanResult()));
+        return String.format("%d%%", WifiUtil.getWifiStrength(result.getScanResult()));
     }
 
     public void addAll(List<ScanRating> results) {
@@ -51,8 +50,8 @@ public class ScanAdapter extends Adapter {
         Collections.sort(allResults, new Comparator<ScanRating>() {
             @Override
             public int compare(ScanRating lhs, ScanRating rhs) {
-                return -Integer.compare(Util.getWifiStrength(lhs.getScanResult()),
-                        Util.getWifiStrength(rhs.getScanResult()));
+                return -Integer.compare(WifiUtil.getWifiStrength(lhs.getScanResult()),
+                        WifiUtil.getWifiStrength(rhs.getScanResult()));
             }
 
         });
@@ -89,7 +88,7 @@ public class ScanAdapter extends Adapter {
     private int getCurrentWifiIndex(List<ScanRating> results) {
         int index = -1;
         for (int i = 0; i < results.size(); i++) {
-            if (Util.isCurrentWifiConnection(getContext(), results.get(i).getScanResult())) {
+            if (WifiUtil.isCurrentWifiConnection(getContext(), results.get(i).getScanResult())) {
                 index = i;
                 break;
             }

@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 
                 final ScanRating result = (ScanRating) parent.getItemAtPosition(position);
 
-                if (!Util.connectToNetwork(getApplicationContext(), result.getScanResult().SSID)) {
+                if (!WifiUtil.connectToNetwork(getApplicationContext(), result.getScanResult().SSID)) {
                     startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                 }
                 for (int i = 0; i < lv.getCount(); i++) {
@@ -112,22 +112,22 @@ public class MainActivity extends Activity {
     }
 
     public void onToggleClicked() {
-        boolean enable = !Util.isWifiEnabled(this);
+        boolean enable = !WifiUtil.isWifiEnabled(this);
         if (enable) {
             setWifiOnIcon();
-            Util.enableWifi(this);
+            WifiUtil.enableWifi(this);
             loadNetworks();
         } else {
             setWifiOffIcon();
             setnoWifiText();
             scanAdaptor.clear();
-            Util.disableWifi(this);
+            WifiUtil.disableWifi(this);
         }
     }
 
     private void loadNetworks() {
 
-        if (Util.isWifiEnabled(this)) {
+        if (WifiUtil.isWifiEnabled(this)) {
             setWifiOnIcon();
         } else {
             setnoWifiText();
@@ -136,14 +136,14 @@ public class MainActivity extends Activity {
             return;
         }
 
-        final List<ScanResult> results = Util.getNewScanResults(this, scanAdaptor);
+        final List<ScanResult> results = ReportUtil.getNewScanResults(this, scanAdaptor);
 
         if (results.size() == 0) {
             setEmptyText();
             return;
         }
 
-        String url = Util.getScanRatingUrl(results);
+        String url = ReportUtil.getScanRatingUrl(results);
 
         loading = Ion.with(this, url)
                 .asJsonObject()
@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
-        if (Util.isWifiEnabled(this)) {
+        if (WifiUtil.isWifiEnabled(this)) {
             setWifiOnIcon();
         } else {
             setWifiOffIcon();

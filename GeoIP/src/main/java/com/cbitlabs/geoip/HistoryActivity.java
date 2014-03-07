@@ -84,7 +84,7 @@ public class HistoryActivity extends Activity {
         }
 
 
-        String url = Util.getHistoryUrl(Util.getUUID(this), pageNum);
+        String url = ReportUtil.getHistoryUrl(Util.getUUID(this), pageNum);
         Log.i(Util.LOG_TAG, "Requesting history with url: " + url);
 
         pageNum++;

@@ -31,12 +31,12 @@ public class OpenNetworkNotification extends Notification {
 
     protected boolean needsNotification(JsonObject jsonObject) {
         String ssid = getSsid(jsonObject);
-        return !Util.isWiFiConnected(c) && isOpenNetwork(jsonObject) && !cacheManager.contains(ssid);
+        return !WifiUtil.isWiFiConnected(c) && isOpenNetwork(jsonObject) && !cacheManager.contains(ssid);
     }
 
 
     private boolean isOpenNetwork(JsonObject jsonObject) {
-        return getAsString(jsonObject, "security") == Util.OPEN;
+        return getAsString(jsonObject, "security") == ReportUtil.OPEN;
     }
 
     public static StringSetCacheManager getCacheManager(Context c) {

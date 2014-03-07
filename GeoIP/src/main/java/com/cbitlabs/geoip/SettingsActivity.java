@@ -40,7 +40,7 @@ public class SettingsActivity extends Activity {
                                     int position, long id) {
 
                 TextView textView = (TextView) view.findViewById(R.id.notification_ssid);
-                final String ssid = Util.fmtSSID(textView.getText().toString());
+                final String ssid = Util.cleanSSID(textView.getText().toString());
                 AlertDialog dialog = createDialog(ssid);
                 dialog.show();
 

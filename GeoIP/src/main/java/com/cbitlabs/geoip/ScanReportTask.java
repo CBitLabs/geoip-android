@@ -20,9 +20,9 @@ public class ScanReportTask extends ReportingTask {
     }
 
     public void sendReport() {
-        final ArrayList<JsonObject> jsonObjects = Util.getScanReport(c);
+        final ArrayList<JsonObject> jsonObjects = ReportUtil.getScanReport(c);
 
-        if (!Util.isValidScanReport(jsonObjects)) {
+        if (!ReportUtil.isValidScanReport(jsonObjects)) {
             Log.i(Util.LOG_TAG, "Duplicate report. Scan Report not sent.");
             return;
         }
@@ -33,7 +33,7 @@ public class ScanReportTask extends ReportingTask {
 
     private void postReport(ArrayList<JsonObject> jsonObjects) {
         Log.i(Util.LOG_TAG, "Posting json " + jsonObjects.toString());
-        Ion.with(c, Util.getScanReportUrl())
+        Ion.with(c, ReportUtil.getScanReportUrl())
                 .setJsonObjectBody(jsonObjects)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

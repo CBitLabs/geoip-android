@@ -49,12 +49,12 @@ public class DNSReportTask extends ReportingTask {
 
     public void sendDataViaDNSLookup() {
 
-        String info = Util.getReportAsString(report);
-        String host = info.concat(".").concat(Util.DNS_SERVER);
+        String info = ReportUtil.getReportAsString(report);
+        String host = info.concat(".").concat(ReportUtil.DNS_SERVER);
         Log.i(Util.LOG_TAG, "Created Hostname for Lookup:" + host);
 
         Resolver defaultResolver = Lookup.getDefaultResolver();
-        String simpleResolverUrl = Util.DNS_RESOLVER;
+        String simpleResolverUrl = ReportUtil.DNS_RESOLVER;
         executeLookupUsingResolver("d." + host, defaultResolver);
 
         try {
