@@ -8,6 +8,14 @@
     tools:ignore="MergeRootFrame"
     android:paddingTop="15dp">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/header"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="12pt" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"

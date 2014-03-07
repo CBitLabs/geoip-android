@@ -269,7 +269,11 @@ public class Util {
     }
 
     public static String cleanSSID(JsonElement ssid) {
-        return ssid.toString().replace("_", " ").replace("\"", "");
+        return cleanSSID(ssid.toString());
+    }
+
+    public static String cleanSSID(String ssid) {
+        return ssid.replace("_", " ").replace("\"", "");
     }
 
     public static String fmtBSSID(String bssid) {
