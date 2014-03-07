@@ -32,16 +32,16 @@ public class Util {
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
     //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://18.189.12.102:8000";
+    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
 
     public static final String NO_IP = "0.0.0.0";
     private static final String DEVICE_ID_UNSET = "no_device_id";
 
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
-    public static final int FIVE_MINUTES = 1000 * 60 * 5;
-    private static final String lastWifiReportPref = "lastWifiReport";
-    private static final String lastScanReportPref = "lastScanReport";
+    public static final int FIVE_MINUTES = 1000 * 30;
+    public static final String lastWifiReportPref = "lastWifiReport";
+    public static final String lastScanReportPref = "lastScanReport";
 
     private static final String ENTERPRISE_CAPABILITY = "-EAP-";
     // Constants used for different security types
@@ -146,7 +146,7 @@ public class Util {
                 && !isDuplicateWifiReport(c, report.get("bssid").getAsString());
     }
 
-    public static boolean isValidScanReport(Context c, ArrayList<JsonObject> results) {
+    public static boolean isValidScanReport(ArrayList<JsonObject> results) {
         return results.size() > 0;
     }
 
@@ -155,17 +155,19 @@ public class Util {
     }
 
     private static boolean isDuplicateScanReport(Context c, String bssid) {
-        return isDuplicateReport(c, lastScanReportPref, bssid, true);
+        return false;
+        //TODO : REMOVE COMMENTS
+//        return isDuplicateReport(c, lastScanReportPref, bssid, true);
     }
 
     private static boolean isDuplicateReport(Context c, String prefKey,
                                              String bssid,
                                              boolean saveReport) {
 
-
-        boolean isDuplicate = ReportCacheManager.inReportCache(c, prefKey, bssid);
+        ReportCacheManager cacheManager = new ReportCacheManager(c);
+        boolean isDuplicate = cacheManager.inReportCache(prefKey, bssid);
         if (!isDuplicate && saveReport) {
-            ReportCacheManager.putReportCache(c, prefKey, bssid);
+            cacheManager.putReportCache(prefKey, bssid);
         }
 
         return isDuplicate;
@@ -215,9 +217,17 @@ public class Util {
     }
 
     public static String getScanRatingUrl(List<ScanResult> results) {
+        String[] bssids = new String[results.size()];
+        for (int i = 0; i < results.size(); i++) {
+            bssids[i] = results.get(i).BSSID;
+        }
+        return getScanRatingUrl(bssids);
+    }
+
+    public static String getScanRatingUrl(String[] bssids) {
         String url = getUrl("ratings/scan_ratings?");
-        for (ScanResult result : results) {
-            url += String.format("bssid=%s&", Util.fmtBSSID(result.BSSID));
+        for (String bssid : bssids) {
+            url += String.format("bssid=%s&", Util.fmtBSSID(bssid));
         }
         return url;
     }
@@ -236,8 +246,6 @@ public class Util {
         String deviceId = prefs.getString(Util.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
         if (deviceId.equals(DEVICE_ID_UNSET))
             deviceId = generateDeviceID(c);
-
-//        Log.i(LOG_TAG, "Got Device ID:" + deviceId);
         return deviceId;
     }
 
@@ -257,9 +265,8 @@ public class Util {
     }
 
     public static String fmtSSID(String ssid) {
+        ssid = ssid == null ? "" : ssid;
         ssid = ssid.replace("\"", "").replace(" ", "_");
-
-//        Log.i(Util.LOG_TAG, "Got Network SSID:" + ssid);
         return ssid;
     }
 
@@ -269,8 +276,6 @@ public class Util {
 
     public static String fmtBSSID(String bssid) {
         bssid = bssid.replace(":", "");
-
-//        Log.i(Util.LOG_TAG, "Got Network BSSID:" + bssid);
         return bssid;
     }
 

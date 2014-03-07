@@ -72,6 +72,16 @@
         <service android:name=".ReportIntentService">
 
         </service>
+
+        <receiver android:name=".NotificationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="infected_notification_cancelled" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="open_network_notification_cancelled" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import java.util.Set;
 
 public class SettingsActivity extends Activity {
     private ArrayAdapter<String> notifcationAdaptor;
+    private final NotificationStorageManager storageManager = new NotificationStorageManager(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class SettingsActivity extends Activity {
         builder.setMessage(R.string.rm_notification_title)
                 .setPositiveButton(R.string.rm_notification, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        NotificationManager.rmNetworkNotification(builder.getContext(), ssid);
+                        storageManager.rmString(ssid);
                         notifcationAdaptor.remove(ssid);
                         notifcationAdaptor.notifyDataSetChanged();
                     }
@@ -76,7 +77,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void loadAdapter() {
-        Set<String> networks = NotificationManager.getNetworks(getApplicationContext());
+        Set<String> networks = storageManager.getSet();
         notifcationAdaptor.addAll(networks);
     }
 

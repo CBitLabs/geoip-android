@@ -7,10 +7,10 @@ import android.os.AsyncTask;
  * Created by jblum on 2/17/14.
  */
 public abstract class ReportingTask extends AsyncTask {
-    public Context context;
+    protected Context c;
 
-    public ReportingTask(Context context) {
-        this.context = context;
+    public ReportingTask(Context c) {
+        this.c = c;
     }
 
     @Override

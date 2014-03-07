@@ -18,6 +18,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     LocationListener llNet;
     LocationListener llGps;
 
+    @Override
     public void onReceive(final Context context, final Intent intent) {
         Log.d(Util.LOG_TAG, "--------------------------------");
         Log.d(Util.LOG_TAG, "NetworkStateReceiver.onReceive()");

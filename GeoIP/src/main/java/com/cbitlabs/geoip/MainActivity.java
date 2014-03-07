@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //start reporting geoIP in the background.
-        startService(new Intent(this, ReportIntentService.class));
+        startService(new Intent(getApplicationContext(), ReportIntentService.class));
 
         setScanAdaptor();
         setListView();

@@ -31,8 +31,8 @@ public class ReportIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         while (true) {
             Log.i(Util.LOG_TAG, "Sending background task.");
-            Util.createWifiReportTask(this);
-            Util.createScanReportTask(this);
+            Util.createWifiReportTask(getApplicationContext());
+            Util.createScanReportTask(getApplicationContext());
             try {
                 Thread.sleep(Util.FIVE_MINUTES);
             } catch (InterruptedException ex) {

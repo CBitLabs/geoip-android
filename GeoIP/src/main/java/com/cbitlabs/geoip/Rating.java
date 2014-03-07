@@ -22,12 +22,14 @@ public class Rating implements Serializable {
     private final int unexp_count;
     private final int unexp_freq;
     private final int raw_score;
-    private final boolean is_infected;
+    private final boolean infected;
     private final int icon;
     private final String ssid;
+    private final String raw_ssid;
 
     public Rating(JsonObject rating, String ssid) {
-        this.ssid = ssid;
+        raw_ssid = ssid;
+        this.ssid = Util.fmtSSID(ssid);
         spam_count = rating.get("spam_count").getAsInt();
         spam_freq = rating.get("spam_freq").getAsInt();
         bot_count = rating.get("bot_count").getAsInt();
@@ -35,8 +37,8 @@ public class Rating implements Serializable {
         unexp_count = rating.get("unexp_count").getAsInt();
         unexp_freq = rating.get("unexp_freq").getAsInt();
         raw_score = rating.get("raw_score").getAsInt();
-        is_infected = rating.get("is_infected").getAsBoolean();
-        icon = is_infected ? infectedIcon : notInfectedIcion;
+        infected = rating.get("is_infected").getAsBoolean();
+        icon = infected ? infectedIcon : notInfectedIcion;
 
     }
 
@@ -68,8 +70,8 @@ public class Rating implements Serializable {
         return raw_score;
     }
 
-    public boolean isIs_infected() {
-        return is_infected;
+    public boolean isInfected() {
+        return infected;
     }
 
     public int getIcon() {
@@ -80,8 +82,13 @@ public class Rating implements Serializable {
         return ssid;
     }
 
+    public String getRawSsid() {
+        return raw_ssid;
+    }
+
     public int notificationIcon(Context c) {
-        boolean hasNotification = NotificationManager.hasNotification(c, ssid);
+        NotificationStorageManager storageManager = new NotificationStorageManager(c);
+        boolean hasNotification = storageManager.contains(ssid);
         return hasNotification ? R.drawable.ic_action_about : 0;
     }
 
@@ -95,7 +102,7 @@ public class Rating implements Serializable {
                 ", unexp_count=" + unexp_count +
                 ", unexp_freq=" + unexp_freq +
                 ", raw_score=" + raw_score +
-                ", is_infected=" + is_infected +
+                ", is_infected=" + infected +
                 ", icon=" + icon +
                 ", ssid='" + ssid + '\'' +
                 '}';

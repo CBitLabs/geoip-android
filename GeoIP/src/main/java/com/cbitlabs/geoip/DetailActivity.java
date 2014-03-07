@@ -1,7 +1,6 @@
 package com.cbitlabs.geoip;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +23,7 @@ public abstract class DetailActivity extends Activity {
 
     protected void setRatingDetails(Rating rating) {
         setAdaptorImage(rating.getIcon(), R.id.rating_icon);
-        setViewText(rating.getSsid(), R.id.detail_ssid);
+        setViewText(rating.getRawSsid(), R.id.detail_ssid);
         prependCount(rating.getSpam_count(), R.id.spam_count);
         prependCount(rating.getBot_count(), R.id.bot_count);
         prependCount(rating.getUnexp_count(), R.id.unexp_count);
@@ -50,24 +49,24 @@ public abstract class DetailActivity extends Activity {
 
         Button btn = (Button) findViewById(R.id.button);
         final String ssid = rating.getSsid();
-        setBtnText(ssid);
+        final NotificationStorageManager storageManager = new NotificationStorageManager(getApplicationContext());
+        setBtnText(ssid, storageManager);
         btn.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                Context c = getApplicationContext();
-                boolean hasNotification = NotificationManager.hasNotification(getApplicationContext(), ssid);
+                boolean hasNotification = storageManager.contains(ssid);
                 if (hasNotification) {
-                    NotificationManager.rmNetworkNotification(c, ssid);
+                    storageManager.rmString(ssid);
                 } else {
-                    NotificationManager.addNetworkNotification(c, ssid);
+                    storageManager.addString(ssid);
                 }
-                setBtnText(ssid);
+                setBtnText(ssid, storageManager);
             }
         });
     }
 
-    private void setBtnText(String ssid) {
+    private void setBtnText(String ssid, NotificationStorageManager storageManager) {
         Button btn = (Button) findViewById(R.id.button);
-        boolean hasNotification = NotificationManager.hasNotification(getApplicationContext(), ssid);
+        boolean hasNotification = storageManager.contains(ssid);
         if (hasNotification) {
             btn.setText(R.string.rm_notification_btn);
         } else {
