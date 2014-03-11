@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:text="@string/header_title"
         android:gravity="center"
-        android:textStyle="bold"
         android:textSize="12pt" />
 
     <ListView

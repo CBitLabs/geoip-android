@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class SettingsActivity extends Activity {
@@ -40,7 +41,7 @@ public class SettingsActivity extends Activity {
                                     int position, long id) {
 
                 TextView textView = (TextView) view.findViewById(R.id.notification_ssid);
-                final String ssid = Util.cleanSSID(textView.getText().toString());
+                final String ssid = textView.getText().toString();
                 AlertDialog dialog = createDialog(ssid);
                 dialog.show();
 
@@ -79,7 +80,11 @@ public class SettingsActivity extends Activity {
 
     private void loadAdapter() {
         Set<String> networks = storageManager.getSet();
-        notifcationAdaptor.addAll(networks);
+        Set<String> cleanNetowrks = new HashSet<String>();
+        for (String ssid : networks) {
+            cleanNetowrks.add(Util.cleanSSID(ssid));
+        }
+        notifcationAdaptor.addAll(cleanNetowrks);
     }
 
 
