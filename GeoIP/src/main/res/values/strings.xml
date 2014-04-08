@@ -16,6 +16,11 @@
 
     <string name="empty_element">No results found!</string>
     <string name="no_wifi">To see avaiable Wifi networks, turn Wi-Fi on.</string>
+    <string name="toggle_wifi">Toggle Wi-Fi</string>
 
     <string name="crash_toast_text">Crash report sent!</string>
+    
+    <!-- content description -->
+    <string name="wifi">Wifi</string>
+    
 </resources>
