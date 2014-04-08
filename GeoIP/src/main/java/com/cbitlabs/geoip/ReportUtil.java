@@ -178,6 +178,14 @@ public class ReportUtil {
         return url;
     }
 
+    public static String getScanRatingUrl(String[] bssids, String[] ssids) {
+        String url = getScanRatingUrl(bssids);
+        for (String ssid : ssids) {
+            url += String.format("ssid=%s&", Util.fmtSSID(ssid));
+        }
+        return url;
+    }
+
     public static String getHistoryUrl(String uuid, int pageNum) {
         return String.format("%s/%s?page=%d", getUrl("history"), uuid, pageNum);
     }

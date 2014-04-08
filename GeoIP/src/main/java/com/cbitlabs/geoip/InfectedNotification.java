@@ -21,34 +21,52 @@ public class InfectedNotification extends Notification {
 
     public InfectedNotification(Context c, ArrayList<JsonObject> jsonObjects) {
         super(c, jsonObjects, TAG, PrefManager.ONE_DAY);
+        addWatchedNetworks();
     }
+
+    private void addWatchedNetworks() {
+        NotificationStorageManager manager = new NotificationStorageManager(c);
+        Set<String> watchedSsids = manager.getSet();
+        for (String ssid : watchedSsids) {
+            JsonObject watchedNetwork = new JsonObject();
+            watchedNetwork.addProperty("ssid", ssid);
+            watchedNetwork.addProperty("bssid", "");
+            if (needsNotification(watchedNetwork)) {
+                jsonObjects.add(watchedNetwork);
+            }
+        }
+    }
+
 
     public void setNotification() {
         Ion.with(c, getUrl())
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject jsonRepsonse) {
-                        if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
-                            return;
-                        }
-                        ArrayList<String> infectedIds = new ArrayList<String>();
-                        Rating rating;
-                        String bssid, ssid;
-                        for (JsonObject jsonObject : jsonObjects) {
-                            bssid = getBssid(jsonObject);
-                            ssid = getSsid(jsonObject);
-                            rating = new Rating(jsonRepsonse.get(bssid).getAsJsonObject(), ssid);
-                            if (rating.isInfected()) {
-                                infectedIds.add(ssid);
-                            }
-                        }
-                        InfectedNotificationBuilder notificationBuilder = new InfectedNotificationBuilder(c, infectedIds);
-                        notificationBuilder.build();
-                    }
-                }
-
+                                 @Override
+                                 public void onCompleted(Exception e, JsonObject jsonRepsonse) {
+                                     if (e != null) {
+                                         Log.i(Util.LOG_TAG, e.toString());
+                                         return;
+                                     }
+                                     Set<String> infectedIds = new HashSet<String>();
+                                     Rating rating;
+                                     String bssid, ssid;
+                                     for (JsonObject jsonObject : jsonObjects) {
+                                         bssid = getBssid(jsonObject);
+                                         ssid = getSsid(jsonObject);
+                                         if (jsonRepsonse.has(bssid)) {
+                                             rating = new Rating(jsonRepsonse.get(bssid).getAsJsonObject(), ssid);
+                                         } else {
+                                             rating = new Rating(jsonRepsonse.get(ssid).getAsJsonObject(), ssid);
+                                         }
+                                         if (rating.isInfected()) {
+                                             infectedIds.add(ssid);
+                                         }
+                                     }
+                                     InfectedNotificationBuilder notificationBuilder = new InfectedNotificationBuilder(c, new ArrayList<String>(infectedIds));
+                                     notificationBuilder.build();
+                                 }
+                             }
                 );
 
     }
@@ -61,14 +79,20 @@ public class InfectedNotification extends Notification {
 
     protected String getUrl() {
         Set<String> bssids = new HashSet<String>();
-        String bssid;
+        Set<String> ssids = new HashSet<String>();
+        String bssid, ssid;
 
         for (JsonObject jsonObject : jsonObjects) {
             bssid = getBssid(jsonObject);
-            bssids.add(bssid);
+            ssid = getSsid(jsonObject);
+            if (bssid.equals("")) {
+                ssids.add(ssid);
+            } else {
+                bssids.add(bssid);
+            }
         }
 
-        return ReportUtil.getScanRatingUrl(bssids.toArray(new String[bssids.size()]));
+        return ReportUtil.getScanRatingUrl(bssids.toArray(new String[bssids.size()]), ssids.toArray(new String[ssids.size()]));
     }
 
     public static StringSetCacheManager getCacheManager(Context c) {

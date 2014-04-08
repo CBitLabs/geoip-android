@@ -47,7 +47,6 @@ public class WifiUtil {
 
     public static boolean isCurrentWifiConnection(Context c, ScanResult result) {
         WifiInfo info = getWiFiInfo(c);
-        String eq = String.valueOf(result.SSID.equals(info.getSSID()));
         return quote(result.SSID).equals(info.getSSID());
     }
 
@@ -85,7 +84,6 @@ public class WifiUtil {
         }
         return false;
     }
-
 
 
     private static List<WifiConfiguration> getConfiguredNetworks(WifiManager wifiManager) {
