@@ -15,7 +15,7 @@ public class Rating implements Serializable {
 	public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
 	private static final int infectedIcon = R.drawable.ic_action_warning;
 	private static final int notInfectedIcon = R.drawable.ic_action_accept;
-	private static final int noRatingIcon = R.drawable.ic_action_place_old;
+	private static final int noRatingIcon = R.drawable.ic_action_place;
 	private final int spam_count;
 	private final int spam_freq;
 	private final int bot_count;
@@ -29,7 +29,7 @@ public class Rating implements Serializable {
 	private final String ssid;
 	private final String raw_ssid;
 
-	public Rating(JsonObject rating, String ssid) {
+	public Rating(final JsonObject rating, final String ssid) {
 		raw_ssid = ssid;
 		this.ssid = Util.fmtSSID(ssid);
 		spam_count = rating.get("spam_count").getAsInt();
@@ -50,7 +50,7 @@ public class Rating implements Serializable {
 	}
 
 	// Null object if server cannot be contacted
-	public Rating(String ssid) {
+	public Rating(final String ssid) {
 		raw_ssid = ssid;
 		this.ssid = Util.fmtSSID(ssid);
 		spam_count = 0;
@@ -110,7 +110,7 @@ public class Rating implements Serializable {
 		return raw_ssid;
 	}
 
-	public int notificationIcon(Context c) {
+	public int notificationIcon(final Context c) {
 		NotificationStorageManager storageManager = new NotificationStorageManager(c);
 		boolean hasNotification = storageManager.contains(ssid);
 		return hasNotification ? R.drawable.ic_action_about : android.R.color.transparent;
@@ -124,8 +124,7 @@ public class Rating implements Serializable {
 	@Override
 	public String toString() {
 		return "Rating{" + "spam_count=" + spam_count + ", spam_freq=" + spam_freq + ", bot_count=" + bot_count
-				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq
-				+ ", raw_score=" + raw_score + ", is_infected=" + infected + ", icon=" + icon + ", ssid='" + ssid
-				+ '\'' + '}';
+				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq + ", raw_score="
+				+ raw_score + ", is_infected=" + infected + ", icon=" + icon + ", ssid='" + ssid + '\'' + '}';
 	}
 }
