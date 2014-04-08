@@ -24,6 +24,7 @@ public class Rating implements Serializable {
     private final int unexp_freq;
     private final int raw_score;
     private final boolean infected;
+    private final boolean validRating;
     private final int icon;
     private final String ssid;
     private final String raw_ssid;
@@ -39,7 +40,12 @@ public class Rating implements Serializable {
         unexp_freq = rating.get("unexp_freq").getAsInt();
         raw_score = rating.get("raw_score").getAsInt();
         infected = rating.get("is_infected").getAsBoolean();
-        icon = infected ? infectedIcon : notInfectedIcon;
+        validRating = rating.get("valid_rating").getAsBoolean();
+        if (validRating) {
+            icon = infected ? infectedIcon : notInfectedIcon;
+        } else {
+            icon = noRatingIcon;
+        }
 
     }
 
@@ -56,6 +62,7 @@ public class Rating implements Serializable {
         raw_score = 0;
         infected = false;
         icon = noRatingIcon;
+        validRating = false;
 
     }
 

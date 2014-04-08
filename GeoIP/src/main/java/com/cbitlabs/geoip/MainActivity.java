@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.builder.Builders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,9 +145,9 @@ public class MainActivity extends Activity {
         }
 
         String url = ReportUtil.getScanRatingUrl(results);
-
-        loading = Ion.with(this, url)
-                .asJsonObject()
+        Builders.Any.B ion = Ion.with(this, url);
+        ion.setTimeout(2000);
+        loading = ion.asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject jsonRepsonse) {
