@@ -245,7 +245,9 @@ public class ScanFragment extends Fragment {
 			return;
 		}
 		MenuItem item = menu.findItem(R.id.toggleWifi);
-		item.setIcon(resource);
+		if (item != null) {
+			item.setIcon(resource);
+		}
 	}
 
 	@Override

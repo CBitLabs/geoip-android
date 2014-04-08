@@ -3,10 +3,12 @@ package com.cbitlabs.geoip;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.cbitlabs.geoip.fragments.HistoryFragment;
 import com.cbitlabs.geoip.fragments.ScanFragment;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -15,23 +17,42 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	private Tab networks;
 	private Tab history;
 	private int currentTab;
+	private ScanFragment scanFragment;
+	private HistoryFragment historyFragment;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		startService(new Intent(getApplicationContext(), ReportIntentService.class));
 		setContentView(R.layout.activity_main);
+		Fragment content = getFragmentManager().findFragmentById(R.id.content);
+		if (content != null) {
+			if (content instanceof ScanFragment) {
+				scanFragment = (ScanFragment) content;
+				historyFragment = new HistoryFragment();
+			} else {
+				scanFragment = new ScanFragment();
+				historyFragment = (HistoryFragment) content;
+			}
+		} else {
+			scanFragment = new ScanFragment();
+			historyFragment = new HistoryFragment();
+		}
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 		networks = actionBar.newTab().setText(R.string.available_networks);
 		history = actionBar.newTab().setText(R.string.history);
-		history.setTabListener(this);
 		networks.setTabListener(this);
+		history.setTabListener(this);
+
+		actionBar.setDisplayShowHomeEnabled(false);
 		actionBar.addTab(networks);
 		actionBar.addTab(history);
+		// keep these 2 lines last
 		currentTab = savedInstanceState == null ? 0 : savedInstanceState.getInt(CURRENT_TAB, 0);
 		actionBar.setSelectedNavigationItem(currentTab);
-		actionBar.setDisplayShowHomeEnabled(false);
-		startService(new Intent(getApplicationContext(), ReportIntentService.class));
 	}
 
 	@Override
@@ -44,7 +65,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public void onTabSelected(final Tab tab, final FragmentTransaction ft) {
 		currentTab = tab.getPosition();
 		if (tab == networks) {
-			ft.replace(R.id.content, new ScanFragment());
+			ft.replace(R.id.content, scanFragment);
+		} else if (tab == history) {
+			ft.replace(R.id.content, historyFragment);
 		}
 	}
 
