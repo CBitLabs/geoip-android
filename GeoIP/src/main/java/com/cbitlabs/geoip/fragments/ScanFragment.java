@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cbitlabs.geoip.HistoryActivity;
 import com.cbitlabs.geoip.R;
 import com.cbitlabs.geoip.ReportUtil;
 import com.cbitlabs.geoip.ScanAdapter;
@@ -212,11 +211,6 @@ public class ScanFragment extends Fragment {
 
 		case R.id.action_settings:
 			i = new Intent(getActivity(), SettingsActivity.class);
-			startActivity(i);
-			return true;
-
-		case R.id.viewHistory:
-			i = new Intent(getActivity(), HistoryActivity.class);
 			startActivity(i);
 			return true;
 		default:

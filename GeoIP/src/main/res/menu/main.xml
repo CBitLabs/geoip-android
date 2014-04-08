@@ -1,9 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/viewHistory"
-        android:icon="@drawable/ic_action_view_as_list"
-        android:title="@string/button_view_history"
-        android:showAsAction="always" />
 
     <item
         android:id="@+id/toggleWifi"

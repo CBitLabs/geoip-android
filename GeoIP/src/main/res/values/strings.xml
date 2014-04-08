@@ -24,7 +24,7 @@
     <!-- content description -->
     <string name="wifi">Wifi</string>
 
-    <!-- main activity -->
+    <!-- main activity tags -->
     <string name="available_networks">Available Networks</string>
     <string name="history">History</string>
 
