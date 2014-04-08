@@ -14,7 +14,8 @@ public class Rating implements Serializable {
     private static final long serialVersionUID = 7526472295622776147L;
     public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
     private static final int infectedIcon = R.drawable.ic_action_warning;
-    private static final int notInfectedIcion = R.drawable.ic_action_accept;
+    private static final int notInfectedIcon = R.drawable.ic_action_accept;
+    private static final int noRatingIcon = R.drawable.ic_action_place;
     private final int spam_count;
     private final int spam_freq;
     private final int bot_count;
@@ -23,6 +24,7 @@ public class Rating implements Serializable {
     private final int unexp_freq;
     private final int raw_score;
     private final boolean infected;
+    private final boolean validRating;
     private final int icon;
     private final String ssid;
     private final String raw_ssid;
@@ -38,7 +40,29 @@ public class Rating implements Serializable {
         unexp_freq = rating.get("unexp_freq").getAsInt();
         raw_score = rating.get("raw_score").getAsInt();
         infected = rating.get("is_infected").getAsBoolean();
-        icon = infected ? infectedIcon : notInfectedIcion;
+        validRating = rating.get("valid_rating").getAsBoolean();
+        if (validRating) {
+            icon = infected ? infectedIcon : notInfectedIcon;
+        } else {
+            icon = noRatingIcon;
+        }
+
+    }
+
+    //    Null object if server cannot be contacted
+    public Rating(String ssid) {
+        raw_ssid = ssid;
+        this.ssid = Util.fmtSSID(ssid);
+        spam_count = 0;
+        spam_freq = 0;
+        bot_count = 0;
+        bot_freq = 0;
+        unexp_count = 0;
+        unexp_freq = 0;
+        raw_score = 0;
+        infected = false;
+        icon = noRatingIcon;
+        validRating = false;
 
     }
 
