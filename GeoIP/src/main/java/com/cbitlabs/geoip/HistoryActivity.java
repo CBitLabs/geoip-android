@@ -37,6 +37,7 @@ public class HistoryActivity extends Activity {
 			historyAdaptor = new HistoryAdapter(this, 0);
 		}
 
+		getActionBar().setDisplayShowHomeEnabled(false);
 		// basic setup of the ListView and adapter
 		setContentView(R.layout.activity_main);
 		setListView();

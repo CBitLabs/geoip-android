@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">GeoIP</string>
+    <string name="app_name">GeoIP Scanner</string>
 
     <string name="title_activity_main">Wi-Fi Scan</string>
     <string name="title_activity_history">History</string>

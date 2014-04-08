@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,9 @@ public class ScanAdapter extends Adapter {
 		String scanConnected = isCurrentWifiConnection ? "Connected" : "";
 		convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
 		convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
-		convertView = setAdaptorText(convertView, fmtWifiStrength(result), R.id.scan_level);
 		convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
 		convertView = setAdaptorImage(convertView, result.getRating().notificationIcon(c), R.id.hasNotification);
+		convertView = setAdaptorImage(convertView, result.getRating().statusIcon(), R.id.statusIcon);
 
 		return convertView;
 	}
@@ -48,6 +49,7 @@ public class ScanAdapter extends Adapter {
 		allResults.addAll(results);
 		allResults = cleanScanReport(allResults);
 		Collections.sort(allResults, new Comparator<ScanRating>() {
+			@SuppressLint("NewApi")
 			@Override
 			public int compare(ScanRating lhs, ScanRating rhs) {
 				return -Integer.compare(WifiUtil.getWifiStrength(lhs.getScanResult()),

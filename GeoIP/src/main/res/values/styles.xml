@@ -1,8 +1,18 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
     </style>
-        
+
+    <!-- Text -->
+    
+    <style name="text_connected" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="text_ssid" parent="@android:style/TextAppearance.Large">
+    </style>
+    
 </resources>
