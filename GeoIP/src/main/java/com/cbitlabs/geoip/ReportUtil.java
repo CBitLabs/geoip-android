@@ -68,6 +68,14 @@ public class ReportUtil {
         return jsonResults;
     }
 
+    public static JsonObject getPrefReport(Context c, String ssid) {
+        JsonObject report = new JsonObject();
+        report.addProperty("ssid", ssid);
+        report.addProperty("uuid", Util.getUUID(c));
+        return report;
+
+    }
+
     private static JsonObject getReport(Context c, String ssid,
                                         String bssid, String ip,
                                         String security, Boolean isEnterprise) {
@@ -156,6 +164,10 @@ public class ReportUtil {
 
     public static String getWifiReportUrl() {
         return getUrl("wifi_report");
+    }
+
+    public static String getPrefReportUrl() {
+        return getUrl("pref_report");
     }
 
     public static String getScanReportUrl() {
