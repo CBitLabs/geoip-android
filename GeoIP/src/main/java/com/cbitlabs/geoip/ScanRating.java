@@ -16,6 +16,11 @@ public class ScanRating {
         this.rating = new Rating(rating, result.SSID);
     }
 
+    public ScanRating(ScanResult result, String ssid) {
+        this.scanResult = result;
+        this.rating = new Rating(ssid);
+    }
+
     public ScanResult getScanResult() {
         return scanResult;
     }

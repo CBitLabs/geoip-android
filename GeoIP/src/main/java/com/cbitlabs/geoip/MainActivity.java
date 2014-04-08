@@ -150,20 +150,24 @@ public class MainActivity extends Activity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject jsonRepsonse) {
-                        // this is called back onto the ui thread, no Activity.runOnUiThread or Handler.post necessary.
+                        List<ScanRating> ratings = new ArrayList<ScanRating>();
                         if (e != null) {
                             Log.i(Util.LOG_TAG, e.toString());
-                            return;
-                        }
-                        Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
-                        List<ScanRating> ratings = new ArrayList<ScanRating>();
-                        for (ScanResult result : results) {
 
-                            JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
-                            if (rating != null) {
-                                ratings.add(new ScanRating(result, rating.getAsJsonObject()));
+                            for (ScanResult result : results) {
+                                ratings.add(new ScanRating(result, result.SSID));
+                            }
+                        } else {
+                            Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
+
+                            for (ScanResult result : results) {
+                                JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+                                if (rating != null) {
+                                    ratings.add(new ScanRating(result, rating.getAsJsonObject()));
+                                }
                             }
                         }
+
                         scanAdaptor.clear();
                         scanAdaptor.addAll(ratings);
                     }
