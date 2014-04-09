@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cbitlabs.geoip.fragments.HistoryFragment;
 import com.cbitlabs.geoip.fragments.ScanFragment;
@@ -16,7 +17,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	private static final String CURRENT_TAB = "com.cbitlabs.geoip.MainActivity.CURRENT_TAB";
 	private Tab networks;
 	private Tab history;
-	private int currentTab;
+	private int currentTab = 0;
 	private ScanFragment scanFragment;
 	private HistoryFragment historyFragment;
 
@@ -48,10 +49,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		history.setTabListener(this);
 
 		actionBar.setDisplayShowHomeEnabled(false);
+		int tab = currentTab; // we need to save this because the addTab() method triggers the callback.
+		actionBar.removeAllTabs();
 		actionBar.addTab(networks);
 		actionBar.addTab(history);
+		currentTab = tab;
 		// keep these 2 lines last
-		currentTab = savedInstanceState == null ? 0 : savedInstanceState.getInt(CURRENT_TAB, 0);
+		currentTab = savedInstanceState == null ? currentTab : savedInstanceState.getInt(CURRENT_TAB, currentTab);
+
 		actionBar.setSelectedNavigationItem(currentTab);
 	}
 
@@ -63,12 +68,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	@Override
 	public void onTabSelected(final Tab tab, final FragmentTransaction ft) {
-		currentTab = tab.getPosition();
 		if (tab == networks) {
-			ft.replace(R.id.content, scanFragment);
+			if (getFragmentManager().findFragmentById(R.id.content) != scanFragment) {
+				ft.replace(R.id.content, scanFragment);
+			}
 		} else if (tab == history) {
-			ft.replace(R.id.content, historyFragment);
+			if (getFragmentManager().findFragmentById(R.id.content) != historyFragment) {
+				ft.replace(R.id.content, historyFragment);
+			}
 		}
+		currentTab = tab.getPosition();
+		Log.d("MAINACT", "currentTab: " + currentTab);
 	}
 
 	@Override
