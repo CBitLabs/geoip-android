@@ -36,7 +36,7 @@
             style="@style/details_box_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Some description nobody understands or cares about...Aliquam dictum enim mauris, eget adipiscing libero ultricies porta. Curabitur dignissim ultricies ipsum, eu placerat mauris sodales ac." />
+            android:text="Some description nobody understands or cares about...Aliquam dictum enim mauris, eget adipiscing libero ultricies ." />
     </LinearLayout>
 
     <TextView

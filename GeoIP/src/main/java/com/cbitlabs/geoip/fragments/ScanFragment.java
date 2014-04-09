@@ -132,7 +132,7 @@ public class ScanFragment extends Fragment {
 	private void loadNetworks() {
 
 		// TODO remove true/false
-		if (WifiUtil.isWifiEnabled(getActivity())) {
+		if (true|WifiUtil.isWifiEnabled(getActivity())) {
 		} else {
 			setnoWifiText();
 			scanAdaptor.clear();

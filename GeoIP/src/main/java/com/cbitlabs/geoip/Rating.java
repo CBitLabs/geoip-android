@@ -13,9 +13,12 @@ import com.google.gson.JsonObject;
 public class Rating implements Serializable {
 	private static final long serialVersionUID = 7526472295622776147L;
 	public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
-	private static final int infectedIcon = R.drawable.ic_action_warning;
-	private static final int notInfectedIcon = R.drawable.ic_action_accept;
-	private static final int noRatingIcon = R.drawable.wifi_low;
+	private static final int infectedIcon = R.drawable.status_bad;
+	private static final int notInfectedIcon = R.drawable.status_good;
+	private static final int noRatingIcon = R.drawable.status_unknown;
+	private static final int wifiStrengthLow = R.drawable.wifi_low;
+	private static final int wifiStrengthMed = R.drawable.wifi_med;
+	private static final int wifiStrengthHi = R.drawable.wifi_hi;
 	private final int spam_count;
 	private final int spam_freq;
 	private final int bot_count;
@@ -26,6 +29,8 @@ public class Rating implements Serializable {
 	private final boolean infected;
 	private final boolean validRating;
 	private final int icon;
+	private final int statusicon;
+
 	private final String ssid;
 	private final String raw_ssid;
 
@@ -41,11 +46,14 @@ public class Rating implements Serializable {
 		raw_score = rating.get("raw_score").getAsInt();
 		infected = rating.get("is_infected").getAsBoolean();
 		validRating = rating.get("valid_rating").getAsBoolean();
+
 		if (validRating) {
-			icon = infected ? infectedIcon : notInfectedIcon;
+			statusicon = infected ? infectedIcon : notInfectedIcon;
 		} else {
-			icon = noRatingIcon;
+			statusicon = noRatingIcon;
 		}
+		// TODO determine icon by signal strength
+		icon = wifiStrengthHi;
 
 	}
 
@@ -61,7 +69,8 @@ public class Rating implements Serializable {
 		unexp_freq = 0;
 		raw_score = 0;
 		infected = false;
-		icon = noRatingIcon;
+		icon = wifiStrengthLow;
+		statusicon = noRatingIcon;
 		validRating = false;
 
 	}
@@ -111,21 +120,24 @@ public class Rating implements Serializable {
 	}
 
 	public int notificationIcon(final Context c) {
-		NotificationStorageManager storageManager = new NotificationStorageManager(c);
+		NotificationStorageManager storageManager = new NotificationStorageManager(
+				c);
 		boolean hasNotification = storageManager.contains(ssid);
-		return hasNotification ? R.drawable.ic_action_about : android.R.color.transparent;
+		return hasNotification ? R.drawable.watched
+				: android.R.color.transparent;
 	}
 
 	// TODO implement something meaningful
 	public int statusIcon() {
-		return R.drawable.ic_action_secure;
+		return statusicon;
 	}
 
 	@Override
 	public String toString() {
-		return "Rating{" + "spam_count=" + spam_count + ", spam_freq=" + spam_freq + ", bot_count=" + bot_count
-				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq
-				+ ", raw_score=" + raw_score + ", is_infected=" + infected + ", icon=" + icon + ", ssid='" + ssid
-				+ '\'' + '}';
+		return "Rating{" + "spam_count=" + spam_count + ", spam_freq="
+				+ spam_freq + ", bot_count=" + bot_count + ", bot_freq="
+				+ bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq="
+				+ unexp_freq + ", raw_score=" + raw_score + ", is_infected="
+				+ infected + ", icon=" + icon + ", ssid='" + ssid + '\'' + '}';
 	}
 }
