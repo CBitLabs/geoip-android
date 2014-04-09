@@ -63,9 +63,11 @@
 
     <style name="details_button">
         <!-- used for buttons -->
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:background">@android:color/holo_blue_bright</item>
+        <item name="android:background">@drawable/btn_blue</item>
         <item name="android:textColor">#fff</item>
     </style>
 
