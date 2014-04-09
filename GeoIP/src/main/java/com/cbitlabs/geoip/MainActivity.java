@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -48,8 +50,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		networks.setTabListener(this);
 		history.setTabListener(this);
 
-		actionBar.setDisplayShowHomeEnabled(false);
-		int tab = currentTab; // we need to save this because the addTab() method triggers the callback.
+		// workaround to hide icon and prevent tabs from appearing above the
+		// actionbar (which setDisplayShowHomeEnabled(false) does in some
+		// android versions);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setLogo(new ColorDrawable(Color.TRANSPARENT));
+
+		int tab = currentTab; // we need to save this because the addTab()
+								// method triggers the callback.
 		actionBar.removeAllTabs();
 		actionBar.addTab(networks);
 		actionBar.addTab(history);

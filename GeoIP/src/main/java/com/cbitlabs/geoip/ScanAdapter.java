@@ -32,7 +32,11 @@ public class ScanAdapter extends Adapter {
 		Context c = getContext();
 		boolean isCurrentWifiConnection = WifiUtil.isCurrentWifiConnection(c, result.getScanResult());
 		String scanConnected = isCurrentWifiConnection ? "Connected" : "";
-		convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
+		// TODO uncomment
+		// convertView = setAdaptorText(convertView,
+		// result.getScanResult().SSID, R.id.scan_ssid);
+		convertView = setAdaptorText(convertView, "TEST SSID", R.id.scan_ssid);
+
 		convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
 		convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
 		convertView = setAdaptorImage(convertView, result.getRating().notificationIcon(c), R.id.hasNotification);
@@ -65,11 +69,14 @@ public class ScanAdapter extends Adapter {
 	private static List<ScanRating> cleanScanReport(List<ScanRating> results) {
 		HashMap<String, ScanRating> cleanResults = new HashMap<String, ScanRating>();
 		for (ScanRating result : results) {
-			String ssid = result.getScanResult().SSID;
+			// TODO uncomment
+			// String ssid = result.getScanResult().SSID;
+			String ssid = "TEST SSID";
 			if (ssid == "") {
 				continue;
 			}
-			if (cleanResults.containsKey(ssid)) {
+			// TODO remove false
+			if (false && cleanResults.containsKey(ssid)) {
 				ScanRating el = cleanResults.get(ssid);
 				if (el.getScanResult().level > result.getScanResult().level) {
 					cleanResults.put(ssid, result);

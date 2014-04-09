@@ -8,10 +8,8 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,14 +21,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cbitlabs.geoip.R;
-import com.cbitlabs.geoip.ReportUtil;
 import com.cbitlabs.geoip.ScanAdapter;
 import com.cbitlabs.geoip.ScanDetailActivity;
 import com.cbitlabs.geoip.ScanRating;
 import com.cbitlabs.geoip.SettingsActivity;
-import com.cbitlabs.geoip.Util;
 import com.cbitlabs.geoip.WifiUtil;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
@@ -106,7 +101,8 @@ public class ScanFragment extends Fragment {
 
 		lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
-			public boolean onItemLongClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+			public boolean onItemLongClick(final AdapterView<?> parent, final View view, final int position,
+					final long id) {
 				ScanRating scanRating = (ScanRating) parent.getItemAtPosition(position);
 				Intent intent = new Intent(view.getContext(), ScanDetailActivity.class);
 				Bundle bundle = new Bundle();
@@ -135,7 +131,7 @@ public class ScanFragment extends Fragment {
 
 	private void loadNetworks() {
 
-		if (WifiUtil.isWifiEnabled(getActivity())) {
+		if (true || WifiUtil.isWifiEnabled(getActivity())) {
 			setWifiOnIcon();
 		} else {
 			setnoWifiText();
@@ -144,36 +140,46 @@ public class ScanFragment extends Fragment {
 			return;
 		}
 
-		final List<ScanResult> results = ReportUtil.getNewScanResults(getActivity(), scanAdaptor);
+		// TODO uncomment
+		// final List<ScanResult> results =
+		// ReportUtil.getNewScanResults(getActivity(), scanAdaptor);
+		// if (results.size() == 0) {
+		// setEmptyText();
+		// return;
+		// }
 
-		if (results.size() == 0) {
-			setEmptyText();
-			return;
-		}
+		// TODO uncomment
+		// String url = ReportUtil.getScanRatingUrl(results);
+		String url = "test";
 
-		String url = ReportUtil.getScanRatingUrl(results);
 		Builders.Any.B ion = Ion.with(getActivity(), url);
 		ion.setTimeout(2000);
 		loading = ion.asJsonObject().setCallback(new FutureCallback<JsonObject>() {
 			@Override
 			public void onCompleted(final Exception e, final JsonObject jsonRepsonse) {
 				List<ScanRating> ratings = new ArrayList<ScanRating>();
-				if (e != null) {
-					Log.i(Util.LOG_TAG, e.toString());
-
-					for (ScanResult result : results) {
-						ratings.add(new ScanRating(result, result.SSID));
-					}
-				} else {
-					Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
-
-					for (ScanResult result : results) {
-						JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
-						if (rating != null) {
-							ratings.add(new ScanRating(result, rating.getAsJsonObject()));
-						}
-					}
-				}
+				// TODO uncomment
+				// if (e != null) {
+				// Log.i(Util.LOG_TAG, e.toString());
+				//
+				// for (ScanResult result : results) {
+				// ratings.add(new ScanRating(result, result.SSID));
+				// }
+				// } else {
+				// Log.i(Util.LOG_TAG, "Found ratings: " +
+				// jsonRepsonse.toString());
+				//
+				// for (ScanResult result : results) {
+				// JsonElement rating =
+				// jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+				// if (rating != null) {
+				// ratings.add(new ScanRating(result,
+				// rating.getAsJsonObject()));
+				// }
+				// }
+				// }
+				ScanRating r = new ScanRating(null, "test");
+				ratings.add(r);
 				scanAdaptor.clear();
 				scanAdaptor.addAll(ratings);
 			}
