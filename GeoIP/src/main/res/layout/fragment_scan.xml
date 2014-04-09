@@ -39,6 +39,7 @@
     </LinearLayout>
 
     <Switch
+        android:onClick="onToggleClicked"
         android:id="@+id/wifi_toggle"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="fill_parent"

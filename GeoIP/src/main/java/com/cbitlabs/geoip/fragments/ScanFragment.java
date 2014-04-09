@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cbitlabs.geoip.R;
@@ -116,14 +117,12 @@ public class ScanFragment extends Fragment {
 		});
 	}
 
-	public void onToggleClicked() {
-		boolean enable = !WifiUtil.isWifiEnabled(getActivity());
+	public void onToggleClicked(boolean enable) {
+		// boolean enable = !WifiUtil.isWifiEnabled(getActivity());
 		if (enable) {
-			setWifiOnIcon();
 			WifiUtil.enableWifi(getActivity());
 			loadNetworks();
 		} else {
-			setWifiOffIcon();
 			setnoWifiText();
 			scanAdaptor.clear();
 			WifiUtil.disableWifi(getActivity());
@@ -134,10 +133,8 @@ public class ScanFragment extends Fragment {
 
 		// TODO remove true/false
 		if (WifiUtil.isWifiEnabled(getActivity())) {
-			setWifiOnIcon();
 		} else {
 			setnoWifiText();
-			setWifiOffIcon();
 			scanAdaptor.clear();
 			return;
 		}
@@ -193,11 +190,6 @@ public class ScanFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.main, menu);
 		this.menu = menu;
-		if (WifiUtil.isWifiEnabled(getActivity())) {
-			setWifiOnIcon();
-		} else {
-			setWifiOffIcon();
-		}
 
 	}
 
@@ -212,11 +204,6 @@ public class ScanFragment extends Fragment {
 		case R.id.refreshScan:
 			loadNetworks();
 			return true;
-
-		case R.id.toggleWifi:
-			onToggleClicked();
-			return true;
-
 		case R.id.action_settings:
 			i = new Intent(getActivity(), SettingsActivity.class);
 			startActivity(i);
@@ -240,27 +227,29 @@ public class ScanFragment extends Fragment {
 		}
 	}
 
-	private void setWifiOffIcon() {
-		setWifiIcon(R.drawable.ic_action_network_cell);
-	}
+	// private void setWifiOffIcon() {
+	// setWifiIcon(R.drawable.ic_action_network_cell);
+	// }
+	//
+	// private void setWifiOnIcon() {
+	// setWifiIcon(R.drawable.ic_action_network_wifi);
+	// }
 
-	private void setWifiOnIcon() {
-		setWifiIcon(R.drawable.ic_action_network_wifi);
-	}
-
-	private void setWifiIcon(final int resource) {
-		if (menu == null) {
-			return;
-		}
-		MenuItem item = menu.findItem(R.id.toggleWifi);
-		if (item != null) {
-			item.setIcon(resource);
-		}
-	}
+	// private void setWifiIcon(final int resource) {
+	// if (menu == null) {
+	// return;
+	// }
+	// MenuItem item = menu.findItem(R.id.toggleWifi);
+	// if (item != null) {
+	// item.setIcon(resource);
+	// }
+	// }
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		Switch sw = (Switch) getView().findViewById(R.id.wifi_toggle);
+		sw.setChecked(WifiUtil.isWifiEnabled(getActivity()));
 		autoUpdate = new Timer();
 		autoUpdate.schedule(new TimerTask() {
 			@Override

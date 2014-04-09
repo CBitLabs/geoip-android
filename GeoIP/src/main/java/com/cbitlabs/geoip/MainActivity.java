@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Switch;
 
 import com.cbitlabs.geoip.fragments.HistoryFragment;
 import com.cbitlabs.geoip.fragments.ScanFragment;
@@ -97,5 +99,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	public void onTabReselected(final Tab tab, final FragmentTransaction ft) {
 		// don't care
+	}
+
+	public void onToggleClicked(View v) {
+		try {
+			Switch sw = (Switch) v;
+			scanFragment.onToggleClicked(sw.isChecked());
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+		}
 	}
 }

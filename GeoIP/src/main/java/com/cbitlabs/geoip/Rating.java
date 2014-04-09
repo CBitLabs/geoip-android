@@ -15,7 +15,7 @@ public class Rating implements Serializable {
 	public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
 	private static final int infectedIcon = R.drawable.ic_action_warning;
 	private static final int notInfectedIcon = R.drawable.ic_action_accept;
-	private static final int noRatingIcon = R.drawable.ic_action_place;
+	private static final int noRatingIcon = R.drawable.wifi_low;
 	private final int spam_count;
 	private final int spam_freq;
 	private final int bot_count;
@@ -124,7 +124,8 @@ public class Rating implements Serializable {
 	@Override
 	public String toString() {
 		return "Rating{" + "spam_count=" + spam_count + ", spam_freq=" + spam_freq + ", bot_count=" + bot_count
-				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq + ", raw_score="
-				+ raw_score + ", is_infected=" + infected + ", icon=" + icon + ", ssid='" + ssid + '\'' + '}';
+				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq
+				+ ", raw_score=" + raw_score + ", is_infected=" + infected + ", icon=" + icon + ", ssid='" + ssid
+				+ '\'' + '}';
 	}
 }
