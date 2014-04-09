@@ -13,7 +13,7 @@ import android.widget.TextView;
 public abstract class DetailActivity extends Activity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rating_detail);
 		getActionBar().setDisplayShowHomeEnabled(false);
@@ -23,38 +23,35 @@ public abstract class DetailActivity extends Activity {
 
 	protected abstract void setupView();
 
-	protected void setRatingDetails(Rating rating) {
+	protected void setRatingDetails(final Rating rating) {
 		setAdaptorImage(rating.getIcon(), R.id.rating_icon);
 		setViewText(rating.getRawSsid(), R.id.detail_ssid);
-		prependCount(rating.getSpam_count(), R.id.spam_count);
-		prependCount(rating.getBot_count(), R.id.bot_count);
-		prependCount(rating.getUnexp_count(), R.id.unexp_count);
+		((TextView) findViewById(R.id.spam_count)).setText("" + rating.getSpam_count());
+		((TextView) findViewById(R.id.bot_count)).setText("" + rating.getBot_count());
+		((TextView) findViewById(R.id.unexp_count)).setText("" + rating.getUnexp_count());
 	}
 
-	protected void prependCount(int count, int id) {
-		TextView textView = (TextView) findViewById(id);
-		CharSequence text = String.format("%d %s", count, textView.getText());
-		textView.setText(text);
-	}
-
-	protected void setViewText(String text, int id) {
+	protected void setViewText(final String text, final int id) {
 		TextView textView = (TextView) findViewById(id);
 		textView.setText(text);
 	}
 
-	protected void setAdaptorImage(int resource, int id) {
+	protected void setAdaptorImage(final int resource, final int id) {
 		ImageView imageView = (ImageView) findViewById(id);
-		imageView.setImageResource(resource);
+		if (imageView != null) {
+			imageView.setImageResource(resource);
+		}
 	}
 
-	protected void setupBtn(Rating rating) {
+	protected void setupBtn(final Rating rating) {
 
 		Button btn = (Button) findViewById(R.id.button);
 		final String ssid = rating.getSsid();
 		final NotificationStorageManager storageManager = new NotificationStorageManager(getApplicationContext());
 		setBtnText(ssid, storageManager);
 		btn.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
+			@Override
+			public void onClick(final View v) {
 				boolean hasNotification = storageManager.contains(ssid);
 				if (hasNotification) {
 					storageManager.rmString(ssid);
@@ -66,7 +63,7 @@ public abstract class DetailActivity extends Activity {
 		});
 	}
 
-	private void setBtnText(String ssid, NotificationStorageManager storageManager) {
+	private void setBtnText(final String ssid, final NotificationStorageManager storageManager) {
 		Button btn = (Button) findViewById(R.id.button);
 		boolean hasNotification = storageManager.contains(ssid);
 		if (hasNotification) {
