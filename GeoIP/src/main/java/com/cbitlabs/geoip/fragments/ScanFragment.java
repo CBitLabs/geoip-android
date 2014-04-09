@@ -57,7 +57,8 @@ public class ScanFragment extends Fragment {
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_scan, null);
 		scanAdaptor = new ScanAdapter(getActivity(), 0);
-		empty = (TextView) view.findViewById(R.id.empty_element);
+		empty = (TextView) view.findViewById(R.id.empty_text);
+
 		setListView(view);
 		loadNetworks();
 		return view;
@@ -131,7 +132,8 @@ public class ScanFragment extends Fragment {
 
 	private void loadNetworks() {
 
-		if (true || WifiUtil.isWifiEnabled(getActivity())) {
+		// TODO remove true/false
+		if (WifiUtil.isWifiEnabled(getActivity())) {
 			setWifiOnIcon();
 		} else {
 			setnoWifiText();
