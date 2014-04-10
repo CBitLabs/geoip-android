@@ -6,13 +6,69 @@
     </style>
 
     <!-- Text -->
-    
+
     <style name="text_connected" parent="@android:style/TextAppearance.Small">
         <item name="android:textColor">@android:color/holo_blue_bright</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="text_ssid" parent="@android:style/TextAppearance.Large">
+    <style name="text_ssid" parent="@android:style/TextAppearance.Large"></style>
+
+    <style name="details_label" parent="@android:style/TextAppearance.Large">
+
+        <!-- used for textviews -->
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
-    
+
+    <style name="details_box">
+
+        <!-- used for linear layout -->
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/box</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="details_box_text" parent="@android:style/TextAppearance.Small">
+
+        <!-- used for textviews -->
+        <item name="android:textColor">#fff</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="details_number_text" parent="details_box_text">
+
+        <!-- used for textviews -->
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="details_number" parent="details_box_text">
+
+        <!-- used for textviews -->
+        <item name="android:textSize">40sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="details_rating" parent="details_number">
+
+        <!-- used for textviews -->
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="details_button">
+        <!-- used for buttons -->
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
 </resources>

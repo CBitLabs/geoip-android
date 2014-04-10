@@ -10,8 +10,5 @@ public class ScanDetailActivity extends DetailActivity {
 		Rating rating = (Rating) getIntent().getSerializableExtra(Rating.SER_KEY);
 		setupBtn(rating);
 		setRatingDetails(rating);
-		setViewText("", R.id.item_loc);
-		setViewText("", R.id.item_created_at_human);
-
 	}
 }

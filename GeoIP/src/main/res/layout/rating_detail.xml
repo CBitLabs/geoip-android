@@ -1,114 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/detail_ssid"
+        style="@style/details_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:singleLine="false"
+        android:text="@string/ex_ssid" />
 
     <LinearLayout
-        android:paddingBottom="25dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        style="@style/details_box"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingTop="4dp"
-        android:paddingRight="4dp">
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/rating_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_action_secure" />
+        <TextView
+            android:id="@+id/rating"
+            style="@style/details_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="GOOD"
+            android:textColor="#00ff00" />
 
-        <LinearLayout
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/detail_ssid"
-                style="@android:style/TextAppearance.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:singleLine="false"
-                android:text="@string/ex_ssid"
-                android:focusable="false"
-                android:clickable="false" />
-
-
-            <TextView
-                android:id="@+id/item_loc"
-                style="@android:style/TextAppearance.Small"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/ex_loc" />
-
-            <TextView
-                android:id="@+id/item_created_at_human"
-                style="@android:style/TextAppearance.Small"
-                android:textStyle="italic"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autoText="false"
-                android:text="@string/ex_created_at"
-                android:singleLine="true" />
-        </LinearLayout>
-
+        <TextView
+            style="@style/details_box_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Some description nobody understands or cares about...Aliquam dictum enim mauris, eget adipiscing libero ultricies ." />
     </LinearLayout>
 
     <TextView
-        android:paddingTop="10dp"
-        android:text="@string/events_title"
+        style="@style/details_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        style="@android:style/TextAppearance.Large" />
+        android:text="@string/events_title" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/spam_count"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/bot_count"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:singleLine="false"
-            android:gravity="center" />
+        <LinearLayout
+            style="@style/details_box"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/bot_count"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/spam_count"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:singleLine="false"
-            android:gravity="center" />
+            <TextView
+                android:id="@+id/bot_count"
+                style="@style/details_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="0"
+                tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/unexp_count"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/unexp_count"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:singleLine="false"
-            android:gravity="center" />
+            <TextView
+                style="@style/details_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:singleLine="false"
+                android:text="@string/bot_count" />
+        </LinearLayout>
 
+        <LinearLayout
+            style="@style/details_box"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/spam_count"
+                style="@style/details_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                style="@style/details_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spam_count" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/details_box"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/unexp_count"
+                style="@style/details_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="0"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                style="@style/details_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/unexp_count" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:layout_marginTop="209dp"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:text="@string/set_notification_btn"
-        android:id="@+id/button" />
+        android:id="@+id/button"
+        style="@style/details_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_notification_btn" />
+
 </LinearLayout>

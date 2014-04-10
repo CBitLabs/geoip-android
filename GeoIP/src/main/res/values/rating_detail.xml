@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="events_title">Events Seen from this Network:</string>
+    <string name="events_title">EVENTS FROM THIS NETWORK</string>
 
     <string name="bot_count">Botnet</string>
     <string name="spam_count">Spam</string>
