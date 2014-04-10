@@ -33,3 +33,4 @@ proguard/
 *.ipr
 *.iws
 .idea/
+/GeoIP/src/main/.settings
