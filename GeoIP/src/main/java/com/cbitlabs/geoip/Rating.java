@@ -24,7 +24,7 @@ public class Rating implements Serializable {
 	private final int unexp_freq;
 	private final int raw_score;
 	private final boolean infected;
-	private final boolean validRating;
+	private boolean validRating;
 	private final int statusicon;
 
 	private final String ssid;
@@ -41,7 +41,11 @@ public class Rating implements Serializable {
 		unexp_freq = rating.get("unexp_freq").getAsInt();
 		raw_score = rating.get("raw_score").getAsInt();
 		infected = rating.get("is_infected").getAsBoolean();
-		validRating = rating.get("valid_rating").getAsBoolean();
+		try {
+			validRating = rating.get("valid_rating").getAsBoolean();
+		} catch (NullPointerException e) {
+			validRating = false;
+		}
 
 		if (validRating) {
 			statusicon = infected ? infectedIcon : notInfectedIcon;
