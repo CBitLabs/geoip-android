@@ -16,9 +16,6 @@ public class Rating implements Serializable {
 	private static final int infectedIcon = R.drawable.status_bad;
 	private static final int notInfectedIcon = R.drawable.status_good;
 	private static final int noRatingIcon = R.drawable.status_unknown;
-	private static final int wifiStrengthLow = R.drawable.wifi_low;
-	private static final int wifiStrengthMed = R.drawable.wifi_med;
-	private static final int wifiStrengthHi = R.drawable.wifi_hi;
 	private final int spam_count;
 	private final int spam_freq;
 	private final int bot_count;
@@ -28,7 +25,6 @@ public class Rating implements Serializable {
 	private final int raw_score;
 	private final boolean infected;
 	private final boolean validRating;
-	private final int icon;
 	private final int statusicon;
 
 	private final String ssid;
@@ -52,8 +48,6 @@ public class Rating implements Serializable {
 		} else {
 			statusicon = noRatingIcon;
 		}
-		// TODO determine icon by signal strength
-		icon = wifiStrengthHi;
 
 	}
 
@@ -69,7 +63,6 @@ public class Rating implements Serializable {
 		unexp_freq = 0;
 		raw_score = 0;
 		infected = false;
-		icon = wifiStrengthLow;
 		statusicon = noRatingIcon;
 		validRating = false;
 
@@ -107,8 +100,9 @@ public class Rating implements Serializable {
 		return infected;
 	}
 
+	@Deprecated
 	public int getIcon() {
-		return icon;
+		return 0;
 	}
 
 	public String getSsid() {
@@ -120,24 +114,20 @@ public class Rating implements Serializable {
 	}
 
 	public int notificationIcon(final Context c) {
-		NotificationStorageManager storageManager = new NotificationStorageManager(
-				c);
+		NotificationStorageManager storageManager = new NotificationStorageManager(c);
 		boolean hasNotification = storageManager.contains(ssid);
-		return hasNotification ? R.drawable.watched
-				: android.R.color.transparent;
+		return hasNotification ? R.drawable.watched : android.R.color.transparent;
 	}
 
-	// TODO implement something meaningful
 	public int statusIcon() {
 		return statusicon;
 	}
 
 	@Override
 	public String toString() {
-		return "Rating{" + "spam_count=" + spam_count + ", spam_freq="
-				+ spam_freq + ", bot_count=" + bot_count + ", bot_freq="
-				+ bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq="
-				+ unexp_freq + ", raw_score=" + raw_score + ", is_infected="
-				+ infected + ", icon=" + icon + ", ssid='" + ssid + '\'' + '}';
+		return "Rating{" + "spam_count=" + spam_count + ", spam_freq=" + spam_freq + ", bot_count=" + bot_count
+				+ ", bot_freq=" + bot_freq + ", unexp_count=" + unexp_count + ", unexp_freq=" + unexp_freq
+				+ ", raw_score=" + raw_score + ", is_infected=" + infected + ", statusicon=" + statusicon + ", ssid='"
+				+ ssid + '\'' + '}';
 	}
 }

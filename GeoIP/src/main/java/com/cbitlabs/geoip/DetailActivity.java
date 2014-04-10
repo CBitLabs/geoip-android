@@ -33,6 +33,7 @@ public abstract class DetailActivity extends Activity {
 
 	protected void setViewText(final String text, final int id) {
 		TextView textView = (TextView) findViewById(id);
+		textView.setVisibility(View.VISIBLE);
 		textView.setText(text);
 	}
 

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,12 +34,24 @@ public class ScanAdapter extends Adapter {
 		boolean isCurrentWifiConnection = WifiUtil.isCurrentWifiConnection(c, result.getScanResult());
 		String scanConnected = isCurrentWifiConnection ? "Connected" : "";
 		// TODO uncomment
-		// convertView = setAdaptorText(convertView,
-		// result.getScanResult().SSID, R.id.scan_ssid);
-		convertView = setAdaptorText(convertView, "TEST SSID", R.id.scan_ssid);
+		convertView = setAdaptorText(convertView, result.getScanResult().SSID, R.id.scan_ssid);
+		// convertView = setAdaptorText(convertView, "TEST SSID",
+		// R.id.scan_ssid);
+
+		Log.d("", "" + result.getScanResult().level + " " + result.getScanResult().SSID);
+		int level = result.getScanResult().level;
+		int icon;
+
+		if (level > -50) {
+			icon = R.drawable.wifi_hi;
+		} else if (level > -70) {
+			icon = R.drawable.wifi_med;
+		} else {
+			icon = R.drawable.wifi_low;
+		}
+		convertView = setAdaptorImage(convertView, icon, R.id.rating_icon);
 
 		convertView = setAdaptorText(convertView, scanConnected, R.id.scan_connected);
-		convertView = setAdaptorImage(convertView, result.getRating().getIcon(), R.id.rating_icon);
 		convertView = setAdaptorImage(convertView, result.getRating().notificationIcon(c), R.id.hasNotification);
 		convertView = setAdaptorImage(convertView, result.getRating().statusIcon(), R.id.statusIcon);
 
@@ -70,13 +83,13 @@ public class ScanAdapter extends Adapter {
 		HashMap<String, ScanRating> cleanResults = new HashMap<String, ScanRating>();
 		for (ScanRating result : results) {
 			// TODO uncomment
-			// String ssid = result.getScanResult().SSID;
-			String ssid = "TEST SSID";
+			String ssid = result.getScanResult().SSID;
+			// String ssid = "TEST SSID";
 			if (ssid == "") {
 				continue;
 			}
 			// TODO remove false
-			if (false && cleanResults.containsKey(ssid)) {
+			if (cleanResults.containsKey(ssid)) {
 				ScanRating el = cleanResults.get(ssid);
 				if (el.getScanResult().level > result.getScanResult().level) {
 					cleanResults.put(ssid, result);

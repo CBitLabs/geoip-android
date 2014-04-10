@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="4dp"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-
-    <ImageView
-        android:id="@+id/rating_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_action_secure" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp" >
 
     <LinearLayout
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
+        android:paddingLeft="15dp"
+        android:paddingRight="4dp" >
 
         <TextView
             android:id="@+id/item_ssid"
-            style="@android:style/TextAppearance.Medium"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/ex_ssid"
-            android:singleLine="true" />
-
+            style="@style/text_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ex_ssid" />
 
         <TextView
             android:id="@+id/item_loc"
             style="@android:style/TextAppearance.Small"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/ex_loc" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/item_created_at_human"
             style="@android:style/TextAppearance.Small"
-            android:textStyle="italic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/ex_created_at" />
+            android:text="@string/ex_created_at"
+            android:textStyle="italic" />
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/statusIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" />
+
+    <ImageView
         android:id="@+id/hasNotification"
-        android:src="@drawable/ic_action_about"
-        android:layout_gravity="right" />
-</LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/statusIcon" />
+
+</RelativeLayout>

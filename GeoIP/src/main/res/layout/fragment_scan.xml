@@ -7,15 +7,27 @@
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame" >
 
+    <Switch
+        android:id="@+id/wifi_toggle"
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:onClick="onToggleClicked"
+        android:text="@string/toggle_wifi" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:layout_above="@id/wifi_toggle" />
 
     <LinearLayout
         android:id="@+id/empty_element"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@id/wifi_toggle"
         android:layout_gravity="top"
         android:orientation="vertical" >
 
@@ -37,16 +49,6 @@
             android:gravity="center|top"
             android:text="@string/scanning_networks" />
     </LinearLayout>
-
-    <Switch
-        android:onClick="onToggleClicked"
-        android:id="@+id/wifi_toggle"
-        style="@android:style/TextAppearance.DeviceDefault.Medium"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"
-        android:text="@string/toggle_wifi" />
 
     <LinearLayout
         android:layout_width="fill_parent"

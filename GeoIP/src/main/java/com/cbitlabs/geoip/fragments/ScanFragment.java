@@ -8,8 +8,10 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,11 +24,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cbitlabs.geoip.R;
+import com.cbitlabs.geoip.ReportUtil;
 import com.cbitlabs.geoip.ScanAdapter;
 import com.cbitlabs.geoip.ScanDetailActivity;
 import com.cbitlabs.geoip.ScanRating;
 import com.cbitlabs.geoip.SettingsActivity;
+import com.cbitlabs.geoip.Util;
 import com.cbitlabs.geoip.WifiUtil;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
@@ -132,7 +137,7 @@ public class ScanFragment extends Fragment {
 	private void loadNetworks() {
 
 		// TODO remove true/false
-		if (true|WifiUtil.isWifiEnabled(getActivity())) {
+		if (WifiUtil.isWifiEnabled(getActivity())) {
 		} else {
 			setnoWifiText();
 			scanAdaptor.clear();
@@ -140,16 +145,15 @@ public class ScanFragment extends Fragment {
 		}
 
 		// TODO uncomment
-		// final List<ScanResult> results =
-		// ReportUtil.getNewScanResults(getActivity(), scanAdaptor);
-		// if (results.size() == 0) {
-		// setEmptyText();
-		// return;
-		// }
+		final List<ScanResult> results = ReportUtil.getNewScanResults(getActivity(), scanAdaptor);
+		if (results.size() == 0) {
+			setEmptyText();
+			return;
+		}
 
 		// TODO uncomment
-		// String url = ReportUtil.getScanRatingUrl(results);
-		String url = "test";
+		String url = ReportUtil.getScanRatingUrl(results);
+		// String url = "test";
 
 		Builders.Any.B ion = Ion.with(getActivity(), url);
 		ion.setTimeout(2000);
@@ -158,27 +162,25 @@ public class ScanFragment extends Fragment {
 			public void onCompleted(final Exception e, final JsonObject jsonRepsonse) {
 				List<ScanRating> ratings = new ArrayList<ScanRating>();
 				// TODO uncomment
-				// if (e != null) {
-				// Log.i(Util.LOG_TAG, e.toString());
-				//
-				// for (ScanResult result : results) {
-				// ratings.add(new ScanRating(result, result.SSID));
-				// }
-				// } else {
-				// Log.i(Util.LOG_TAG, "Found ratings: " +
-				// jsonRepsonse.toString());
-				//
-				// for (ScanResult result : results) {
-				// JsonElement rating =
-				// jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
-				// if (rating != null) {
-				// ratings.add(new ScanRating(result,
-				// rating.getAsJsonObject()));
-				// }
-				// }
-				// }
-				ScanRating r = new ScanRating(null, "test");
-				ratings.add(r);
+				if (e != null) {
+					Log.i(Util.LOG_TAG, e.toString());
+
+					for (ScanResult result : results) {
+						ratings.add(new ScanRating(result, result.SSID));
+					}
+				} else {
+					Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
+
+					for (ScanResult result : results) {
+						JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+						if (rating != null) {
+							ratings.add(new ScanRating(result, rating.getAsJsonObject()));
+						}
+					}
+				}
+				// TODO DEBUG
+				// ScanRating r = new ScanRating(null, "test");
+				// ratings.add(r);
 				scanAdaptor.clear();
 				scanAdaptor.addAll(ratings);
 			}

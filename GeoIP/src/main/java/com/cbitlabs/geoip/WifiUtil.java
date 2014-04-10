@@ -45,10 +45,10 @@ public class WifiUtil {
 
 	public static boolean isCurrentWifiConnection(Context c, ScanResult result) {
 		// TODO uncomment
-		// WifiInfo info = getWiFiInfo(c);
-		// String eq = String.valueOf(result.SSID.equals(info.getSSID()));
-		// return quote(result.SSID).equals(info.getSSID());
-		return true;
+		WifiInfo info = getWiFiInfo(c);
+		String eq = String.valueOf(result.SSID.equals(info.getSSID()));
+		return quote(result.SSID).equals(info.getSSID());
+		// return true;
 	}
 
 	public static WifiInfo getWiFiInfo(Context c) {
