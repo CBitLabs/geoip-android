@@ -53,7 +53,7 @@ public class InfectedNotification extends Notification {
                                  @Override
                                  public void onCompleted(Exception e, JsonObject jsonRepsonse) {
                                      if (e != null) {
-                                         Log.i(Util.LOG_TAG, e.toString());
+                                         Log.i(GenUtil.LOG_TAG, e.toString());
                                          return;
                                      }
                                      Set<String> infectedIds = new HashSet<String>();

@@ -31,11 +31,11 @@ public class ReportIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         while (true) {
-            Log.i(Util.LOG_TAG, "Sending background task.");
-            Util.createWifiReportTask(getApplicationContext());
-            Util.createScanReportTask(getApplicationContext());
+            Log.i(GenUtil.LOG_TAG, "Sending background task.");
+            GenUtil.createWifiReportTask(getApplicationContext());
+            GenUtil.createScanReportTask(getApplicationContext());
             try {
-                Thread.sleep(Util.FIVE_MINUTES);
+                Thread.sleep(GenUtil.FIVE_MINUTES);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }

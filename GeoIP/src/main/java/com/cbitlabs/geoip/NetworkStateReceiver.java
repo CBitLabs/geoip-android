@@ -20,19 +20,19 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        Log.d(Util.LOG_TAG, "--------------------------------");
-        Log.d(Util.LOG_TAG, "NetworkStateReceiver.onReceive()");
+        Log.d(GenUtil.LOG_TAG, "--------------------------------");
+        Log.d(GenUtil.LOG_TAG, "NetworkStateReceiver.onReceive()");
 
         if (WifiUtil.isWiFiConnected(context)) {
 
             GeoPoint p = GeoUtil.getLocation(context);
 
             if (GeoPoint.isValidPoint(p)) {
-                Util.createWifiReportTask(context);
+                GenUtil.createWifiReportTask(context);
                 Intent report_intent = new Intent(context, ReportIntentService.class);
                 context.startService(report_intent);
             } else {
-                Log.i(Util.LOG_TAG, "Location isn't accurate enough, registering location listener");
+                Log.i(GenUtil.LOG_TAG, "Location isn't accurate enough, registering location listener");
                 updateLocation(context);
             }
         }
@@ -50,8 +50,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         llNet = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                Log.i(Util.LOG_TAG, "Received updated location via Network!");
-                Util.createWifiReportTask(context);
+                Log.i(GenUtil.LOG_TAG, "Received updated location via Network!");
+                GenUtil.createWifiReportTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 
@@ -75,8 +75,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         llGps = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                Log.i(Util.LOG_TAG, "Received updated location via GPS!");
-                Util.createWifiReportTask(context);
+                Log.i(GenUtil.LOG_TAG, "Received updated location via GPS!");
+                GenUtil.createWifiReportTask(context);
                 locationManager.removeUpdates(NetworkStateReceiver.this.llNet);
             }
 

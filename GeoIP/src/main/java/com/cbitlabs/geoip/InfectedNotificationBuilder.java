@@ -27,7 +27,7 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
 
     public void build() {
 
-        Log.i(Util.LOG_TAG, "Building notification for ssids: " + ssids);
+        Log.i(GenUtil.LOG_TAG, "Building notification for ssids: " + ssids);
 
         super.build();
     }
@@ -46,7 +46,7 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
 
         style.setBigContentTitle(BIG_CONTENT_TITLE);
         for (String ssid : ssids) {
-            style.addLine(Util.cleanSSID(ssid));
+            style.addLine(GenUtil.cleanSSID(ssid));
         }
         return style;
     }

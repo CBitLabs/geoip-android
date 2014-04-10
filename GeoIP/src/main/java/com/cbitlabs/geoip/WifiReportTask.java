@@ -17,7 +17,7 @@ public class WifiReportTask extends ReportingTask {
 
     public WifiReportTask(Context context) {
         super(context);
-        Log.d(Util.LOG_TAG, "WifiReportTask Created");
+        Log.d(GenUtil.LOG_TAG, "WifiReportTask Created");
     }
 
     @Override
@@ -25,12 +25,12 @@ public class WifiReportTask extends ReportingTask {
         final JsonObject wifiReport = ReportUtil.getWifiReport(this.c);
 
         if (!ReportUtil.isValidWifiReport(this.c, wifiReport)) {
-            Log.i(Util.LOG_TAG, "Duplicate or noWIFI. Wifi Report not sent.");
+            Log.i(GenUtil.LOG_TAG, "Duplicate or noWIFI. Wifi Report not sent.");
             return;
         }
 
 
-        Log.i(Util.LOG_TAG, "Posting json " + wifiReport.toString());
+        Log.i(GenUtil.LOG_TAG, "Posting json " + wifiReport.toString());
         Ion.with(c, ReportUtil.getWifiReportUrl())
                 .setJsonObjectBody(wifiReport)
                 .asJsonObject()
@@ -38,12 +38,12 @@ public class WifiReportTask extends ReportingTask {
                     @Override
                     public void onCompleted(Exception e, JsonObject res) {
                         if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
+                            Log.i(GenUtil.LOG_TAG, e.toString());
                             //try a DNS lookup instead
-                            Util.createDNSReportTask(c, wifiReport);
+                            GenUtil.createDNSReportTask(c, wifiReport);
                         }
                         if (res != null) {
-                            Log.i(Util.LOG_TAG, "Recieved " + res.toString());
+                            Log.i(GenUtil.LOG_TAG, "Recieved " + res.toString());
                         }
                     }
                 });

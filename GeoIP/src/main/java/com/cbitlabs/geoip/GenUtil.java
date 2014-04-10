@@ -14,7 +14,7 @@ import java.util.UUID;
  * Created by stuart on 11/25/13.
  * General utilies
  */
-public class Util {
+public class GenUtil {
 
     public static final String LOG_TAG = "CBITLABS_GEOIP";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
@@ -32,7 +32,7 @@ public class Util {
     public static String getUUID(Context c) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        String deviceId = prefs.getString(Util.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
+        String deviceId = prefs.getString(GenUtil.PREF_KEY_DEVICE_ID, DEVICE_ID_UNSET);
         if (deviceId.equals(DEVICE_ID_UNSET))
             deviceId = generateDeviceID(c);
         return deviceId;
@@ -88,19 +88,19 @@ public class Util {
     }
 
     public static void createWifiReportTask(Context c) {
-        Log.i(Util.LOG_TAG, "Creating new Wifi AsyncTask");
+        Log.i(GenUtil.LOG_TAG, "Creating new Wifi AsyncTask");
         WifiReportTask t = new WifiReportTask(c);
         t.execute();
     }
 
     public static void createScanReportTask(Context c) {
-        Log.i(Util.LOG_TAG, "Creating new ScanReport AsyncTask");
+        Log.i(GenUtil.LOG_TAG, "Creating new ScanReport AsyncTask");
         ScanReportTask t = new ScanReportTask(c);
         t.execute();
     }
 
     public static void createDNSReportTask(Context c, JsonObject report) {
-        Log.i(Util.LOG_TAG, "Creating new DNS AsyncTask");
+        Log.i(GenUtil.LOG_TAG, "Creating new DNS AsyncTask");
         DNSReportTask t = new DNSReportTask(c, report);
         t.execute();
     }

@@ -31,7 +31,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         }
 
         ArrayList<String> ssids = intent.getStringArrayListExtra(extrasKey);
-        Log.i(Util.LOG_TAG, "DeleteIntent. Action: " + action
+        Log.i(GenUtil.LOG_TAG, "DeleteIntent. Action: " + action
                 + " extrasKey: " + extrasKey + " extras: " + ssids);
         if (ssids != null) {
             for (String ssid : ssids) {

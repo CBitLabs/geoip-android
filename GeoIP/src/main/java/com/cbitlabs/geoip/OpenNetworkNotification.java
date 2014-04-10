@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 3/6/14.
- * Create notification for open networks. 
+ * Create notification for open networks.
  */
 public class OpenNetworkNotification extends Notification {
 

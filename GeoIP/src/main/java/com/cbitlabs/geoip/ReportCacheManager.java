@@ -34,7 +34,7 @@ public class ReportCacheManager extends PrefManager {
     }
 
     private String serialize(String baseKey, String bssid) {
-        return String.format("%s_%s", baseKey, Util.fmtBSSID(bssid));
+        return String.format("%s_%s", baseKey, GenUtil.fmtBSSID(bssid));
     }
 
     private long deserialize(SharedPreferences prefs, String prefKey) {

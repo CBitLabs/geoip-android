@@ -145,7 +145,7 @@ public class MainActivity extends Activity {
         }
 
         String url = ReportUtil.getScanRatingUrl(results);
-        Log.i(Util.LOG_TAG, "Ratings url: " + url);
+        Log.i(GenUtil.LOG_TAG, "Ratings url: " + url);
         Builders.Any.B ion = Ion.with(this, url);
         ion.setTimeout(2000);
         loading = ion.asJsonObject()
@@ -154,16 +154,16 @@ public class MainActivity extends Activity {
                     public void onCompleted(Exception e, JsonObject jsonRepsonse) {
                         List<ScanRating> ratings = new ArrayList<ScanRating>();
                         if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
+                            Log.i(GenUtil.LOG_TAG, e.toString());
 
                             for (ScanResult result : results) {
                                 ratings.add(new ScanRating(result, result.SSID));
                             }
                         } else {
-                            Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
+                            Log.i(GenUtil.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
 
                             for (ScanResult result : results) {
-                                JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+                                JsonElement rating = jsonRepsonse.get(GenUtil.fmtBSSID(result.BSSID));
                                 if (rating != null) {
                                     ratings.add(new ScanRating(result, rating.getAsJsonObject()));
                                 }

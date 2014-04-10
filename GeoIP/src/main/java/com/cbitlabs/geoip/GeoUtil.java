@@ -51,7 +51,7 @@ public class GeoUtil {
 
     protected static boolean isRecentLocation(Location l) {
         long locAge = (new Date()).getTime() - l.getTime();
-        return locAge > Util.TEN_MINUTES;
+        return locAge > GenUtil.TEN_MINUTES;
     }
 
 
@@ -72,8 +72,8 @@ public class GeoUtil {
 
         // Check whether the new location fix is newer or older
         long timeDelta = location.getTime() - currentBestLocation.getTime();
-        boolean isSignificantlyNewer = timeDelta > Util.FIVE_MINUTES;
-        boolean isSignificantlyOlder = timeDelta < -Util.FIVE_MINUTES;
+        boolean isSignificantlyNewer = timeDelta > GenUtil.FIVE_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -GenUtil.FIVE_MINUTES;
         boolean isNewer = timeDelta > 0;
 
         // If it's been more than two minutes since the current location, use the new location

@@ -17,14 +17,14 @@ public class ScanReportTask extends ReportingTask {
 
     public ScanReportTask(Context c) {
         super(c);
-        Log.d(Util.LOG_TAG, "ScanReportTask Created");
+        Log.d(GenUtil.LOG_TAG, "ScanReportTask Created");
     }
 
     public void sendReport() {
         final ArrayList<JsonObject> jsonObjects = ReportUtil.getScanReport(c);
 
         if (!ReportUtil.isValidScanReport(jsonObjects)) {
-            Log.i(Util.LOG_TAG, "Duplicate report. Scan Report not sent.");
+            Log.i(GenUtil.LOG_TAG, "Duplicate report. Scan Report not sent.");
             return;
         }
 
@@ -33,7 +33,7 @@ public class ScanReportTask extends ReportingTask {
     }
 
     private void postReport(ArrayList<JsonObject> jsonObjects) {
-        Log.i(Util.LOG_TAG, "Posting json " + jsonObjects.toString());
+        Log.i(GenUtil.LOG_TAG, "Posting json " + jsonObjects.toString());
         Ion.with(c, ReportUtil.getScanReportUrl())
                 .setJsonObjectBody(jsonObjects)
                 .asJsonObject()
@@ -41,10 +41,10 @@ public class ScanReportTask extends ReportingTask {
                     @Override
                     public void onCompleted(Exception e, JsonObject res) {
                         if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
+                            Log.i(GenUtil.LOG_TAG, e.toString());
                         }
                         if (res != null) {
-                            Log.i(Util.LOG_TAG, "Recieved " + res.toString());
+                            Log.i(GenUtil.LOG_TAG, "Recieved " + res.toString());
                         }
                     }
                 });

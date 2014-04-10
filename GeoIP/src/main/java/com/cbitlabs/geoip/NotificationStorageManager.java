@@ -20,7 +20,7 @@ public class NotificationStorageManager extends StringSetPrefManager {
     @Override
     public void addString(String prefSsid) {
         JsonObject jsonObject = ReportUtil.getPrefReport(c, prefSsid);
-        Log.i(Util.LOG_TAG, "Posting pref " + jsonObject
+        Log.i(GenUtil.LOG_TAG, "Posting pref " + jsonObject
                 + " prefUrl " + ReportUtil.getPrefReportUrl());
         Ion.with(c, ReportUtil.getPrefReportUrl())
                 .setJsonObjectBody(jsonObject).asJsonObject()
@@ -28,10 +28,10 @@ public class NotificationStorageManager extends StringSetPrefManager {
                     @Override
                     public void onCompleted(Exception e, JsonObject res) {
                         if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
+                            Log.i(GenUtil.LOG_TAG, e.toString());
                         }
                         if (res != null) {
-                            Log.i(Util.LOG_TAG, "Recieved " + res.toString());
+                            Log.i(GenUtil.LOG_TAG, "Recieved " + res.toString());
                         }
                     }
                 });

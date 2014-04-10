@@ -77,7 +77,7 @@ public class ReportUtil {
                     jsonResults.add(jsonReport);
                 }
             }
-            Log.i(Util.LOG_TAG, "jsonResults " + jsonResults.toString());
+            Log.i(GenUtil.LOG_TAG, "jsonResults " + jsonResults.toString());
         }
         return jsonResults;
     }
@@ -91,7 +91,7 @@ public class ReportUtil {
     public static JsonObject getPrefReport(Context c, String ssid) {
         JsonObject report = new JsonObject();
         report.addProperty("ssid", ssid);
-        report.addProperty("uuid", Util.getUUID(c));
+        report.addProperty("uuid", GenUtil.getUUID(c));
         return report;
 
     }
@@ -114,9 +114,9 @@ public class ReportUtil {
         JsonObject reportMap = new JsonObject();
         reportMap.addProperty("lat", loc.getLat());
         reportMap.addProperty("lng", loc.getLng());
-        reportMap.addProperty("ssid", Util.fmtSSID(ssid));
-        reportMap.addProperty("bssid", Util.fmtBSSID(bssid));
-        reportMap.addProperty("uuid", Util.getUUID(c));
+        reportMap.addProperty("ssid", GenUtil.fmtSSID(ssid));
+        reportMap.addProperty("bssid", GenUtil.fmtBSSID(bssid));
+        reportMap.addProperty("uuid", GenUtil.getUUID(c));
         reportMap.addProperty("ip", ip);
         reportMap.addProperty("security", security);
         reportMap.addProperty("isEnterprise", isEnterprise);
@@ -290,7 +290,7 @@ public class ReportUtil {
     public static String getScanRatingUrl(String[] bssids) {
         String url = getUrl("ratings/scan_ratings?");
         for (String bssid : bssids) {
-            url += String.format("bssid=%s&", Util.fmtBSSID(bssid));
+            url += String.format("bssid=%s&", GenUtil.fmtBSSID(bssid));
         }
         return url;
     }
@@ -304,7 +304,7 @@ public class ReportUtil {
     public static String getScanRatingUrl(String[] bssids, String[] ssids) {
         String url = getScanRatingUrl(bssids);
         for (String ssid : ssids) {
-            url += String.format("ssid=%s&", Util.fmtSSID(ssid));
+            url += String.format("ssid=%s&", GenUtil.fmtSSID(ssid));
         }
         return url;
     }

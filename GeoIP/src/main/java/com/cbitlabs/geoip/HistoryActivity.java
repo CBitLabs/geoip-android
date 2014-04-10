@@ -84,8 +84,8 @@ public class HistoryActivity extends Activity {
         }
 
 
-        String url = ReportUtil.getHistoryUrl(Util.getUUID(this), pageNum);
-        Log.i(Util.LOG_TAG, "Requesting history with url: " + url);
+        String url = ReportUtil.getHistoryUrl(GenUtil.getUUID(this), pageNum);
+        Log.i(GenUtil.LOG_TAG, "Requesting history with url: " + url);
 
         pageNum++;
 
@@ -96,18 +96,18 @@ public class HistoryActivity extends Activity {
                     public void onCompleted(Exception e, JsonArray result) {
                         // this is called back onto the ui thread, no Activity.runOnUiThread or Handler.post necessary.
                         if (e != null) {
-                            Log.i(Util.LOG_TAG, e.toString());
+                            Log.i(GenUtil.LOG_TAG, e.toString());
                             Toast.makeText(HistoryActivity.this, "Error loading history", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Log.i(Util.LOG_TAG, "Found history: " + result.toString());
+                        Log.i(GenUtil.LOG_TAG, "Found history: " + result.toString());
                         if (clear) { //clear after request returns
                             historyAdaptor.clear();
                         }
 
                         for (int i = 0; i < result.size(); i++) {
                             JsonObject o = result.get(i).getAsJsonObject();
-                            o.addProperty("ssid", Util.cleanSSID(o.get("ssid")));
+                            o.addProperty("ssid", GenUtil.cleanSSID(o.get("ssid")));
                             historyAdaptor.add(new HistoryItem(o));
                         }
                     }

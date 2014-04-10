@@ -25,7 +25,7 @@ public class DNSReportTask extends ReportingTask {
         super(context);
         this.report = report;
 
-        Log.d(Util.LOG_TAG, "DNSReportTask Created");
+        Log.d(GenUtil.LOG_TAG, "DNSReportTask Created");
     }
 
     @Override
@@ -39,12 +39,12 @@ public class DNSReportTask extends ReportingTask {
     }
 
     protected void executeLookup(String h) {
-        Log.i(Util.LOG_TAG, "Looking up:" + h);
+        Log.i(GenUtil.LOG_TAG, "Looking up:" + h);
 
         try {
             Address.getByName(h);
         } catch (UnknownHostException e) {
-            Log.e(Util.LOG_TAG, "DNS Lookup failed for host:" + h, e);
+            Log.e(GenUtil.LOG_TAG, "DNS Lookup failed for host:" + h, e);
         }
     }
 
@@ -52,19 +52,19 @@ public class DNSReportTask extends ReportingTask {
 
         String info = ReportUtil.getReportAsString(report);
         String host = info.concat(".").concat(ReportUtil.DNS_SERVER);
-        Log.i(Util.LOG_TAG, "Created Hostname for Lookup:" + host);
+        Log.i(GenUtil.LOG_TAG, "Created Hostname for Lookup:" + host);
 
         Resolver defaultResolver = Lookup.getDefaultResolver();
         String simpleResolverUrl = ReportUtil.DNS_RESOLVER;
         executeLookupUsingResolver("d." + host, defaultResolver);
 
         try {
-            Log.i(Util.LOG_TAG, "Setting DNS Resolver to use:" + simpleResolverUrl);
+            Log.i(GenUtil.LOG_TAG, "Setting DNS Resolver to use:" + simpleResolverUrl);
             Resolver simpleResolver = new SimpleResolver(simpleResolverUrl);
             executeLookupUsingResolver("s." + host, simpleResolver);
             Lookup.setDefaultResolver(defaultResolver);
         } catch (UnknownHostException e) {
-            Log.e(Util.LOG_TAG, "A problem occurred while setting the custom resolver. UnknownHostException:" + simpleResolverUrl, e);
+            Log.e(GenUtil.LOG_TAG, "A problem occurred while setting the custom resolver. UnknownHostException:" + simpleResolverUrl, e);
         }
     }
 }
