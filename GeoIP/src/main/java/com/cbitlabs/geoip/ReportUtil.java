@@ -19,8 +19,8 @@ public class ReportUtil {
 
     public static final String DNS_SERVER = "geo.cbitlabs.com";
     public static final String DNS_RESOLVER = "cb101.public.cbitlabs.com";
-    //    private static final String REPORT_SERVER_URL = "http://cb101.public.cbitlabs.com";
-    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
+    private static final String REPORT_SERVER_URL = "http://54.235.252.38";
+//    private static final String REPORT_SERVER_URL = "http://172.16.0.18:8000";
 
     public static final String NO_IP = "0.0.0.0";
 
