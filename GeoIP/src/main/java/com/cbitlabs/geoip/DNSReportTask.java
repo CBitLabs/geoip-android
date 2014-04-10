@@ -2,6 +2,7 @@ package com.cbitlabs.geoip;
 
 /**
  * Created by stuart on 11/25/13.
+ * Task to send a report over DNS if HTTP fails
  */
 
 import android.content.Context;

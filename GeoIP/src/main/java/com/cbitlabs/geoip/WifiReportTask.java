@@ -2,6 +2,7 @@ package com.cbitlabs.geoip;
 
 /**
  * Created by stuart on 11/25/13.
+ * Post a wifiReport to the server, falls back to DNS if HTTP fails.
  */
 
 import android.content.Context;

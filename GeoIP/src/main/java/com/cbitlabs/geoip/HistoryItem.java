@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by jblum on 2/28/14.
+ * Serialization for History object from the server
  */
 public class HistoryItem implements Serializable {
     private static final long serialVersionUID = 7526472295622776147L;

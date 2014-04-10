@@ -13,6 +13,7 @@ import java.util.Set;
 
 /**
  * Created by jblum on 3/6/14.
+ * Nofication to alert when a network is infected
  */
 public class InfectedNotification extends Notification {
 
@@ -24,6 +25,9 @@ public class InfectedNotification extends Notification {
         addWatchedNetworks();
     }
 
+    /**
+     * Update the objects with the user's watched newtorks
+     */
     private void addWatchedNetworks() {
         NotificationStorageManager manager = new NotificationStorageManager(c);
         Set<String> watchedSsids = manager.getSet();
@@ -71,12 +75,21 @@ public class InfectedNotification extends Notification {
 
     }
 
+    /**
+     *
+     * @param jsonObject
+     * @return Prevent duplicate notifications!
+     */
     protected boolean needsNotification(JsonObject jsonObject) {
         String ssid = getSsid(jsonObject);
         return !cacheManager.contains(ssid) && storageManager.contains(ssid);
     }
 
 
+    /**
+     *
+     * @return Request ratings by bssid and ssid
+     */
     protected String getUrl() {
         Set<String> bssids = new HashSet<String>();
         Set<String> ssids = new HashSet<String>();

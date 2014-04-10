@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * Created by jblum on 3/4/14.
+ * Wrapper for string set preferences
  */
 public class StringSetPrefManager extends PrefManager {
 
@@ -23,21 +24,18 @@ public class StringSetPrefManager extends PrefManager {
 
     public void addString(String string) {
         Set<String> set = getSet();
-//        Log.i(Util.LOG_TAG, "addString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         set.add(string);
         edit(set);
     }
 
     public void rmString(String string) {
         Set<String> set = getSet();
-//        Log.i(Util.LOG_TAG, "rmString:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         set.remove(string);
         edit(set);
     }
 
     public boolean contains(String string) {
         Set<String> set = getSet();
-//        Log.i(Util.LOG_TAG, "contains:: " + getPrefKey() + " got set: " + set + " ssid: " + string);
         return set.contains(string);
     }
 
@@ -52,6 +50,5 @@ public class StringSetPrefManager extends PrefManager {
     private void edit(Set<String> set) {
         editor.putStringSet(getPrefKey(), set);
         editor.commit();
-//        Log.i(Util.LOG_TAG, "edit:: Added set:" + set + " got set: " + getSet());
     }
 }

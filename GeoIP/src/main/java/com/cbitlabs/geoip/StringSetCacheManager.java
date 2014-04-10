@@ -4,6 +4,7 @@ import android.content.Context;
 
 /**
  * Created by jblum on 3/6/14.
+ * String set with caching.
  */
 public class StringSetCacheManager extends StringSetPrefManager {
 

@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by jblum on 3/1/14.
+ * Wrapper for shared preferences with caching.
  */
 abstract class PrefManager {
 

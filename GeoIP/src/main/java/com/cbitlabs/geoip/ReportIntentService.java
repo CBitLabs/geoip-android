@@ -6,6 +6,7 @@ import android.util.Log;
 
 /**
  * Created by jblum on 1/10/14.
+ * Try getting new scan and wifi reports every X minutes
  */
 public class ReportIntentService extends IntentService {
 

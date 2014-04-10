@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 2/17/14.
+ * Post scan report and issue notifications if necessary for scanResults
  */
 public class ScanReportTask extends ReportingTask {
 

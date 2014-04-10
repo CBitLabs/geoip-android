@@ -11,6 +11,11 @@ import java.util.Date;
  */
 public class GeoUtil {
 
+    /**
+     *
+     * @param c
+     * @return the best GeoPoint from gps or the network. Point can be null if location is old or not found.
+     */
     public static GeoPoint getLocation(final Context c) {
 
         Location netLoc = getNetworkLocation(c);

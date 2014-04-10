@@ -145,6 +145,7 @@ public class MainActivity extends Activity {
         }
 
         String url = ReportUtil.getScanRatingUrl(results);
+        Log.i(Util.LOG_TAG, "Ratings url: " + url);
         Builders.Any.B ion = Ion.with(this, url);
         ion.setTimeout(2000);
         loading = ion.asJsonObject()

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 /**
  * Created by stuart on 11/25/13.
+ * General utilies
  */
 public class Util {
 
@@ -23,6 +24,11 @@ public class Util {
     public static final long TEN_MINUTES = 1000 * 60 * 10l;
     public static final int FIVE_MINUTES = 1000 * 60 * 5;
 
+    /**
+     *
+     * @param c
+     * @return Unique per device
+     */
     public static String getUUID(Context c) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
@@ -51,16 +57,31 @@ public class Util {
         return cleanSSID(ssid.toString());
     }
 
+    /**
+     *
+     * @param ssid
+     * @return Deserialize ssid
+     */
     public static String cleanSSID(String ssid) {
         return ssid.replace("_", " ").replace("\"", "");
     }
 
+    /**
+     *
+     * @param ssid
+     * @return Serialize ssid
+     */
     public static String fmtSSID(String ssid) {
         ssid = ssid == null ? "" : ssid;
         ssid = ssid.replace("\"", "").replace(" ", "_");
         return ssid;
     }
 
+    /**
+     *
+     * @param bssid
+     * @return serialize bssid
+     */
     public static String fmtBSSID(String bssid) {
         bssid = bssid.replace(":", "");
         return bssid;

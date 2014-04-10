@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by jblum on 3/7/14.
+ * Wrapper on wifi utilities
  */
 public class WifiUtil {
 
@@ -51,6 +52,11 @@ public class WifiUtil {
     }
 
 
+    /**
+     *
+     * @param c
+     * @return Get current connection info
+     */
     public static WifiInfo getWiFiInfo(Context c) {
         WifiManager wifiManager = getWifiManger(c);
         return wifiManager.getConnectionInfo();
@@ -61,6 +67,11 @@ public class WifiUtil {
         return wifiManager.getScanResults();
     }
 
+    /**
+     *
+     * @param result
+     * @return Normalize DB level to percentage
+     */
     public static int getWifiStrength(ScanResult result) {
         try {
             int level = WifiManager.calculateSignalLevel(result.level, 10);
@@ -71,6 +82,12 @@ public class WifiUtil {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param ssid
+     * @return Connect to a network if preferences are saved.
+     */
     public static boolean connectToNetwork(Context c, String ssid) {
         WifiManager wifiManager = getWifiManger(c);
         List<WifiConfiguration> confs = getConfiguredNetworks(wifiManager);
