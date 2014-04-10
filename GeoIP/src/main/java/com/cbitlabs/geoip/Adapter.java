@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 /**
  * Created by jblum on 2/28/14.
+ * Wrapper for ArrayAdaptor class. Used to set text and images.
  */
 abstract class Adapter extends ArrayAdapter {
 

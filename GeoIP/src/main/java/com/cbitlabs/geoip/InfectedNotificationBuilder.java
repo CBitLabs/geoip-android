@@ -46,7 +46,7 @@ public class InfectedNotificationBuilder extends NotificationBuilder {
 
         style.setBigContentTitle(BIG_CONTENT_TITLE);
         for (String ssid : ssids) {
-            style.addLine(ssid);
+            style.addLine(Util.cleanSSID(ssid));
         }
         return style;
     }

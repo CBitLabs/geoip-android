@@ -13,10 +13,12 @@ import java.util.Date;
 abstract class PrefManager {
 
     public static final long ONE_DAY = 24 * 60 * 60 * 1000;
+    protected Context c;
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor editor;
 
     public PrefManager(Context c) {
+        this.c = c;
         prefs = PreferenceManager.getDefaultSharedPreferences(c);
         editor = prefs.edit();
     }
