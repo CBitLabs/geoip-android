@@ -123,7 +123,6 @@ public class ScanFragment extends Fragment {
 	}
 
 	public void onToggleClicked(boolean enable) {
-		// boolean enable = !WifiUtil.isWifiEnabled(getActivity());
 		if (enable) {
 			WifiUtil.enableWifi(getActivity());
 			loadNetworks();
@@ -136,7 +135,6 @@ public class ScanFragment extends Fragment {
 
 	private void loadNetworks() {
 
-		// TODO remove true/false
 		if (WifiUtil.isWifiEnabled(getActivity())) {
 		} else {
 			setnoWifiText();
@@ -144,16 +142,13 @@ public class ScanFragment extends Fragment {
 			return;
 		}
 
-		// TODO uncomment
 		final List<ScanResult> results = ReportUtil.getNewScanResults(getActivity(), scanAdaptor);
 		if (results.size() == 0) {
 			setEmptyText();
 			return;
 		}
 
-		// TODO uncomment
 		String url = ReportUtil.getScanRatingUrl(results);
-		// String url = "test";
 
 		Builders.Any.B ion = Ion.with(getActivity(), url);
 		ion.setTimeout(2000);
@@ -161,7 +156,6 @@ public class ScanFragment extends Fragment {
 			@Override
 			public void onCompleted(final Exception e, final JsonObject jsonRepsonse) {
 				List<ScanRating> ratings = new ArrayList<ScanRating>();
-				// TODO uncomment
 				if (e != null) {
 					Log.i(Util.LOG_TAG, e.toString());
 
@@ -178,9 +172,6 @@ public class ScanFragment extends Fragment {
 						}
 					}
 				}
-				// TODO DEBUG
-				// ScanRating r = new ScanRating(null, "test");
-				// ratings.add(r);
 				scanAdaptor.clear();
 				scanAdaptor.addAll(ratings);
 			}
@@ -202,7 +193,6 @@ public class ScanFragment extends Fragment {
 		// as you specify a parent activity in AndroidManifest.xml.
 		Intent i;
 		switch (item.getItemId()) {
-
 		case R.id.refreshScan:
 			loadNetworks();
 			return true;
@@ -228,24 +218,6 @@ public class ScanFragment extends Fragment {
 			empty.setText(resource);
 		}
 	}
-
-	// private void setWifiOffIcon() {
-	// setWifiIcon(R.drawable.ic_action_network_cell);
-	// }
-	//
-	// private void setWifiOnIcon() {
-	// setWifiIcon(R.drawable.ic_action_network_wifi);
-	// }
-
-	// private void setWifiIcon(final int resource) {
-	// if (menu == null) {
-	// return;
-	// }
-	// MenuItem item = menu.findItem(R.id.toggleWifi);
-	// if (item != null) {
-	// item.setIcon(resource);
-	// }
-	// }
 
 	@Override
 	public void onResume() {

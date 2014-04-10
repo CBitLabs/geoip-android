@@ -21,6 +21,7 @@ import com.cbitlabs.geoip.HistoryDetailActivity;
 import com.cbitlabs.geoip.HistoryItem;
 import com.cbitlabs.geoip.R;
 import com.cbitlabs.geoip.ReportUtil;
+import com.cbitlabs.geoip.SettingsActivity;
 import com.cbitlabs.geoip.Util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -121,35 +122,6 @@ public class HistoryFragment extends Fragment {
 			}
 		});
 
-		// TODO uncomment mock data
-		JsonObject rating = new JsonObject();
-		rating.addProperty("spam_count", 1);
-		rating.addProperty("spam_freq", 2);
-		rating.addProperty("bot_count", 3);
-		rating.addProperty("bot_freq", 4);
-		rating.addProperty("unexp_count", 5);
-		rating.addProperty("unexp_freq", 6);
-		rating.addProperty("raw_score", 7);
-		rating.addProperty("is_infected", false);
-		rating.addProperty("valid_rating", true);
-		JsonObject jo = new JsonObject();
-		jo.addProperty("count", 128);
-		jo.addProperty("loc", "loc");
-		jo.addProperty("security", "security");
-		jo.addProperty("ssid", "ssid");
-		jo.add("rating", rating);
-		jo.addProperty("bssid", "bssid");
-		jo.addProperty("remote_addr", "remote_addr");
-		jo.addProperty("isEnterprise", true);
-		jo.addProperty("created_at", "created_at");
-		jo.addProperty("created_at_human", "create_at_human");
-		jo.addProperty("datasrc", "datasrc");
-		jo.addProperty("ip", "ip");
-		jo.addProperty("lat", 1.0d);
-		jo.addProperty("lng", 1.0d);
-		jo.addProperty("uuid", "uuid");
-		HistoryItem hi = new HistoryItem(jo);
-		historyAdaptor.add(hi);
 	}
 
 	@Override
@@ -163,10 +135,15 @@ public class HistoryFragment extends Fragment {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		Intent i;
 
 		switch (item.getItemId()) {
 		case R.id.refreshHistory:
 			loadHistory(true);
+			return true;
+		case R.id.action_settings:
+			i = new Intent(getActivity(), SettingsActivity.class);
+			startActivity(i);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

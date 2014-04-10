@@ -54,7 +54,7 @@ public class SettingsActivity extends Activity {
 	private AlertDialog createDialog(final String ssid) {
 
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.rm_notification_title)
+		builder.setTitle(R.string.rm_notification_title).setMessage(R.string.rm_notification_message)
 				.setPositiveButton(R.string.rm_notification, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						storageManager.rmString(ssid);
@@ -66,7 +66,6 @@ public class SettingsActivity extends Activity {
 						dialog.dismiss();
 					}
 				});
-
 		return builder.create();
 	}
 

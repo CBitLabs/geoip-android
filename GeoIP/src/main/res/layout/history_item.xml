@@ -11,9 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="4dp" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/item_ssid"
