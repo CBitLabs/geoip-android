@@ -42,6 +42,10 @@ public class InfectedNotification extends Notification {
     }
 
 
+    /*
+        Get ratings for the given bssid/ssid ids.
+        Build a notifcation of infected ssids.
+     */
     public void setNotification() {
         Ion.with(c, getUrl())
                 .asJsonObject()

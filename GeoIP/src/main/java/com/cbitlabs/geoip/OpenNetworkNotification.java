@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 3/6/14.
+ * Create notification for open networks. 
  */
 public class OpenNetworkNotification extends Notification {
 
@@ -31,7 +32,7 @@ public class OpenNetworkNotification extends Notification {
 
     protected boolean needsNotification(JsonObject jsonObject) {
         String ssid = getSsid(jsonObject);
-        return !WifiUtil.isWiFiConnected(c) && isOpenNetwork(jsonObject) && !cacheManager.contains(ssid);
+        return !WifiUtil.isWiFiConnected(c) && WifiUtil.isWifiEnabled(c) && isOpenNetwork(jsonObject) && !cacheManager.contains(ssid);
     }
 
 

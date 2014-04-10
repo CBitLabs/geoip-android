@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 3/7/14.
+ * Abstract class to hold a notification. Subclasses implement the setNotification
+ * method which builds (can use NotifcationBuilder subclass) the notifcation for the given JsonObjects
+ * The needNotifcation method must also be implemented to verify each jsonObject should or should not
+ * be part of a notification.
  */
 abstract class Notification {
     protected Context c;
@@ -22,8 +26,14 @@ abstract class Notification {
         this.jsonObjects = filterForNotification(jsonObjects);
     }
 
+    /*
+        Builds the notification
+     */
     abstract void setNotification();
 
+    /*
+        Used to filter the objects.
+     */
     abstract boolean needsNotification(JsonObject object);
 
     protected ArrayList<JsonObject> filterForNotification(ArrayList<JsonObject> jsonObjects) {

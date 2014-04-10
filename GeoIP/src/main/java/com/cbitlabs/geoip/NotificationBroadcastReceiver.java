@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 3/4/14.
+ * Adds ssids to the cache when a notification is cancelled.
  */
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
 

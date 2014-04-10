@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jblum on 3/6/14.
+ * Wrapper to build notifications.
  */
 abstract class NotificationBuilder {
     protected static final int notifyID = 1;
