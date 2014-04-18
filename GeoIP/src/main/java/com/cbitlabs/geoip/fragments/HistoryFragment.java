@@ -22,9 +22,10 @@ import com.cbitlabs.geoip.HistoryItem;
 import com.cbitlabs.geoip.R;
 import com.cbitlabs.geoip.ReportUtil;
 import com.cbitlabs.geoip.SettingsActivity;
-import com.cbitlabs.geoip.Util;
+import com.cbitlabs.geoip.GenUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.Util;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -93,8 +94,8 @@ public class HistoryFragment extends Fragment {
 			pageNum = 0;
 		}
 
-		String url = ReportUtil.getHistoryUrl(Util.getUUID(getActivity()), pageNum);
-		Log.i(Util.LOG_TAG, "Requesting history with url: " + url);
+		String url = ReportUtil.getHistoryUrl(GenUtil.getUUID(getActivity()), pageNum);
+		Log.i(GenUtil.LOG_TAG, "Requesting history with url: " + url);
 
 		pageNum++;
 
@@ -102,21 +103,21 @@ public class HistoryFragment extends Fragment {
 			@Override
 			public void onCompleted(final Exception e, final JsonArray result) {
 				if (e != null) {
-					Log.i(Util.LOG_TAG, e.toString());
+					Log.i(GenUtil.LOG_TAG, e.toString());
 					Activity activity = getActivity();
 					if (activity != null) {
 						Toast.makeText(activity, "Error loading history", Toast.LENGTH_SHORT).show();
 					}
 					return;
 				}
-				Log.i(Util.LOG_TAG, "Found history: " + result.toString());
+				Log.i(GenUtil.LOG_TAG, "Found history: " + result.toString());
 				if (clear) { // clear after request returns
 					historyAdaptor.clear();
 				}
 
 				for (int i = 0; i < result.size(); i++) {
 					JsonObject o = result.get(i).getAsJsonObject();
-					o.addProperty("ssid", Util.cleanSSID(o.get("ssid")));
+					o.addProperty("ssid", GenUtil.cleanSSID(o.get("ssid")));
 					historyAdaptor.add(new HistoryItem(o));
 				}
 			}

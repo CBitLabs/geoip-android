@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.content.Context;
 
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.Util;
 
 /**
  * Created by jblum on 2/21/14.
@@ -32,7 +33,7 @@ public class Rating implements Serializable {
 
 	public Rating(final JsonObject rating, final String ssid) {
 		raw_ssid = ssid;
-		this.ssid = Util.fmtSSID(ssid);
+		this.ssid = GenUtil.fmtSSID(ssid);
 		spam_count = rating.get("spam_count").getAsInt();
 		spam_freq = rating.get("spam_freq").getAsInt();
 		bot_count = rating.get("bot_count").getAsInt();
@@ -58,7 +59,7 @@ public class Rating implements Serializable {
 	// Null object if server cannot be contacted
 	public Rating(final String ssid) {
 		raw_ssid = ssid;
-		this.ssid = Util.fmtSSID(ssid);
+		this.ssid = GenUtil.fmtSSID(ssid);
 		spam_count = 0;
 		spam_freq = 0;
 		bot_count = 0;

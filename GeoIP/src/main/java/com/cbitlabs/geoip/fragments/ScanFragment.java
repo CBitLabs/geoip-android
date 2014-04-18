@@ -29,10 +29,11 @@ import com.cbitlabs.geoip.ScanAdapter;
 import com.cbitlabs.geoip.ScanDetailActivity;
 import com.cbitlabs.geoip.ScanRating;
 import com.cbitlabs.geoip.SettingsActivity;
-import com.cbitlabs.geoip.Util;
+import com.cbitlabs.geoip.GenUtil;
 import com.cbitlabs.geoip.WifiUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.Util;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -157,16 +158,16 @@ public class ScanFragment extends Fragment {
 			public void onCompleted(final Exception e, final JsonObject jsonRepsonse) {
 				List<ScanRating> ratings = new ArrayList<ScanRating>();
 				if (e != null) {
-					Log.i(Util.LOG_TAG, e.toString());
+					Log.i(GenUtil.LOG_TAG, e.toString());
 
 					for (ScanResult result : results) {
 						ratings.add(new ScanRating(result, result.SSID));
 					}
 				} else {
-					Log.i(Util.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
+					Log.i(GenUtil.LOG_TAG, "Found ratings: " + jsonRepsonse.toString());
 
 					for (ScanResult result : results) {
-						JsonElement rating = jsonRepsonse.get(Util.fmtBSSID(result.BSSID));
+						JsonElement rating = jsonRepsonse.get(GenUtil.fmtBSSID(result.BSSID));
 						if (rating != null) {
 							ratings.add(new ScanRating(result, rating.getAsJsonObject()));
 						}

@@ -80,7 +80,7 @@ public class SettingsActivity extends Activity {
 		Set<String> networks = storageManager.getSet();
 		Set<String> cleanNetowrks = new HashSet<String>();
 		for (String ssid : networks) {
-			cleanNetowrks.add(Util.cleanSSID(ssid));
+			cleanNetowrks.add(GenUtil.cleanSSID(ssid));
 		}
 		notifcationAdaptor.addAll(cleanNetowrks);
 	}
