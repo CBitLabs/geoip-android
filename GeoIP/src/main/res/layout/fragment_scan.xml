@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <Switch
+        android:id="@+id/wifi_toggle"
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:onClick="onToggleClicked"
+        android:text="@string/toggle_wifi" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/wifi_toggle" />
+
+    <LinearLayout
+        android:id="@+id/empty_element"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/wifi_toggle"
+        android:orientation="vertical"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="50dp" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bigwifi" />
+
+        <TextView
+            android:id="@+id/empty_text"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/scanning_networks" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/wifi_toggle"
+        android:background="@android:color/holo_blue_bright" />
+
+</RelativeLayout>

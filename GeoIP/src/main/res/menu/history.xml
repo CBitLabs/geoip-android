@@ -1,8 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 
+    <item
+        android:id="@+id/toggleWifi"
+        android:icon="@drawable/ic_action_network_wifi"
+        android:title="@string/button_togglewifi"
+        android:showAsAction="always" />
+ -->
+
     <item
         android:id="@+id/refreshHistory"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/button_refresh"
         android:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_sysbar_quicksettings"
+        android:title="@string/action_settings"
+        android:showAsAction="always" />
 </menu>

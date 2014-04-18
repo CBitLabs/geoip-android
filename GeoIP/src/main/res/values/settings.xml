@@ -1,10 +1,11 @@
 <resources>
-    <string name="header_title">Watched networks:</string>
+    <string name="header_title">Watched networks</string>
     <string name="title_activity_settings">Settings</string>
     <string name="empty_network_notification">No notifications set!</string>
-    <string name="rm_notification_title">Remove notifcations for this network?</string>
+    <string name="rm_notification_title">Remove network from list?</string>
+    <string name="rm_notification_message">This action cannot be undone.</string>
 
     <!-- Confirm dialog-->
     <string name="cancel">Cancel</string>
-    <string name="rm_notification">Remove</string>
+    <string name="rm_notification">Yes, remove network</string>
 </resources>

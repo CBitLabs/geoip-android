@@ -1,8 +1,73 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Colors -->
+    <color name="dark_grey">#ff626969</color>
+    <!-- Text -->
+    <style name="text_connected" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="text_ssid" parent="@android:style/TextAppearance.Large"></style>
+
+    <style name="text_header" parent="@android:style/TextAppearance.Small">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+    <!-- DETAILS SCREEN -->
+    <!-- used for linear layout -->
+    <style name="details_box">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/box</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- used for textviews -->
+    <style name="details_label" parent="@android:style/TextAppearance.Large">
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <!-- used for textviews -->
+    <style name="details_box_text" parent="@android:style/TextAppearance.Small">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="details_number_text" parent="details_box_text">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+
+    <style name="details_number" parent="details_box_text">
+        <item name="android:textSize">60sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="details_rating" parent="details_number">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:textColor">#8EE349</item>
+    </style>
+
+    <!-- used for buttons -->
+    <style name="details_button">
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">#fff</item>
     </style>
 
 </resources>

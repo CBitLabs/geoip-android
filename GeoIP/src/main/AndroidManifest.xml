@@ -39,15 +39,6 @@
                 android:value="com.cbitlabs.geoip.MainActivity" />
         </activity>
         <activity
-            android:name=".HistoryActivity"
-            android:label="@string/title_activity_history"
-            android:parentActivityName="com.cbitlabs.geoip.MainActivity">
-            <!-- Parent activity meta-data to support API level 4+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoip.MainActivity" />
-        </activity>
-        <activity
             android:name=".ScanDetailActivity"
             android:parentActivityName="com.cbitlabs.geoip.MainActivity">
             <!-- Parent activity meta-data to support API level 4+ -->
@@ -57,11 +48,11 @@
         </activity>
         <activity
             android:name=".HistoryDetailActivity"
-            android:parentActivityName="com.cbitlabs.geoip.HistoryActivity">
+            android:parentActivityName="com.cbitlabs.geoip.MainActivity">
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoip.HistoryActivity" />
+                android:value="com.cbitlabs.geoip.MainActivity" />
         </activity>
 
         <receiver android:name=".NetworkStateReceiver">
