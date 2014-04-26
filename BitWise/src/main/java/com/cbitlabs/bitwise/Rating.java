@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 
 public class Rating implements Serializable {
 	private static final long serialVersionUID = 7526472295622776147L;
-	public static final String SER_KEY = "com.cbitlabs.geoip.Rating";
+	public static final String SER_KEY = "com.cbitlabs.bitwise.Rating";
 	private static final int infectedIcon = R.drawable.status_bad;
 	private static final int notInfectedIcon = R.drawable.status_good;
 	private static final int noRatingIcon = R.drawable.status_unknown;

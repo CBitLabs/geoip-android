@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class HistoryItem implements Serializable {
     private static final long serialVersionUID = 7526472295622776147L;
-    public static final String SER_KEY = "com.cbitlabs.geoip.HistoryItem";
+    public static final String SER_KEY = "com.cbitlabs.bitwise.HistoryItem";
     private final int count;
     private final String loc;
     private final String security;

@@ -18,7 +18,7 @@ import com.cbitlabs.bitwise.fragments.ScanFragment;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
-	private static final String CURRENT_TAB = "com.cbitlabs.geoip.MainActivity.CURRENT_TAB";
+	private static final String CURRENT_TAB = "com.cbitlabs.bitwise.MainActivity.CURRENT_TAB";
 	private Tab networks;
 	private Tab history;
 	private int currentTab = 0;

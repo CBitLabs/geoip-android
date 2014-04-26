@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class GenUtil {
 
-    public static final String LOG_TAG = "CBITLABS_GEOIP";
+    public static final String LOG_TAG = "CBITLABS_BITWISE";
     public static final String PREF_KEY_DEVICE_ID = "device_id";
 
     private static final String DEVICE_ID_UNSET = "no_device_id";

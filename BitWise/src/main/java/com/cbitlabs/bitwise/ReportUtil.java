@@ -104,7 +104,7 @@ public class ReportUtil {
      * @param ip
      * @param security
      * @param isEnterprise
-     * @return JsonObject representing a serialized GeoIP object on the server.
+     * @return JsonObject representing a serialized BitWise object on the server.
      */
     private static JsonObject getReport(Context c, String ssid,
                                         String bssid, String ip,

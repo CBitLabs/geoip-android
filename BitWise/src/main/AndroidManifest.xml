@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cbitlabs.geoip"
+    package="com.cbitlabs.bitwise"
     android:versionCode="2"
     android:versionName="1.1">
 
@@ -36,7 +36,7 @@
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoip.MainActivity" />
+                android:value="com.cbitlabs.bitwise.MainActivity" />
         </activity>
         <activity
             android:name="com.cbitlabs.bitwise.ScanDetailActivity"
@@ -44,7 +44,7 @@
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoip.MainActivity" />
+                android:value="com.cbitlabs.bitwise.MainActivity" />
         </activity>
         <activity
             android:name="com.cbitlabs.bitwise.HistoryDetailActivity"
@@ -52,7 +52,7 @@
             <!-- Parent activity meta-data to support API level 4+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cbitlabs.geoip.MainActivity" />
+                android:value="com.cbitlabs.bitwise.MainActivity" />
         </activity>
 
         <receiver android:name="com.cbitlabs.bitwise.NetworkStateReceiver">
