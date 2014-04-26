@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GeoIP/GeoIP.iml" filepath="$PROJECT_DIR$/GeoIP/GeoIP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android-geoip.iml" filepath="$PROJECT_DIR$/android-geoip.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BitWise/BitWise.iml" filepath="$PROJECT_DIR$/BitWise/BitWise.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-bitwise.iml" filepath="$PROJECT_DIR$/android-bitwise.iml" />
       <module fileurl="file://$PROJECT_DIR$/geoip-android.iml" filepath="$PROJECT_DIR$/geoip-android.iml" />
     </modules>
   </component>
